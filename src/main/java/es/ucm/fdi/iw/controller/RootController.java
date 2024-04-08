@@ -266,27 +266,16 @@ public class RootController {
             .setParameter("owner", owner)
                 .getResultList();
         
-        
         // Guardar las ligas en las que se ha unido el usuario
-        List<Liga> ligasUsuario = new ArrayList<>(); 
+        List<Liga> ligasUsuario = new ArrayList<>();
         for (Equipo equipo : misEquipos) {
             Liga liga = equipo.getLiga();
             if (liga != null && !ligasUsuario.contains(liga)) {
                 ligasUsuario.add(liga);
             }
         }
-
-        // Guardar los mensajes por liga del usuario
-        Map<Liga, List<Message>> mensajesPorLiga = new HashMap<>();
-        for (Liga liga : ligasUsuario) {
-            List<Message> mensajes = entityManager.createNamedQuery("Message.porLiga", Message.class)
-                .setParameter("nombreliga", liga)
-                    .getResultList();
-
-            mensajesPorLiga.put(liga, mensajes); //para cada liga (clave del mapa) se guardan sus mensajes recibidos
-        }
         
-        model.addAttribute("mensajesPorLiga", mensajesPorLiga);
+        model.addAttribute("ligas", ligasUsuario);
         return "actualidad"; 
     }
 
