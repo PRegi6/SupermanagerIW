@@ -1,0 +1,171 @@
+/* usa este fichero para personalizar tus vistas */
+table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  /* Filas impares */
+  tr:nth-child(odd) {
+    background-color: #f2f2f2;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f2f2f2d2;
+  }
+  
+  /* Encabezado de la tabla */
+  th {
+    background-color: #070707;
+    color: white;
+  }
+  
+  /* Primera columna de la tabla */
+  td:first-child {
+    font-weight: bold;
+  }  
+
+button {
+    background-color: #ff3700;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-custom {
+    background-color: #ff3700;
+    border-color: #ff3700;
+    color: white; /* Cambia el color del texto para que sea legible */
+}
+
+.btn-custom:hover {
+    background-color: #e62b00; /* Color de fondo cuando se pasa el ratón por encima */
+    border-color: #e62b00;
+    color: white;
+}
+
+
+.iwthumb {
+    height: 32px;
+    width: 32px;
+}
+
+.errTable tr>td:first-child {
+    min-width: 200px;
+    max-width: 200px;
+    word-break: break-all;
+    font-weight: bold;
+    color: red;
+}
+
+.errTable td {
+    vertical-align: top;
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
+}
+
+img.preview {
+    object-fit: cover;
+    width: 10%;
+    height: 100px;
+    border-radius: 10px;
+}
+
+.filtros_mercado {
+    display: flex;
+    padding-left: 10px;
+    padding-right: 10px;
+    height: 5.5vh;
+    justify-content: space-between;
+    background-color: #070506;
+    align-items: center;
+}
+    .boton_filtros {
+        display: flex;
+        justify-content: space-evenly;
+        overflow: hidden;
+        background-color: #ff3700;
+        color: white;
+        border: none;
+        width: 7%;
+        min-width: 100px;
+    }
+
+    .filtros_posicion {
+        display: flex;
+        gap: 5px;
+    }
+        .boton_posicion {
+            background-color: #ff3700;
+            color: white;
+            border: none;
+        }
+
+.jugadores_mercado {
+    height: calc(100vh - 22.5vh);
+    display: block;
+    overflow: auto;
+    padding-right: 10px;
+    padding-left: 10px;
+    scrollbar-width: none;
+}
+
+    .div_jugador {
+        background-color: white;
+        border: 1px solid black;
+        color: black;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+        .imagen_jugador {
+            width: 15%;
+            border-color: black;
+        }
+
+        .info_jugador {
+            display: block;
+        }
+
+        .promedio_valor {
+            width: 10%;
+        }
+
+th, td{
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+
+.recuadro{
+    border: 1px solid black;
+    padding: 8px;
+    text-align: left;
+}
+
+#navegador table {
+    display: inline-block; 
+    vertical-align: top; 
+    margin-right: 20px; 
+}
+
+#navegador th,
+#navegador td {
+    text-align: center;
+}
+
+.jornadas {
+    display: flex;
+    overflow-x: auto; /* Hace que el contenedor sea scrollable horizontalmente */
+    gap: 0; /* Elimina el espacio entre los elementos */
+}
+
+.form-jornada {
+    margin-right: 10px; /* Agrega un espacio entre los botones */
+}

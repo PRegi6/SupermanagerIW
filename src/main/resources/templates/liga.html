@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="fragments/head :: header" />
+    <title>IW: Clasificación liga</title>
+</head>
+
+<body class="d-flex flex-column h-100">
+    <header th:replace="fragments/nav.html :: nav"></header>
+
+    <main class="flex-shrink-0">
+        <div class="container">
+            <h1>Clasificación de <span th:text="${nombreLiga}">liga</span></h1>
+            <th:block th:if="${not equipos.empty}">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Equipo</th>
+                            <th>Posición</th>
+                            <th>Puntos</th>
+                            <th>Dinero</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="equipo, equipoIndex : ${equipos}">
+                            <td th:text="${equipo.teamname}"></td>
+                            <td th:text="${equipoIndex.index + 1}"></td>
+                            <td th:text="${equipo.puntos}"></td>
+                            <td th:text="${equipo.dinero}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </th:block>
+        </div>
+    </main>
+    <th:block th:replace="fragments/footer.html :: footer" />
+</body>
+</html>

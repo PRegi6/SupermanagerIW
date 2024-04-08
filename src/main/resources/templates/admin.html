@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="fragments/head :: header" />
+    <title>IW: Admin</title>
+</head>
+
+<body class="d-flex flex-column h-100">
+    <header th:replace="fragments/nav.html :: nav"></header>
+
+    <main class="flex-shrink-0">
+        <div class="container">
+            <h1 class="mt-5">Administración</h1>
+            <form class="form-signin" method="post" th:action="@{/admin/}">
+                <!-- <label for="zipFile">Selecciona un archivo ZIP para cargar base de datos:</label><br>
+                <input type="file" id="zipFile" name="zipFile" accept=".zip"><br><br>
+                <button class="btn btn-lg btn-custom btn-block" type="submit" name="formType" value="subirImg">Subir archivo zip</button><br><br> -->
+                <button class="btn btn-lg btn-custom btn-block" type="submit" name="formType" value="avanzarJornada">Avanzar jornada</button>
+            </form>
+        </div>
+    </main>
+
+    <th:block th:replace="fragments/footer.html :: footer" />
+</body>
+
+</html>

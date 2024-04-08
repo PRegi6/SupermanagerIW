@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="fragments/head :: header" />
+    <title>IW: Equipos</title>
+</head>
+
+<body class="d-flex flex-column h-100">
+    <header th:replace="fragments/nav.html :: nav"></header>
+
+    <main class="flex-shrink-0">
+        <div class="container">
+            <h1>Mis equipos</h1>
+            <!-- Verificar si la lista de equipos está vacía -->
+            <th:block th:if="${misEquipos.empty}">
+                <p>No hay equipos creados.</p>
+            </th:block>
+            <th:block th:if="${not misEquipos.empty}">
+                <!-- Mostrar la tabla si hay equipos creados -->
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Puntos</th>
+                            <th>Dinero</th>
+                            <th>Liga</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="equipo : ${misEquipos}">
+                            <td>
+                                <a th:href="@{/MiEquipo/{id}(id=${equipo.id})}" th:text="${equipo.teamname}">Los Canijos</a>
+                            </td>
+                            <td th:text="${equipo.puntos}"></td>
+                            <td th:text="${equipo.dinero}"></td>
+                            <!-- Si el equipo no está en una liga se muestra un botón para unirse a una -->
+                            <td th:if="${equipo.liga eq null}">
+                                <form th:action="@{/unirseliga}" method="get">
+                                    <input type="hidden" id="nombreequipo" name="nombreequipo" th:value="${equipo.teamname}" />
+                                    <button type="submit">Unirse a una liga</button>
+                                </form>
+                            </td>
+                            <td th:unless="${equipo.liga eq null}">
+                                <div th:text="${equipo.liga.getNombreLiga()}"></div>
+                            </td>
+                        </tr>                    
+                    </tbody>
+                </table>
+            </th:block>
+            <a th:href="@{/crearequipo}"><button class="btn btn-lg btn-custom btn-block" type="submit">Crear equipo</button></a>
+        </div>
+    </main>
+
+    <th:block th:replace="fragments/footer.html :: footer" />
+
+    <script th:src="@{/js/ajax-demo.js}"></script>
+</body>
+</html>

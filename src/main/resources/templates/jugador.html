@@ -1,0 +1,57 @@
+</html>
+<!DOCTYPE html>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="fragments/head :: header" />
+    <title>IW: Información Jugador</title>
+</head>
+
+<body class="d-flex flex-column h-100">
+    <header th:replace="fragments/nav.html :: nav"></header>
+
+    <main class="flex-shrink-0">
+        <div class="container">
+            <h1>Información de <span th:text="${jugador.nombre}">Jugador</span></h1>
+            <th:block>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Foto del jugador</th>
+                            <th>Nombre</th>
+                            <th>Nacionalidad</th>
+                            <th>Equipo</th>
+                            <th>Posicion</th>
+                            <th>Partidos Jugados</th>
+                            <th>Puntos Totales</th>
+                            <th>Valoracion Total</th>
+                            <th>Valoracion media</th>
+                            <th>Valor de mercado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="imagen_jugador">
+                                    <img th:src="@{'/img/jugadores/' + ${jugador.nombre} + '.jpg'}"/>
+                                </div>
+                            </td>
+                            <td th:text="${jugador.nombre}"></td>
+                            <td th:text="${jugador.pais}"></td>
+                            <td th:text="${jugador.equipo}"></td>
+                            <td th:text="${jugador.posicion}"></td>
+                            <td th:text="${jugador.partidosJugados}"></td>
+                            <td th:text="${jugador.puntosTotales}"></td>
+                            <td th:text="${jugador.valoracionTotal}"></td>
+                            <td th:text="${jugador.valoracionMedia}"></td>
+                            <td th:text="${jugador.valorMercado}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </th:block>
+        </div>
+    </main>
+    <th:block th:replace="fragments/footer.html :: footer" />
+</body>
+</html>
+
