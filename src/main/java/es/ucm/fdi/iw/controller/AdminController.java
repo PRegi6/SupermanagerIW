@@ -65,6 +65,9 @@ public class AdminController {
     @GetMapping("/liga")
     public String getLiga() { return "liga"; }
 
+    @GetMapping("/foro")
+    public String getForo() { return "foro"; }
+
     @GetMapping("/crearliga")
     public String getCrearLiga() { return "crearliga"; }
 

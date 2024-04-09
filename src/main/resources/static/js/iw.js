@@ -3,6 +3,21 @@
 /**
  * WebSocket API, which only works once initialized
  */
+
+
+
+// Inicia el servidor HTTP
+const server = app.listen(8080, () => {
+    console.log('Servidor HTTP iniciado en el puerto 8080');
+});
+
+// Asocia el servidor WebSocket al servidor HTTP
+server.on('upgrade', (request, socket, head) => {
+    wsd.handleUpgrade(request, socket, head, (ws) => {
+        wsd.emit('connection', ws, request);
+    });
+});
+
 const ws = {
 
     /**
@@ -57,6 +72,8 @@ const ws = {
             console.log("Error, could not subscribe to " + sub, e);
         }
     }
+
+    
 }
 
 /**
@@ -108,6 +125,7 @@ function go(url, method, data = {}, headers = false) {
             }
         });
 }
+
 
 /**
  * Fills an image element with the image retrieved from a URL.
@@ -211,3 +229,28 @@ document.addEventListener("DOMContentLoaded", () => {
     // 	 document.addEventListener("DOMContentLoaded", () => { /* your-code-here */ });
     //   (assuming you do not care about order-of-execution, all such handlers will be called correctly)
 });
+
+
+
+const WebSocket = require('ws');
+const express = require('express');
+const app = express();
+
+// Configuración del servidor WebSocket
+const wsd = new WebSocket.Server({ noServer: true });
+
+wsd.on('connection', function connection(ws) {
+    console.log('Cliente conectado');
+
+    ws.on('message', function incoming(message) {
+        console.log('Mensaje recibido del cliente:', message);
+
+        // Aquí puedes procesar el mensaje recibido y enviar respuestas según sea necesario
+        // Por ejemplo, puedes enviar mensajes a otros clientes conectados al mismo foro
+        // o realizar otras operaciones relacionadas con el foro.
+        
+        // Ejemplo de envío de un mensaje de confirmación al cliente
+        ws.send('Mensaje recibido en el servidor');
+    });
+});
+

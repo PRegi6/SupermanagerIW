@@ -60,6 +60,11 @@ public class RootController {
         return "registro";
     }
 
+    @GetMapping("/foro")
+    public String foro(Model model) {
+        return "foro";
+    }
+
     /**
      * Register a new user
      */
