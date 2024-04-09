@@ -73,7 +73,7 @@
                 <tbody>
                     <tr th:each="liga : ${ligas}">
                         <td>
-                            <a href="#" onclick="connectToForum('${liga.id}', '${liga.nombreLiga}')">
+                            <a th:href="@{/foro/{id}(id=${liga.id})}">
                                 <span th:text="${liga.nombreLiga}"></span>
                             </a>
                         </td>
@@ -85,29 +85,6 @@
     </main>
     <th:block th:replace="fragments/footer.html :: footer" />
 
-    <!-- JavaScript para WebSocket -->
-    <script>
-        function connectToForum(id, nombre) {
-            const socket = new WebSocket('ws://localhost:8080/actualidad/foro'); // Cambiar la URL según corresponda
-            
-            socket.onopen = function(event) {
-                console.log('Conexión establecida');
-                socket.send(JSON.stringify({ id: id, nombre: nombre }));
-            };
-            
-            socket.onmessage = function(event) {
-                console.log('Mensaje recibido:', event.data);
-                // Procesar el mensaje recibido del servidor WebSocket
-            };
-            
-            socket.onclose = function(event) {
-                console.log('Conexión cerrada');
-            };
-            
-            socket.onerror = function(error) {
-                console.error('Error en la conexión:', error);
-            };
-        }
-    </script>
+   
 </body>
 </html>

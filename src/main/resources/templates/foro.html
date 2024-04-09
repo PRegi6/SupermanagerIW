@@ -14,13 +14,35 @@
             <h1>Foro</h1>
         </div>
         <div class="container">
-            <form class="form-signin" method="post" th:action="@{/foro}">
+            <form class="form-signin" method="post" th:action="@{/foro/{id}(id=${liga.id})}">
+
+                <th:block th:if="${mensajes.empty}"><p>Foro vacio</p> </th:block> 
+                <th:block th:if="${not mensajes.empty}"> 
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Mensajes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="mensaje : ${mensajes}">
+                                <td>
+                                    <p th:text="${mensaje.text}">mensaje</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </th:block> 
+
+
+
                 <p th:if="${error}" class="error" th:text="${error}">
                     Error en el foro
                 </p>
                 <p>
                     <label for="mensaje" class="visually-hidden">Mensaje</label>
-                    <input type="text" id="mensajeusuario" name="mensajeusuario" class="form-control" placeholder="Mensaje" required="required">
+                    <input type="text" id="mensaje" name="mensaje" class="form-control" placeholder="Mensaje" required="required">
                 </p>
                 <button class="btn btn-lg btn-custom btn-block" type="submit">Publicar</button>
             </form>
@@ -30,6 +52,10 @@
     <th:block th:replace="fragments/footer.html :: footer" />
 
     <script th:src="@{/js/ajax-demo.js}"></script>
+
 </body>
+
+ 
+</script>
 
 </html>

@@ -17,6 +17,9 @@ import lombok.Data;
             + "WHERE l.nombreLiga = :nombreliga"),
     @NamedQuery(name="Liga.byidliga",
     query="SELECT l FROM Liga l "
+            + "WHERE l.id = :idLiga"),
+    @NamedQuery(name="Liga.mensajes",
+    query="SELECT l.received FROM Liga l "
             + "WHERE l.id = :idLiga")
 })
 @Table(name="Liga")

@@ -7,16 +7,6 @@
 
 
 // Inicia el servidor HTTP
-const server = app.listen(8080, () => {
-    console.log('Servidor HTTP iniciado en el puerto 8080');
-});
-
-// Asocia el servidor WebSocket al servidor HTTP
-server.on('upgrade', (request, socket, head) => {
-    wsd.handleUpgrade(request, socket, head, (ws) => {
-        wsd.emit('connection', ws, request);
-    });
-});
 
 const ws = {
 
@@ -215,6 +205,7 @@ function postImage(img, endpoint, name, filename) {
 document.addEventListener("DOMContentLoaded", () => {
     if (config.socketUrl) {
         let subs = config.admin ? ["/topic/admin", "/user/queue/updates"] : ["/user/queue/updates"]
+        subs.push("/user/actualidad/foro/");
         ws.initialize(config.socketUrl, subs);
 
         let p = document.querySelector("#nav-unread");
@@ -232,25 +223,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-const WebSocket = require('ws');
-const express = require('express');
-const app = express();
-
-// Configuración del servidor WebSocket
-const wsd = new WebSocket.Server({ noServer: true });
-
-wsd.on('connection', function connection(ws) {
-    console.log('Cliente conectado');
-
-    ws.on('message', function incoming(message) {
-        console.log('Mensaje recibido del cliente:', message);
-
-        // Aquí puedes procesar el mensaje recibido y enviar respuestas según sea necesario
-        // Por ejemplo, puedes enviar mensajes a otros clientes conectados al mismo foro
-        // o realizar otras operaciones relacionadas con el foro.
-        
-        // Ejemplo de envío de un mensaje de confirmación al cliente
-        ws.send('Mensaje recibido en el servidor');
-    });
-});
 

@@ -1,7 +1,9 @@
 package es.ucm.fdi.iw;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
@@ -17,6 +19,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
+import es.ucm.fdi.iw.model.Equipo;
+import es.ucm.fdi.iw.model.Liga;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.User.Role;
 
@@ -80,6 +84,18 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 			ws = ws.replace("ws:", "wss:"); // for deployment in containers
 		}
 		session.setAttribute("url", url);
+		List<Liga> ligasUsr = new ArrayList<Liga>();
+		List<Equipo> equiposUsr = entityManager.createNamedQuery("Equipo.misEquipos", Equipo.class)
+			.setParameter("owner", u)
+				.getResultList();
+
+		for (Equipo e : equiposUsr) {
+			Liga liga = e.getLiga();
+			if (liga != null) {
+				ligasUsr.add(liga);
+			}
+		}
+		session.setAttribute("misLigas", ligasUsr);
 		session.setAttribute("ws", ws);
 
 		// redirects to 'admin' or 'user/{id}', depending on the user

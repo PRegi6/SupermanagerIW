@@ -60,10 +60,7 @@ public class RootController {
         return "registro";
     }
 
-    @GetMapping("/foro")
-    public String foro(Model model) {
-        return "foro";
-    }
+    
 
     /**
      * Register a new user
@@ -284,33 +281,13 @@ public class RootController {
         return "actualidad"; 
     }
 
-    @PostMapping("/actualidad")
-    @Transactional
-    public String postMensaje(HttpSession session, @RequestParam("ligaId") Long ligaId, @RequestParam("texto") String texto) {
-        
-        User sender = (User)session.getAttribute("u");
-        Liga liga = entityManager.find(Liga.class, ligaId);
-
-        if (liga != null && texto != null) {
-            // Crear un nuevo mensaje
-            Message mensaje = new Message();
-            mensaje.setSender(sender);
-            mensaje.setRecipient(liga);
-            mensaje.setText(texto);
-            mensaje.setDateSent(LocalDateTime.now());
-            
-            entityManager.persist(mensaje);
-            entityManager.flush();
-        }
     
-        return "/actualidad";
-    }
 
     @GetMapping("/miequipo")
     public String getMiequipo(Model model) { return "miequipo"; }
 
     @GetMapping("/jugador/{idJugador}")
-    public String getJugador(@PathVariable Long idJugador, Model model) {
+    public String getJugador(@PathVariable long idJugador, Model model) {
         JugadorACB jugador = entityManager.createNamedQuery("JugadorACB.jugadorId", JugadorACB.class)
         .setParameter("idJugador", idJugador)
             .getSingleResult();
@@ -320,7 +297,7 @@ public class RootController {
     }
 
     @GetMapping("/liga/{idLiga}")
-    public String getLiga(@PathVariable Long idLiga, Model model) {
+    public String getLiga(@PathVariable long idLiga, Model model) {
         Liga liga = entityManager.createNamedQuery("Liga.byidliga", Liga.class)
             .setParameter("idLiga", idLiga)
                 .getSingleResult();
@@ -334,7 +311,47 @@ public class RootController {
         model.addAttribute("equipos", equipos);
         model.addAttribute("nombreLiga", liga.getNombreLiga());
 
+
         return "liga"; 
+    }
+
+    @GetMapping("/foro/{idLiga}")
+    public String getForo(@PathVariable long idLiga, Model model) {
+        Liga liga = entityManager.createNamedQuery("Liga.byidliga", Liga.class)
+            .setParameter("idLiga", idLiga)
+                .getSingleResult();
+
+        List<Message> mensajes= liga.getReceived();
+
+        model.addAttribute("mensajes", mensajes);
+        model.addAttribute("liga", liga);
+        return "foro"; 
+    }
+
+    @PostMapping("/foro/{idLiga}")
+    @Transactional
+    public String postMensaje(HttpSession session, @PathVariable long idLiga, @RequestParam String mensaje, Model model) {
+        
+        User sender = (User)session.getAttribute("u");
+        sender = entityManager.find(User.class, sender.getId());
+        Liga liga = entityManager.find(Liga.class, idLiga);
+
+        if (liga != null && mensaje != null) {
+            // Crear un nuevo mensaje
+            Message m = new Message();
+            m.setSender(sender);
+            m.setRecipient(liga);
+            m.setText(mensaje);
+            m.setDateSent(LocalDateTime.now());
+            liga.getReceived().add(m);
+            
+            entityManager.persist(m);
+            entityManager.flush();
+        }
+        List<Message> mensajes= liga.getReceived();
+        model.addAttribute("mensajes", mensajes);
+        model.addAttribute("liga", liga);
+        return "/foro";
     }
     
     @GetMapping("/crearliga")
@@ -429,6 +446,10 @@ public class RootController {
             equipo.setLiga(liga);
             entityManager.persist(equipo);
             entityManager.flush();
+
+            List<Liga> misLigas = (List<Liga>)session.getAttribute("misLigas");
+            misLigas.add(liga);
+            session.setAttribute("misLigas", misLigas);
 
             return "redirect:clasificacion";
         }
