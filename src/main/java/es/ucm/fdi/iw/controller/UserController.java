@@ -247,52 +247,5 @@ public class UserController {
 		session.setAttribute("unread", unread);
 		return "{\"unread\": " + unread + "}";
     }
-    
-    /**
-     * Posts a message to a user.
-     * @param id of target user (source user is from ID)
-     * @param o JSON-ized message, similar to {"message": "text goes here"}
-     * @throws JsonProcessingException
-     */
-    @PostMapping("/{id}/{id_liga}/msg")
-	@ResponseBody
-	@Transactional
-	public String postMsg(@PathVariable long id_user, @PathVariable long id_liga, 
-			@RequestBody JsonNode o, Model model, HttpSession session) 
-		throws JsonProcessingException {
-		
-		String text = o.get("message").asText();
-		Liga l = entityManager.find(Liga.class, id_liga);
-		User u = entityManager.find(User.class, id_user);
-		User sender = entityManager.find(
-				User.class, ((User)session.getAttribute("u")).getId());
-		model.addAttribute("user", u);
-		
-		// construye mensaje, lo guarda en BD
-		Message m = new Message();
-		m.setRecipient(l);
-		m.setSender(sender);
-		m.setDateSent(LocalDateTime.now());
-		m.setText(text);
-		entityManager.persist(m);
-		entityManager.flush(); // to get Id before commit
-		
-		ObjectMapper mapper = new ObjectMapper();
-		/*
-		// construye json: método manual
-		ObjectNode rootNode = mapper.createObjectNode();
-		rootNode.put("from", sender.getUsername());
-		rootNode.put("to", u.getUsername());
-		rootNode.put("text", text);
-		rootNode.put("id", m.getId());y
-		String json = mapper.writeValueAsString(rootNode);
-		*/
-		// persiste objeto a json usando Jackson
-		String json = mapper.writeValueAsString(m.toTransfer());
-
-		log.info("Sending a message to {} with contents '{}'", id_liga, json);
-
-		messagingTemplate.convertAndSend("/user/"+u.getUsername()+"/queue/updates", json);
-		return "{\"result\": \"message sent.\"}";
-	}
+	
 }

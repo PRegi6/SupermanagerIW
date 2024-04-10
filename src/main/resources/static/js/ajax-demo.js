@@ -24,7 +24,7 @@ function renderMsg(msg) {
 
 // pinta mensajes viejos al cargarse, via AJAX
 let messageDiv = document.getElementById("mensajes");
-go(config.rootUrl + "/user/received", "GET").then(ms =>
+go(config.rootUrl + "/foro", "GET").then(ms =>
     ms.forEach(m => messageDiv.insertAdjacentHTML("beforeend", renderMsg(m))));
 
 // y aquí pinta mensajes según van llegando

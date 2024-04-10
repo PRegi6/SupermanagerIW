@@ -204,14 +204,14 @@ function postImage(img, endpoint, name, filename) {
  */
 document.addEventListener("DOMContentLoaded", () => {
     if (config.socketUrl) {
-        let subs = config.admin ? ["/topic/admin", "/user/queue/updates"] : ["/user/queue/updates"]
-        subs.push("/user/actualidad/foro/");
+        let subs = config.admin ? ["/topic/admin", "/user/queue/updates", "/foro"] : ["/user/queue/updates", "/foro"]
         ws.initialize(config.socketUrl, subs);
-
-        let p = document.querySelector("#nav-unread");
-        if (p) {
-            go(`${config.rootUrl}/user/unread`, "GET").then(d => p.textContent = d.unread);
-        }
+        
+        // Ahora no hay mensajes sin leer
+        // let p = document.querySelector("#nav-unread");
+        // if (p) {
+        //     go(`${config.rootUrl}/user/unread`, "GET").then(d => p.textContent = d.unread);
+        // }
     } else {
         console.log("Not opening websocket: missing config", config)
     }

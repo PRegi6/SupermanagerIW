@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.servlet.http.HttpSession;
@@ -22,6 +23,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import es.ucm.fdi.iw.model.Equipo;
 import es.ucm.fdi.iw.model.EquipoACB;
@@ -34,6 +42,8 @@ import es.ucm.fdi.iw.model.PuntosJugador;
 import es.ucm.fdi.iw.model.User;
 import es.ucm.fdi.iw.model.User.Role;
 import es.ucm.fdi.iw.model.Message;
+import es.ucm.fdi.iw.model.Transferable;
+
 import java.time.LocalDateTime;
 
 
@@ -49,6 +59,9 @@ public class RootController {
     @Autowired
 	private PasswordEncoder passwordEncoder;
 
+    @Autowired
+	private SimpMessagingTemplate messagingTemplate;
+
 	private static final Logger log = LogManager.getLogger(RootController.class);
 
 	@GetMapping("/login")
@@ -59,8 +72,6 @@ public class RootController {
     public String registro(Model model) {
         return "registro";
     }
-
-    
 
     /**
      * Register a new user
@@ -281,8 +292,6 @@ public class RootController {
         return "actualidad"; 
     }
 
-    
-
     @GetMapping("/miequipo")
     public String getMiequipo(Model model) { return "miequipo"; }
 
@@ -311,7 +320,6 @@ public class RootController {
         model.addAttribute("equipos", equipos);
         model.addAttribute("nombreLiga", liga.getNombreLiga());
 
-
         return "liga"; 
     }
 
@@ -329,29 +337,39 @@ public class RootController {
     }
 
     @PostMapping("/foro/{idLiga}")
+    @ResponseBody
     @Transactional
-    public String postMensaje(HttpSession session, @PathVariable long idLiga, @RequestParam String mensaje, Model model) {
+    public String postMensaje(@PathVariable long idLiga, @RequestBody JsonNode o, HttpSession session, Model model) throws JsonProcessingException{
         
+        String text = o.get("message").asText();
         User sender = (User)session.getAttribute("u");
         sender = entityManager.find(User.class, sender.getId());
         Liga liga = entityManager.find(Liga.class, idLiga);
 
-        if (liga != null && mensaje != null) {
-            // Crear un nuevo mensaje
-            Message m = new Message();
-            m.setSender(sender);
-            m.setRecipient(liga);
-            m.setText(mensaje);
-            m.setDateSent(LocalDateTime.now());
-            liga.getReceived().add(m);
-            
-            entityManager.persist(m);
-            entityManager.flush();
-        }
+        // Crear un nuevo mensaje
+        Message m = new Message();
+        m.setSender(sender);
+        m.setRecipient(liga);
+        m.setText(text);
+        m.setDateSent(LocalDateTime.now());
+        liga.getReceived().add(m);
+        m.toTransfer();
+        
+        entityManager.persist(m);
+        entityManager.flush();
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        String json = mapper.writeValueAsString(m.toTransfer());
+
+        log.info("Sending a message to {} with contents '{}'", liga.getId(), json);
+
+        messagingTemplate.convertAndSend("/foro/" + liga.getId(), json);
         List<Message> mensajes= liga.getReceived();
         model.addAttribute("mensajes", mensajes);
         model.addAttribute("liga", liga);
-        return "/foro";
+
+        return "{\"result\": \"message sent.\"}";
     }
     
     @GetMapping("/crearliga")

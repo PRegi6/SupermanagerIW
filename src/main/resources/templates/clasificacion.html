@@ -12,12 +12,10 @@
     <main class="flex-shrink-0">
         <div class="container">
             <h1>Clasificación de ligas</h1>
-            <!-- Verificar si el usuario se ha unido a alguna liga -->
             <th:block th:if="${equipos.empty}">
                 <p>No te has unido a ninguna liga todavía.</p>
             </th:block>
             <th:block th:if="${not equipos.empty}">
-                <!-- Mostrar la tabla si el usuario se ha unido a alguna liga -->
                 <table>
                     <thead>
                         <tr>
