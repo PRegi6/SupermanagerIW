@@ -172,6 +172,34 @@ public class RootController {
     }
 
     /**
+     * Devuelve la información de las ligas a las que está unido un usuario
+     */
+    @GetMapping("/ligas")
+    public String getLigas(@RequestParam String nombreEquipo, HttpSession session, Model model) {
+        User owner = (User)session.getAttribute("u");
+        List <Equipo> misEquipos = entityManager.createNamedQuery("Equipo.misEquipos", Equipo.class)
+            .setParameter("owner", owner)
+                .getResultList();
+
+        List<Liga> ligasDisponibles = entityManager.createNamedQuery("Liga.allLigas", Liga.class)
+            .getResultList();
+        
+        // Obtener una lista de las ligas a las que hay equipos unidos
+        List<Liga> ligasConEquipos = misEquipos.stream()
+            .map(Equipo::getLiga)
+            .collect(Collectors.toList());
+        
+        // Filtrar las ligas disponibles para excluir aquellas a las que hay equipos unidos
+        List<Liga> ligasSinEquipos = ligasDisponibles.stream()
+            .filter(liga -> !ligasConEquipos.contains(liga))
+            .collect(Collectors.toList());
+        
+        model.addAttribute("nombreEquipo", nombreEquipo);
+        model.addAttribute("ligas", ligasSinEquipos);
+        return "ligas";
+    }
+
+    /**
      * Devuelve la información de los equipos de un usuario
      */
     @GetMapping("/equipos")
@@ -380,7 +408,7 @@ public class RootController {
      */
 	@PostMapping("/crearliga")
 	@Transactional
-    public String createLiga(@RequestParam String nombreliga, @RequestParam String password, @RequestParam Boolean publica,
+    public String createLiga(@RequestParam String nombreliga, @RequestParam String password,
         HttpSession session, Model model) throws IOException {
         
         List<Liga> existentes = entityManager.createNamedQuery("Liga.bynombreliga", Liga.class)
@@ -397,7 +425,6 @@ public class RootController {
         candidato.setContrasena(password);
         User u = (User)session.getAttribute("u");
         candidato.setCreador(u);
-        candidato.setPublica(publica);
         entityManager.persist(candidato);
         entityManager.flush();
         
@@ -437,30 +464,26 @@ public class RootController {
     }
 
     @GetMapping("/unirseliga")
-    public String getUnirseLiga(@RequestParam String nombreequipo, HttpSession session) {
-        session.setAttribute("nombreequipo", nombreequipo);
+    public String getUnirseLiga(@RequestParam String nombreEquipo, @RequestParam String nombreLiga, Model model) {
+        model.addAttribute("nombreEquipo", nombreEquipo);
+        model.addAttribute("nombreLiga", nombreLiga);
         return "unirseliga";
     }
 
     @PostMapping("/unirseliga")
     @Transactional
-    public String unirLiga(@RequestParam String nombreliga, @RequestParam String password, HttpSession session, Model model) {
+    public String unirLiga(@RequestParam String nombreLiga, @RequestParam String nombreEquipo, @RequestParam String password, HttpSession session, Model model) {
         Liga liga = entityManager.createNamedQuery("Liga.bynombreliga", Liga.class)
-            .setParameter("nombreliga", nombreliga)
+            .setParameter("nombreliga", nombreLiga)
                 .getSingleResult();
 
-        if (liga == null) {
-            model.addAttribute("error", "Liga no existente");
-        }
-        else if (!liga.getContrasena().equals(password)){
+        if (!liga.getContrasena().equals(password)){
             model.addAttribute("error", "Contraseña errónea");
         }
         else {
-            String nombreequipo = (String)session.getAttribute("nombreequipo");
             Equipo equipo = entityManager.createNamedQuery("Equipo.bynombreequipo", Equipo.class)
-                .setParameter("nombreequipo", nombreequipo)
+                .setParameter("nombreequipo", nombreEquipo)
                     .getSingleResult();
-            session.removeAttribute("nombreequipo");
             equipo.setLiga(liga);
             entityManager.persist(equipo);
             entityManager.flush();

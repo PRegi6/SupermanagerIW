@@ -6,8 +6,8 @@ INSERT INTO "PUBLIC"."IWUSER" VALUES
 (3, TRUE, NULL, NULL, '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 'USER', 'b');    
 
 INSERT INTO "PUBLIC"."LIGA" VALUES
-(4, '123', 'PaquitoLeague', TRUE, 3),
-(5, '123', 'GG', TRUE, 2);   
+(4, '123', 'PaquitoLeague', 3),
+(5, '123', 'GG', 2);   
 
 INSERT INTO "PUBLIC"."EQUIPO" VALUES
 (6, 500000.0, 0, 'Los rubios', 4, 3),

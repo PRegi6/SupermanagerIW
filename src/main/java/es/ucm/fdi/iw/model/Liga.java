@@ -41,7 +41,5 @@ public class Liga {
     @OneToMany
     @JoinColumn(name="mensajes")
     private List<Message> received = new ArrayList<>();
-
-    private boolean publica;
     
 }

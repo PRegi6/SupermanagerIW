@@ -36,8 +36,8 @@
                             <td th:text="${equipo.dinero}"></td>
                             <!-- Si el equipo no está en una liga se muestra un botón para unirse a una -->
                             <td th:if="${equipo.liga eq null}">
-                                <form th:action="@{/unirseliga}" method="get">
-                                    <input type="hidden" id="nombreequipo" name="nombreequipo" th:value="${equipo.teamname}" />
+                                <form th:action="@{/ligas}" method="get">
+                                    <input type="hidden" id="nombreEquipo" name="nombreEquipo" th:value="${equipo.teamname}" />
                                     <button type="submit">Unirse a una liga</button>
                                 </form>
                             </td>

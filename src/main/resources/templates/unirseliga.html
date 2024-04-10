@@ -11,17 +11,15 @@
 
     <main class="flex-shrink-0">
         <div class="container">
-            <h1>Busca una liga y únete</h1>
+            <h1>Unirse a <span th:text="${nombreLiga}">Liga</span></h1>
         </div>
         <div class="container">
             <form class="form-signin" method="post" th:action="@{/unirseliga}">
                 <p th:if="${error}" class="error" th:text="${error}"></p>
                 <p>
-                    <label for="nombreliga" class="visually-hidden">Nombre de la liga</label>
-                    <input type="text" id="nombreliga" name="nombreliga" class="form-control" placeholder="Nombre" required="required">
-                </p>
-                <p>
                     <label for="password" class="visually-hidden">Password</label>
+                    <input type="hidden" id="nombreLiga" name="nombreLiga" th:value="${nombreLiga}" />
+                    <input type="hidden" id="nombreEquipo" name="nombreEquipo" th:value="${nombreEquipo}" />
                     <input type="password" id="password" name="password" class="form-control" placeholder="Password" required="required">
                 </p>
                 <button class="btn btn-lg btn-custom btn-block" type="submit">Unirse</button>
