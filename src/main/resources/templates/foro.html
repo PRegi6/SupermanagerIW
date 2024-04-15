@@ -14,9 +14,8 @@
             <h1>Foro</h1>
         </div>
         <div class="container">
-            <!-- Mensajes recibidos -->
+            <th:block th:if="${mensajes.empty}"><p>Foro vacio</p></th:block>
             <div class="py-5 row" id="mensajes">
-                <th:block th:if="${mensajes.empty}"><p>Foro vacio</p></th:block>
             </div>
             <form class="form-signin" method="post" th:action="@{/foro/{id}(id=${liga.id})}">
                 <p th:if="${error}" class="error" th:text="${error}">

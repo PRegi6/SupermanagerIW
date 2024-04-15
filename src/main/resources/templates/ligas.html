@@ -12,12 +12,10 @@
     <main class="flex-shrink-0">
         <div class="container">
             <h1>Ligas</h1>
-            <!-- Verificar si la lista de equipos está vacía -->
             <th:block th:if="${ligas.empty}">
                 <p>No hay ligas creadas.</p>
             </th:block>
             <th:block th:if="${not ligas.empty}">
-                <!-- Mostrar la tabla si hay equipos creados -->
                 <table>
                     <thead>
                         <tr>
@@ -27,7 +25,6 @@
                     <tbody>
                         <tr th:each="liga : ${ligas}">
                             <td th:text="${liga.nombreLiga}"></td>
-                            <!-- Si el equipo no está en una liga se muestra un botón para unirse a una -->
                             <td>
                                 <form th:action="@{/unirseliga}" method="get">
                                     <input type="hidden" id="nombreEquipo" name="nombreEquipo" th:value="${nombreEquipo}" />

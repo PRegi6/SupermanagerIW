@@ -392,7 +392,7 @@ public class RootController {
 
         log.info("Sending a message to {} with contents '{}'", liga.getId(), json);
 
-        messagingTemplate.convertAndSend("/foro/" + liga.getId(), json);
+        messagingTemplate.convertAndSend("/topic/" + liga.getId(), json);
         List<Message> mensajes= liga.getReceived();
         model.addAttribute("mensajes", mensajes);
         model.addAttribute("liga", liga);
