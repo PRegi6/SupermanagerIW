@@ -128,12 +128,18 @@ public class RootController {
 
         model.addAttribute("equipos", equipos);
 
+        List<PartidoACB> partidosant = entityManager.createNamedQuery("PartidoACB.partidosJornada", PartidoACB.class)
+            .setParameter("jornada", jornada.getJornada()-1)
+                .getResultList();
+
+
         List<PartidoACB> partidos = entityManager.createNamedQuery("PartidoACB.partidosJornada", PartidoACB.class)
             .setParameter("jornada", jornada.getJornada())
                 .getResultList();
 
         model.addAttribute("partidos", partidos);
         model.addAttribute("jornada", jornada.getJornada());
+        model.addAttribute("partidosant", partidosant);
         
         return "index";
     }
