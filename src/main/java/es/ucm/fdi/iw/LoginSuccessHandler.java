@@ -84,7 +84,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 			ws = ws.replace("ws:", "wss:"); // for deployment in containers
 		}
 		session.setAttribute("url", url);
-		List<Liga> ligasUsr = new ArrayList<Liga>();
+		List<String> ligasUsr = new ArrayList<String>();
 		List<Equipo> equiposUsr = entityManager.createNamedQuery("Equipo.misEquipos", Equipo.class)
 			.setParameter("owner", u)
 				.getResultList();
@@ -92,10 +92,12 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 		for (Equipo e : equiposUsr) {
 			Liga liga = e.getLiga();
 			if (liga != null) {
-				ligasUsr.add(liga);
+				ligasUsr.add("/topic/"+liga.getId());
 			}
 		}
 		session.setAttribute("misLigas", ligasUsr);
+		log.info("Mis ligas {}", ligasUsr);
+
 		session.setAttribute("ws", ws);
 
 		// redirects to 'admin' or 'user/{id}', depending on the user

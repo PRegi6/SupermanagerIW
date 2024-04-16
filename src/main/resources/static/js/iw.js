@@ -204,8 +204,10 @@ function postImage(img, endpoint, name, filename) {
  */
 document.addEventListener("DOMContentLoaded", () => {
     if (config.socketUrl) {
-        let subs = config.admin ? ["/topic/admin", "/user/queue/updates", "/foro"] : ["/user/queue/updates", "/foro"]
-        ws.initialize(config.socketUrl, subs);
+        let subs = config.admin ? ["/topic/admin", "/user/queue/updates"] : ["/user/queue/updates"]
+        subs = [ ...config.misLigas.replaceAll(/[[\]]/g, '').split(','), ...subs]
+        console.log("No salgais sin hacer commit", subs)
+        ws.initialize(config.socketUrl, subs)
         
         // Ahora no hay mensajes sin leer
         // let p = document.querySelector("#nav-unread");
@@ -220,7 +222,3 @@ document.addEventListener("DOMContentLoaded", () => {
     // 	 document.addEventListener("DOMContentLoaded", () => { /* your-code-here */ });
     //   (assuming you do not care about order-of-execution, all such handlers will be called correctly)
 });
-
-
-
-
