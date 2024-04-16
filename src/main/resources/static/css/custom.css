@@ -169,3 +169,9 @@ th, td{
 .form-jornada {
     margin-right: 10px; /* Agrega un espacio entre los botones */
 }
+
+.ultimosPartidos p {
+    display: inline-block; /* Hace que los párrafos estén en la misma línea */
+    margin-right: 5px; /* Añade un pequeño margen entre los párrafos */
+    text-align: center; /* Alinea el texto al centro */
+}

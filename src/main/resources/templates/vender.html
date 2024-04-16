@@ -24,6 +24,9 @@
                         <p>Equipo: <span th:text="${jugador.equipo}">Equipo</span></p>
                         <p>Posición: <span th:text="${jugador.posicion}">Jugador</span></p>
                         <p>Últimos partidos</p>
+                        <div class = "ultimosPartidos">
+                            <p th:each="valoracion : ${ultimosPartidos}" th:text="${valoracion}">Valoracion</p>
+                        </div>
                     </div>
                     <div class="promedio_valor">
                         <p>prom. <span th:text="${jugador.partidosJugados != 0 ? jugador.puntosTotales / jugador.partidosJugados : '0'}">Promedio de puntos</span></p>

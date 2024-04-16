@@ -9,7 +9,6 @@ import javax.transaction.Transactional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model; 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -117,13 +116,6 @@ public class AdminController {
                         .setParameter("nombre", j.getNombre())
                         .setParameter("jornada", jornada.getJornada())
                             .getSingleResult();
-
-                    j.setPartidosJugados(j.getPartidosJugados() + 1);
-                    j.setPuntosTotales(j.getPuntosTotales() + pJ.getPuntos());
-                    j.setValorMercado(pJ.getValor_mercado());
-                    j.setValoracionTotal(pJ.getValoracion() + j.getValoracionTotal());
-                    double valoracionMedia = Math.round((j.getValoracionTotal() / j.getPartidosJugados()));
-                    j.setValoracionMedia(valoracionMedia);
 
                     puntosGanados = puntosGanados + pJ.getValoracion();
 
