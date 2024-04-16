@@ -49,14 +49,16 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
-            <div class="calendario">
-                <h2>Calendario - Próxima jornada: <span class="prox-jornada" th:text="${jornada}"></span></h2>
+
+                <h2 style="margin-top: 20px;"> Calendario - Próxima jornada: <span class="prox-jornada" th:text="${jornada}"></span></h2>
                 <div class="lista-partidos">
                     <div class="partido" th:each="partido : ${partidos}">
                         <div class="partido-info">
+                            <img th:src="@{'img/equipos/' + ${partido.local} + '.jpg'}"/>
                             <span class="equipo-local" th:text="${partido.local}"></span>
+                            <span><strong>vs</strong></span>
                             <span class="equipo-visitante" th:text="${partido.visitante}"></span>
+                            <img th:src="@{'img/equipos/' + ${partido.visitante} + '.jpg'}"/>
                         </div>
                     </div>
                 </div>
