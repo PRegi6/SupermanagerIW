@@ -14,7 +14,7 @@
             <h1>Foro</h1>
         </div>
         <div class="container">
-            <th:block th:if="${mensajes.empty}"><p>Foro vacio</p></th:block>
+            <th:block th:if="${mensajes.empty}"><p></p></th:block>
             <div class="py-5 row" id="mensajes">
             </div>
             <form class="form-signin" method="post" th:action="@{/foro/{id}(id=${liga.id})}">
