@@ -9,17 +9,18 @@
 let b = document.getElementById("sendmsg");
 b.onclick = (e) => {
     e.preventDefault();
+    const campo = document.getElementById("message");
     go(b.parentNode.action, 'POST', {
-            message: document.getElementById("message").value
+            message: campo.value
         })
-        .then(d => console.log("happy", d))
+        .then(d => campo.value = "")
         .catch(e => console.log("sad", e))
 }
 
 // cómo pintar 1 mensaje (devuelve html que se puede insertar en un div)
 function renderMsg(msg) {
     console.log("rendering: ", msg);
-    return `<div>${msg.from} @${msg.sent}: ${msg.text}</div>`;
+    return `<div">${msg.from}: ${msg.text}</div>`;
 }
 
 // pinta mensajes viejos al cargarse, via AJAX
