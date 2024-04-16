@@ -181,7 +181,7 @@ public class AdminController {
 
         model.addAttribute("jornada", jornada.getJornada());
 
-        return "index";
+        return "redirect:/";
     }
 
 }

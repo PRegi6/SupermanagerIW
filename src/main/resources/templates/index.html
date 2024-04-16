@@ -49,17 +49,37 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
-            <div class="calendario">
-                <h2>Calendario - Próxima jornada: <span class="prox-jornada" th:text="${jornada}"></span></h2>
+
+                <h2 style="margin-top: 20px;"> Calendario - Próxima jornada: <span class="prox-jornada" th:text="${jornada}"></span></h2>
                 <div class="lista-partidos">
                     <div class="partido" th:each="partido : ${partidos}">
                         <div class="partido-info">
+                            <img th:src="@{'img/equipos/' + ${partido.local} + '.jpg'}"/>
                             <span class="equipo-local" th:text="${partido.local}"></span>
+                            <span><strong>vs</strong></span>
                             <span class="equipo-visitante" th:text="${partido.visitante}"></span>
+                            <img th:src="@{'img/equipos/' + ${partido.visitante} + '.jpg'}"/>
                         </div>
                     </div>
                 </div>
+
+                <th:block th:if="${jornada &gt; 1}">
+                    <h2 style="margin-top: 20px;"> Resultados - Ultima jornada: <span class="ant-jornada" th:text="${jornada-1}"></span></h2>
+                    <div class="lista-partidos">
+                        <div class="partido" th:each="partidoa : ${partidosant}">
+                            <div class="partido-info">
+                                <img th:src="@{'img/equipos/' + ${partidoa.local} + '.jpg'}"/>
+                                <span class="equipo-local" th:text="${partidoa.local}"></span>
+                                <span class="equipo-local" th:text="${partidoa.puntosLocal}"></span>
+                                <span><strong>-</strong></span>
+                                <span class="equipo-local" th:text="${partidoa.puntosVisitante}"></span>
+                                <span class="equipo-visitante" th:text="${partidoa.visitante}"></span>
+                                <img th:src="@{'img/equipos/' + ${partidoa.visitante} + '.jpg'}"/>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+                
             </div>
         </div>
     </main>
