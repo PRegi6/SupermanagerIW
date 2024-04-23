@@ -18,11 +18,11 @@
             <div class="py-5 row" id="mensajes">
             </div>
             <form class="form-signin" method="post" th:action="@{/foro/{id}(id=${liga.id})}">
-                <p th:if="${error}" class="error" th:text="${error}">
-                    Error en el foro
-                </p>
-                <label for="message" class="visually-hidden">Mensaje</label>
-                <input type="text" id="message" name="message" class="form-control" placeholder="Mensaje" required="required">
+                    <p th:if="${error}" class="error" th:text="${error}">
+                        Error en el foro
+                    </p>
+                    <label for="message" class="visually-hidden">Mensaje</label>
+                <input type="textarea" id="message" name="message" class="form-control" placeholder="Mensaje" required="required" maxlength="257">
                 <button id="sendmsg" class="btn btn-lg btn-custom btn-block" type="submit">Publicar</button>
             </form>
         </div>
