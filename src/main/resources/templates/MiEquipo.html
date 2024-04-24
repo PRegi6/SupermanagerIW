@@ -37,6 +37,9 @@
                         </a>
                         <p th:text="${jugador.posicion}">Posición jugador</p>
                         <p>Últimos partidos</p>
+                        <div class = "ultimosPartidos">
+                            <p th:each="valoracion : ${ultimosPartidos[jugador.nombre]}" th:text="${valoracion}">Valoracion</p>
+                        </div>
                     </div>
                     <div class="promedio_valor">
                         <p th:text="${jugador.partidosJugados != 0 ? jugador.puntosTotales / jugador.partidosJugados : '0'}">Promedio de puntos</p>
@@ -50,7 +53,6 @@
                             <button class="btn btn-lg btn-custom btn-block" type="submit">Vender</button>
                         </form>
                     </div>
-                    
                 </div>
                 <th:block th:if="${bases.size &lt; 2}">
                     <form class="form-signin" method="post" th:action="@{/fichar}">
@@ -70,6 +72,9 @@
                         </a>
                         <p th:text="${jugador.posicion}">Posición jugador</p>
                         <p>Últimos partidos</p>
+                        <div class = "ultimosPartidos">
+                            <p th:each="valoracion : ${ultimosPartidos[jugador.nombre]}" th:text="${valoracion}">Valoracion</p>
+                        </div>
                     </div>
                     <div class="promedio_valor">
                         <p th:text="${jugador.partidosJugados != 0 ? jugador.puntosTotales / jugador.partidosJugados : '0'}">Promedio de puntos</p>
@@ -102,6 +107,9 @@
                         </a>
                         <p th:text="${jugador.posicion}">Posición jugador</p>
                         <p>Últimos partidos</p>
+                        <div class = "ultimosPartidos">
+                            <p th:each="valoracion : ${ultimosPartidos[jugador.nombre]}" th:text="${valoracion}">Valoracion</p>
+                        </div>
                     </div>
                     <div class="promedio_valor">
                         <p th:text="${jugador.partidosJugados != 0 ? jugador.puntosTotales / jugador.partidosJugados : '0'}">Promedio de puntos</p>

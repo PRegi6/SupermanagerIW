@@ -27,6 +27,7 @@
                             <th>Valoracion Total</th>
                             <th>Valoracion media</th>
                             <th>Valor de mercado</th>
+                            <th>Últimos partidos</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -45,6 +46,11 @@
                             <td th:text="${jugador.valoracionTotal}"></td>
                             <td th:text="${jugador.valoracionMedia}"></td>
                             <td th:text="${jugador.valorMercado}"></td>
+                            <td>
+                                <div class = "ultimosPartidos">
+                                    <p th:each="valoracion : ${ultimosPartidos}" th:text="${valoracion}">Valoracion</p>
+                                </div>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

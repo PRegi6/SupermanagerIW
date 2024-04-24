@@ -169,3 +169,51 @@ th, td{
 .form-jornada {
     margin-right: 10px; /* Agrega un espacio entre los botones */
 }
+
+.ultimosPartidos p {
+    display: inline-block; /* Hace que los párrafos estén en la misma línea */
+    margin-right: 5px; /* Añade un pequeño margen entre los párrafos */
+    text-align: center; /* Alinea el texto al centro */
+}
+
+.card {
+    border: 2px solid black;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.card-title:hover {
+    color: #ff3700; /* Al pasar el ratón por encima el texto se pone negro*/
+}
+
+.card-text {
+    margin-bottom: 5px;
+}
+
+.card-body {
+    padding: 20px;
+    display: flex;
+    align-items: center; /* Centra verticalmente los elementos */
+}
+
+.card-img {
+    max-width: 100px; /* Ajusta el ancho máximo de la imagen */
+    height: auto;
+    border-radius: 5px;
+    margin-right: 20px; /* Espacio entre la imagen y los otros elementos */
+}
+
+.equipo-imagen {
+    width: 50px; 
+    height: auto;
+    margin-right: 10px; /* Espacio entre la imagen del equipo y la información del jugador */
+}
+

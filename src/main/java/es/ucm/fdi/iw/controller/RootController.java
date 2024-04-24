@@ -128,12 +128,18 @@ public class RootController {
 
         model.addAttribute("equipos", equipos);
 
+        List<PartidoACB> partidosant = entityManager.createNamedQuery("PartidoACB.partidosJornada", PartidoACB.class)
+            .setParameter("jornada", jornada.getJornada()-1)
+                .getResultList();
+
+
         List<PartidoACB> partidos = entityManager.createNamedQuery("PartidoACB.partidosJornada", PartidoACB.class)
             .setParameter("jornada", jornada.getJornada())
                 .getResultList();
 
         model.addAttribute("partidos", partidos);
         model.addAttribute("jornada", jornada.getJornada());
+        model.addAttribute("partidosant", partidosant);
         
         return "index";
     }
@@ -320,16 +326,21 @@ public class RootController {
         return "actualidad"; 
     }
 
-    @GetMapping("/miequipo")
-    public String getMiequipo(Model model) { return "miequipo"; }
-
     @GetMapping("/jugador/{idJugador}")
     public String getJugador(@PathVariable long idJugador, Model model) {
         JugadorACB jugador = entityManager.createNamedQuery("JugadorACB.jugadorId", JugadorACB.class)
         .setParameter("idJugador", idJugador)
             .getSingleResult();
+        
+        Jornada jornadaActual = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
+        List<Integer> listUltPartidos = entityManager.createNamedQuery("PuntosJugador.ultimosPartidos", Integer.class)
+        .setParameter("nombre", jugador.getNombre())    
+        .setParameter("jornada", jornadaActual.getJornada())
+            .setMaxResults(3)
+                .getResultList();
 
         model.addAttribute("jugador", jugador);
+        model.addAttribute("ultimosPartidos", listUltPartidos);
         return "jugador"; 
     }
 
@@ -516,12 +527,24 @@ public class RootController {
 
         Jornada jornada = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
 
+        Map<String, List<Integer>> ultimosPartidos = new HashMap<String, List<Integer>>();
+        for (JugadorACB j : jugadores) {
+            List<Integer> listUltPartidos = entityManager.createNamedQuery("PuntosJugador.ultimosPartidos", Integer.class)
+                .setParameter("nombre", j.getNombre())    
+                .setParameter("jornada", jornada.getJornada())
+                    .setMaxResults(3)
+                        .getResultList();
+
+            ultimosPartidos.put(j.getNombre(), listUltPartidos);
+        }
+
         model.addAttribute("equipo", equipo);
         model.addAttribute("idequipo", idEquipo);
         model.addAttribute("bases", bases);
         model.addAttribute("aleros", aleros);
         model.addAttribute("pivots", pivots);
         model.addAttribute("jornada", jornada.getJornada());
+        model.addAttribute("ultimosPartidos", ultimosPartidos);
 
         // Si hay error al fichar muestro el error y lo quito de la sesión
         model.addAttribute("error", session.getAttribute("error"));
@@ -562,8 +585,6 @@ public class RootController {
 
         return "redirect:/MiEquipo/" + idEquipo;
     }
-
-    
 
     @GetMapping("/fichar")
     public String getFicharJug() { return "fichar"; }
@@ -619,10 +640,22 @@ public class RootController {
 
         jugadores.sort(Comparator.comparing(JugadorACB::getNombre));
 
+        Map<String, List<Integer>> ultimosPartidos = new HashMap<String, List<Integer>>();
+        for (JugadorACB j : jugadores) {
+            List<Integer> listUltPartidos = entityManager.createNamedQuery("PuntosJugador.ultimosPartidos", Integer.class)
+                .setParameter("nombre", j.getNombre())    
+                .setParameter("jornada", jornada.getJornada())
+                    .setMaxResults(3)
+                        .getResultList();
+
+            ultimosPartidos.put(j.getNombre(), listUltPartidos);
+        }
+
         model.addAttribute("idequipo", idequipo);
         model.addAttribute("jugadores", jugadores);
         model.addAttribute("formType", formType);
         model.addAttribute("jornada", jornada.getJornada());
+        model.addAttribute("ultimosPartidos", ultimosPartidos);
 
         return "fichar";
     }
@@ -636,8 +669,17 @@ public class RootController {
             .setParameter("nombre", nombreJugador)
                 .getSingleResult();
 
+        Jornada jornada = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
+
+        List<Integer> listUltPartidos = entityManager.createNamedQuery("PuntosJugador.ultimosPartidos", Integer.class)
+            .setParameter("nombre", jugador.getNombre())    
+            .setParameter("jornada", jornada.getJornada())
+                .setMaxResults(3)
+                    .getResultList();
+
         model.addAttribute("idequipo", idequipo);
         model.addAttribute("jugador", jugador);
+        model.addAttribute("ultimosPartidos", listUltPartidos);
 
         return "vender";
     }
@@ -668,8 +710,8 @@ public class RootController {
             else pivots.add(e);
         }
 
-        model.addAttribute("nombreequipo", equipo.getTeamname());
-        model.addAttribute("equipo", pE);
+        model.addAttribute("equipo", equipo);
+        model.addAttribute("equipoJornada", pE);
         model.addAttribute("idequipo", idEquipo);
         model.addAttribute("bases", bases);
         model.addAttribute("aleros", aleros);

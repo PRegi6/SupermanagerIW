@@ -10,8 +10,12 @@
     <header th:replace="fragments/nav.html :: nav"></header>
 
     <main class="flex-shrink-0">
-        <h1 th:text="${nombreequipo}">Nombre equipo</h1>
-        <h1 th:text="${equipo.puntos}">Puntos equipo</h1>
+        <h1>
+            <a th:href="@{/MiEquipo/{idEquipo}(idEquipo=${equipo.id})}" th:text="${equipo.teamname}">
+                Nombre equipo
+            </a>
+        </h1>
+        <h1>Puntos conseguidos: <span th:text="${equipoJornada.puntos}">Puntos</span></h1>
         <div class="container">
             <div class="jornadas" th:if="${jornada > 1}">
                 <th:block th:each="jornadaJugada : ${#numbers.sequence(1, jornada - 1)}">
