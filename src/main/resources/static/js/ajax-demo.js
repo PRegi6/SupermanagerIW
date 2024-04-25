@@ -1,3 +1,4 @@
+import es.ucm.fdi.iw.model.User;
 /*
  * Ejemplos de uso de JS para interaccionar con servidores
  * y añadir interactividad a la página.
@@ -18,10 +19,30 @@ b.onclick = (e) => {
 }
 
 // cómo pintar 1 mensaje (devuelve html que se puede insertar en un div)
-function renderMsg(msg) {
+function renderMsg(msg,u) {
     console.log("rendering: ", msg);
-    return `<div class="formato-mensaje">${msg.from}:<br> <p>${msg.text}</p></div>`;
+    let deleteButtonHTML = ""; // Inicializamos el HTML del botón como vacío
+    User u = entityManager.createNamedQuery("User.byUsername", User.class)
+		        .setParameter("username", username)
+		        .getSingleResult();		
+		session.setAttribute("u", u);
+    let isAdmin = (user == "a");
+    if (isAdmin) { // Comprobamos si el usuario es admin
+        // Si es admin, definimos el HTML del botón de eliminar
+        deleteButtonHTML = `<button onclick="deleteMessage('${msg.id}')">Eliminar</button>`;
+    }
+    // Incorporamos el botón en el HTML del mensaje si es necesario
+    return `<div class="formato-mensaje">
+                ${msg.from}:<br>
+                <p>${msg.text}</p>
+                ${deleteButtonHTML}  <!-- Añadimos el botón aquí -->
+            </div>`;
 }
+
+function deleteMessage(msgId) {
+    console.log("Eliminando mensaje: ", msgId);
+}
+
 
 // pinta mensajes viejos al cargarse, via AJAX
 let messageDiv = document.getElementById("mensajes");
