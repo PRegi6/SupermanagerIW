@@ -228,3 +228,66 @@ th, td{
     margin-right: 10px; /* Espacio entre la imagen del equipo y la información del jugador */
 }
 
+/*Estilos para la clasificación dentro de una liga*/
+.infoEquipo {
+    display: flex;
+    justify-content: space-between;
+    background-color: lightgray;
+    justify-content: center;
+    align-items: center;
+    height: 45px;
+    margin: 5px;
+    border-radius: 10px;
+}
+
+.posicionEquipo,
+.nombreEquipo,
+.dueñoEquipo,
+.puntosEquipo {
+    flex: 1;
+    padding: 5px;
+    text-align: center;
+}
+
+.posicionEquipo {
+    text-align: left;
+}
+
+.nombreEquipo {
+    font-weight: bold;
+    text-align: left;
+}
+
+.dueñoEquipo {
+    color: grey;
+}
+
+.puntosEquipo {
+    font-weight: bold;
+}
+
+/*Estilo de la página de un jugador*/
+.cabeceraJugador {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.infoPersonal{
+    justify-content: center;
+    align-items: center;
+}
+
+.nombreJugador {
+    font-weight: bold;
+    font-size: 1.125rem;
+}
+
+.promediosTemporada{
+    display: block;
+    background-color: lightgray;
+    font-weight: bold;
+}
+
+.tituloPromedios{
+    text-align: center;
+}
