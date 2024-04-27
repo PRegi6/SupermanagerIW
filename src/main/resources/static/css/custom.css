@@ -114,14 +114,6 @@ img.preview {
             border: none;
         }
 
-.jugadores_mercado {
-    height: calc(100vh - 22.5vh);
-    display: inline-block;
-    overflow: auto;
-    padding-right: 10px;
-    padding-left: 10px;
-    scrollbar-width: none;
-}
 
     .div_jugador {
         background-color: white;
@@ -181,6 +173,10 @@ th, td{
 }
 
 
+.ultimosPartidos {
+    display: inline-block; /* Hace que el contenedor esté en la misma línea */
+}
+
 .ultimosPartidos p {
     display: inline-block; /* Hace que los párrafos estén en la misma línea */
     margin-right: 5px; /* Añade un pequeño margen entre los párrafos */
@@ -202,7 +198,7 @@ th, td{
 }
 
 .card-title:hover {
-    color: #ff3700; /* Al pasar el ratón por encima el texto se pone negro*/
+    color: #ff3700; /* Al pasar el ratón por encima el texto se pone naranja*/
 }
 
 .card-text {
@@ -215,18 +211,6 @@ th, td{
     align-items: center; /* Centra verticalmente los elementos */
 }
 
-.card-img {
-    max-width: 100px; /* Ajusta el ancho máximo de la imagen */
-    height: auto;
-    border-radius: 5px;
-    margin-right: 20px; /* Espacio entre la imagen y los otros elementos */
-}
-
-.equipo-imagen {
-    width: 50px; 
-    height: auto;
-    margin-right: 10px; /* Espacio entre la imagen del equipo y la información del jugador */
-}
 
 /*Estilos para la clasificación dentro de una liga*/
 .infoEquipo {
@@ -290,4 +274,43 @@ th, td{
 
 .tituloPromedios{
     text-align: center;
+}
+
+.texto-posicion {
+    font-weight: bold; /* negrita */
+    text-transform: uppercase; /* mayúsculas */
+    color: #ff3700;
+    font-size: xx-large;
+}
+
+.texto-valor {
+    font-weight: bold;
+    font-style: italic;
+    color: black;
+    font-size: larger;
+}
+
+.spacer {
+    margin: 0 25px; 
+}
+
+.jugador-img {
+    max-width: 250px;
+    height: auto;
+    border-radius: 5px;
+}
+
+.equipo-img {
+    max-width: 50px;
+    height: fit-content;
+    border-radius: 15px;
+}
+.row + .bottom-row {
+    margin-top: 5px;
+}
+
+.promedio{
+    color: green;
+    font-weight: bold;
+    font-size: medium;
 }
