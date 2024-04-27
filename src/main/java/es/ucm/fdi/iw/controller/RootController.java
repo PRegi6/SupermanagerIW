@@ -46,28 +46,28 @@ import es.ucm.fdi.iw.model.Transferable;
 
 import java.time.LocalDateTime;
 
-
 /**
- *  Non-authenticated requests only.
+ * Non-authenticated requests only.
  */
 @Controller
 public class RootController {
 
     @Autowired
-	private EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Autowired
-	private PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
-	private SimpMessagingTemplate messagingTemplate;
+    private SimpMessagingTemplate messagingTemplate;
 
-	private static final Logger log = LogManager.getLogger(RootController.class);
+    private static final Logger log = LogManager.getLogger(RootController.class);
 
-	@GetMapping("/login")
+    @GetMapping("/login")
     public String login(Model model) {
         return "login";
     }
+
     @GetMapping("/registro")
     public String registro(Model model) {
         return "registro";
@@ -76,13 +76,13 @@ public class RootController {
     /**
      * Register a new user
      */
-	@PostMapping("/registro")
-	@Transactional
-    public String createuser(@RequestParam String username, @RequestParam String password, 
-        HttpSession session, Model model) throws IOException {
-        
+    @PostMapping("/registro")
+    @Transactional
+    public String createuser(@RequestParam String username, @RequestParam String password,
+            HttpSession session, Model model) throws IOException {
+
         List<User> existentes = entityManager.createNamedQuery("User.byUsername", User.class)
-            .setParameter("username", username)
+                .setParameter("username", username)
                 .getResultList();
 
         if (!existentes.isEmpty()) {
@@ -97,31 +97,31 @@ public class RootController {
         candidato.setRoles(Role.USER.name());
         entityManager.persist(candidato);
         entityManager.flush();
-        
+
         return "redirect:login";
     }
 
-	@GetMapping("/")
+    @GetMapping("/")
     public String index(HttpSession session, Model model) {
-        User u = (User)session.getAttribute("u");
+        User u = (User) session.getAttribute("u");
         Jornada jornada = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
         if (u != null) {
             model.addAttribute("nombreUsuario", u.getUsername());
-        }
-        else {
+        } else {
             model.addAttribute("nombreUsuario", null);
         }
 
         List<EquipoACB> equipos = entityManager.createNamedQuery("EquipoACB.equipos", EquipoACB.class)
-            .getResultList();
-        
+                .getResultList();
+
         // Define el comparador personalizado
         Comparator<EquipoACB> comparador = Comparator
-            .comparingInt((EquipoACB equipo) -> -equipo.getVictorias()) // Orden descendente por victorias
-            .thenComparingInt(EquipoACB::getDerrotas) // Orden ascendente por derrotas
-            .thenComparingInt((EquipoACB equipo) -> -equipo.getPuntosAFavor()) // Orden descendente por puntos a favor
-            .thenComparingInt(EquipoACB::getPuntosEnContra) // Orden ascendente por puntos en contra
-            .thenComparingInt((EquipoACB equipo) -> -equipo.getDiferencia()); // Orden descendente por diferencia
+                .comparingInt((EquipoACB equipo) -> -equipo.getVictorias()) // Orden descendente por victorias
+                .thenComparingInt(EquipoACB::getDerrotas) // Orden ascendente por derrotas
+                .thenComparingInt((EquipoACB equipo) -> -equipo.getPuntosAFavor()) // Orden descendente por puntos a
+                                                                                   // favor
+                .thenComparingInt(EquipoACB::getPuntosEnContra) // Orden ascendente por puntos en contra
+                .thenComparingInt((EquipoACB equipo) -> -equipo.getDiferencia()); // Orden descendente por diferencia
 
         // Ordena la lista de equipos utilizando el comparador
         Collections.sort(equipos, comparador);
@@ -129,18 +129,17 @@ public class RootController {
         model.addAttribute("equipos", equipos);
 
         List<PartidoACB> partidosant = entityManager.createNamedQuery("PartidoACB.partidosJornada", PartidoACB.class)
-            .setParameter("jornada", jornada.getJornada()-1)
+                .setParameter("jornada", jornada.getJornada() - 1)
                 .getResultList();
 
-
         List<PartidoACB> partidos = entityManager.createNamedQuery("PartidoACB.partidosJornada", PartidoACB.class)
-            .setParameter("jornada", jornada.getJornada())
+                .setParameter("jornada", jornada.getJornada())
                 .getResultList();
 
         model.addAttribute("partidos", partidos);
         model.addAttribute("jornada", jornada.getJornada());
         model.addAttribute("partidosant", partidosant);
-        
+
         return "index";
     }
 
@@ -149,18 +148,18 @@ public class RootController {
      */
     @GetMapping("/clasificacion")
     public String getLigas(HttpSession session, Model model) {
-        User owner = (User)session.getAttribute("u");
+        User owner = (User) session.getAttribute("u");
         List<Equipo> misEquipos = entityManager.createNamedQuery("Equipo.misEquipos", Equipo.class)
-            .setParameter("owner", owner)
+                .setParameter("owner", owner)
                 .getResultList();
         Map<String, Integer> posiciones = new HashMap<>();
-		model.addAttribute("equipos", misEquipos);
+        model.addAttribute("equipos", misEquipos);
 
-        for (Equipo e: misEquipos) {
+        for (Equipo e : misEquipos) {
             Liga liga = e.getLiga();
             if (liga != null) {
                 List<Equipo> equipos = entityManager.createNamedQuery("Equipo.byliga", Equipo.class)
-                    .setParameter("liga", liga)
+                        .setParameter("liga", liga)
                         .getResultList();
 
                 equipos.sort(Comparator.comparingInt(Equipo::getPuntos).reversed());
@@ -182,24 +181,25 @@ public class RootController {
      */
     @GetMapping("/ligas")
     public String getLigas(@RequestParam String nombreEquipo, HttpSession session, Model model) {
-        User owner = (User)session.getAttribute("u");
-        List <Equipo> misEquipos = entityManager.createNamedQuery("Equipo.misEquipos", Equipo.class)
-            .setParameter("owner", owner)
+        User owner = (User) session.getAttribute("u");
+        List<Equipo> misEquipos = entityManager.createNamedQuery("Equipo.misEquipos", Equipo.class)
+                .setParameter("owner", owner)
                 .getResultList();
 
         List<Liga> ligasDisponibles = entityManager.createNamedQuery("Liga.allLigas", Liga.class)
-            .getResultList();
-        
+                .getResultList();
+
         // Obtener una lista de las ligas a las que hay equipos unidos
         List<Liga> ligasConEquipos = misEquipos.stream()
-            .map(Equipo::getLiga)
-            .collect(Collectors.toList());
-        
-        // Filtrar las ligas disponibles para excluir aquellas a las que hay equipos unidos
+                .map(Equipo::getLiga)
+                .collect(Collectors.toList());
+
+        // Filtrar las ligas disponibles para excluir aquellas a las que hay equipos
+        // unidos
         List<Liga> ligasSinEquipos = ligasDisponibles.stream()
-            .filter(liga -> !ligasConEquipos.contains(liga))
-            .collect(Collectors.toList());
-        
+                .filter(liga -> !ligasConEquipos.contains(liga))
+                .collect(Collectors.toList());
+
         model.addAttribute("nombreEquipo", nombreEquipo);
         model.addAttribute("ligas", ligasSinEquipos);
         return "ligas";
@@ -210,20 +210,20 @@ public class RootController {
      */
     @GetMapping("/equipos")
     public String getEquipos(HttpSession session, Model model) {
-        User owner = (User)session.getAttribute("u");
-        List <Equipo> misEquipos = entityManager.createNamedQuery("Equipo.misEquipos", Equipo.class)
-            .setParameter("owner", owner)
+        User owner = (User) session.getAttribute("u");
+        List<Equipo> misEquipos = entityManager.createNamedQuery("Equipo.misEquipos", Equipo.class)
+                .setParameter("owner", owner)
                 .getResultList();
-        
+
         model.addAttribute("misEquipos", misEquipos);
 
         Map<String, Integer> posiciones = new HashMap<>();
 
-        for (Equipo e: misEquipos) {
+        for (Equipo e : misEquipos) {
             Liga liga = e.getLiga();
             if (liga != null) {
                 List<Equipo> equipos = entityManager.createNamedQuery("Equipo.byliga", Equipo.class)
-                    .setParameter("liga", liga)
+                        .setParameter("liga", liga)
                         .getResultList();
 
                 equipos.sort(Comparator.comparingInt(Equipo::getPuntos).reversed());
@@ -238,7 +238,7 @@ public class RootController {
 
         model.addAttribute("posiciones", posiciones);
 
-        return "equipos"; 
+        return "equipos";
     }
 
     @GetMapping("/mercado")
@@ -247,19 +247,20 @@ public class RootController {
         int jornadaActual = jornada.getJornada();
 
         List<JugadorACB> jugadores = new ArrayList<>();
-        
+
         jugadores = entityManager.createNamedQuery("JugadorACB.jugadores", JugadorACB.class)
-            .getResultList();
-        
+                .getResultList();
+
         jugadores.sort(Comparator.comparing(JugadorACB::getNombre));
 
         Map<String, List<Integer>> ultimosPartidos = new HashMap<String, List<Integer>>();
         for (JugadorACB j : jugadores) {
-            List<Integer> listUltPartidos = entityManager.createNamedQuery("PuntosJugador.ultimosPartidos", Integer.class)
-                .setParameter("nombre", j.getNombre())    
-                .setParameter("jornada", jornadaActual)
+            List<Integer> listUltPartidos = entityManager
+                    .createNamedQuery("PuntosJugador.ultimosPartidos", Integer.class)
+                    .setParameter("nombre", j.getNombre())
+                    .setParameter("jornada", jornadaActual)
                     .setMaxResults(3)
-                        .getResultList();
+                    .getResultList();
 
             ultimosPartidos.put(j.getNombre(), listUltPartidos);
         }
@@ -272,43 +273,42 @@ public class RootController {
     }
 
     @PostMapping("/mercado")
-    public String postMercado(@RequestParam(name = "buscar", required = false) String buscar, @RequestParam(name = "posicion", required = false) String posicion, Model model) {
+    public String postMercado(@RequestParam(name = "buscar", required = false) String buscar,
+            @RequestParam(name = "posicion", required = false) String posicion, Model model) {
         Jornada jornada = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
         int jornadaActual = jornada.getJornada();
 
         List<JugadorACB> jugadores = new ArrayList<>();
-        
+
         if (posicion != null) {
             if (posicion.equals("Base")) {
                 jugadores = entityManager.createNamedQuery("JugadorACB.bases", JugadorACB.class)
-                    .getResultList();
-            }
-            else if (posicion.equals("Alero")) {
+                        .getResultList();
+            } else if (posicion.equals("Alero")) {
                 jugadores = entityManager.createNamedQuery("JugadorACB.aleros", JugadorACB.class)
-                    .getResultList();
-            }
-            else {
+                        .getResultList();
+            } else {
                 jugadores = entityManager.createNamedQuery("JugadorACB.pivots", JugadorACB.class)
-                    .getResultList();
+                        .getResultList();
             }
-        }
-        else {
+        } else {
             jugadores = entityManager.createNamedQuery("JugadorACB.nombreSimilar", JugadorACB.class)
-                .setParameter("nombreSimilar", "%" + buscar + "%")
+                    .setParameter("nombreSimilar", "%" + buscar + "%")
                     .getResultList();
         }
 
         Map<String, List<Integer>> ultimosPartidos = new HashMap<String, List<Integer>>();
         for (JugadorACB j : jugadores) {
-            List<Integer> listUltPartidos = entityManager.createNamedQuery("PuntosJugador.ultimosPartidos", Integer.class)
-                .setParameter("nombre", j.getNombre())    
-                .setParameter("jornada", jornadaActual)
+            List<Integer> listUltPartidos = entityManager
+                    .createNamedQuery("PuntosJugador.ultimosPartidos", Integer.class)
+                    .setParameter("nombre", j.getNombre())
+                    .setParameter("jornada", jornadaActual)
                     .setMaxResults(3)
-                        .getResultList();
+                    .getResultList();
 
             ultimosPartidos.put(j.getNombre(), listUltPartidos);
         }
-        
+
         jugadores.sort(Comparator.comparing(JugadorACB::getNombre));
         model.addAttribute("jugadores", jugadores);
         model.addAttribute("jornada", jornadaActual);
@@ -318,13 +318,13 @@ public class RootController {
     }
 
     @GetMapping("/actualidad")
-    public String getActualidad(HttpSession session, Model model) { 
-        User owner = (User)session.getAttribute("u");
+    public String getActualidad(HttpSession session, Model model) {
+        User owner = (User) session.getAttribute("u");
 
-        List <Equipo> misEquipos = entityManager.createNamedQuery("Equipo.misEquipos", Equipo.class)
-            .setParameter("owner", owner)
+        List<Equipo> misEquipos = entityManager.createNamedQuery("Equipo.misEquipos", Equipo.class)
+                .setParameter("owner", owner)
                 .getResultList();
-        
+
         // Guardar las ligas en las que se ha unido el usuario
         List<Liga> ligasUsuario = new ArrayList<>();
         for (Equipo equipo : misEquipos) {
@@ -333,49 +333,52 @@ public class RootController {
                 ligasUsuario.add(liga);
             }
         }
-        
-        model.addAttribute("ligas", 
 
-    
+        model.addAttribute("ligas", ligasUsuario);
+        return "actualidad";
+    }
+
     @GetMapping("/jugador/{idJugador}")
     public String getJugador(@PathVariable long idJugador, Model model) {
         JugadorACB jugador = entityManager.createNamedQuery("JugadorACB.jugadorId", JugadorACB.class)
-        .setParameter("idJugador", idJugador)
-            .getSingleResult();
-        
+                .setParameter("idJugador", idJugador)
+                .getSingleResult();
+
         Jornada jornadaActual = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
         List<Integer> listUltPartidos = entityManager.createNamedQuery("PuntosJugador.ultimosPartidos", Integer.class)
-        .setParameter("nombre", jugador.getNombre())    
-        .setParameter("jornada", jornadaActual.getJornada())
-            .setMaxResults(3)
+                .setParameter("nombre", jugador.getNombre())
+                .setParameter("jornada", jornadaActual.getJornada())
+                .setMaxResults(3)
                 .getResultList();
 
         model.addAttribute("jugador", jugador);
         model.addAttribute("ultimosPartidos", listUltPartidos);
-        return "jugador"; 
+        return "jugador";
     }
 
     @GetMapping("/liga/{idLiga}")
-    public String getLiga(@PathVariable long idLiga, Model model) { liga = entityManager.createNamedQuery("Liga.byidliga", Liga.class)
-            .setParameter("idLiga", idLiga)
+    public String getLiga(@PathVariable long idLiga, Model model) {
+        Liga liga = entityManager.createNamedQuery("Liga.byidliga", Liga.class)
+                .setParameter("idLiga", idLiga)
                 .getSingleResult();
 
-                 <Equipo> equipos = entityManager.createNamedQuery("Equipo.byliga", Equipo.class)
-            .setParameter("liga",
+        List<Equipo> equipos = entityManager.createNamedQuery("Equipo.byliga", Equipo.class)
+                .setParameter("liga", liga)
+                .getResultList();
 
-        
         equipos.sort(Comparator.comparingInt(Equipo::getPuntos).reversed());
 
         model.addAttribute("equipos", equipos);
         model.addAttribute("nombreLiga", liga.getNombreLiga());
 
-     
+        return "liga";
+    }
 
-    
     @GetMapping("/foro/{idLiga}")
     public String getForo(@PathVariable long idLiga, Model model) {
-                 liga = entityManager.createNamedQuery("Liga.byidliga", Liga.class)
-            .setParameter("idLiga",
+        Liga liga = entityManager.createNamedQuery("Liga.byidliga", Liga.class)
+                .setParameter("idLiga", idLiga)
+                .getSingleResult();
 
         List<Message> mensajes = liga.getReceived();
 
@@ -387,10 +390,11 @@ public class RootController {
     @PostMapping("/foro/{idLiga}")
     @ResponseBody
     @Transactional
-    public String postMensaje(@PathVariable long idLiga, @RequestBody JsonNode o, HttpSession session, Model model) throws JsonProcessingException{
-        
+    public String postMensaje(@PathVariable long idLiga, @RequestBody JsonNode o, HttpSession session, Model model)
+            throws JsonProcessingException {
+
         String text = o.get("message").asText();
-        User sender = (User)session.getAttribute("u");
+        User sender = (User) session.getAttribute("u");
         sender = entityManager.find(User.class, sender.getId());
         Liga liga = entityManager.find(Liga.class, idLiga);
 
@@ -402,7 +406,7 @@ public class RootController {
         m.setDateSent(LocalDateTime.now());
         liga.getReceived().add(m);
         m.toTransfer();
-        
+
         entityManager.persist(m);
         entityManager.flush();
 
@@ -413,29 +417,28 @@ public class RootController {
         log.info("Sending a message to {} with contents '{}'", liga.getId(), json);
 
         messagingTemplate.convertAndSend("/topic/" + liga.getId(), json);
-        List<Message> mensajes= liga.getReceived();
+        List<Message> mensajes = liga.getReceived();
         model.addAttribute("mensajes", mensajes);
         model.addAttribute("liga", liga);
 
         return "{\"result\": \"message sent.\"}";
     }
-    
-    @GetMapping("/crearliga")
-    public String getCrearLiga() { return "crearliga"; }
 
+    @GetMapping("/crearliga")
+    public String getCrearLiga() {
+        return "crearliga";
+    }
 
     /**
-        
-    
      * Crea una nueva liga
      */
-	@PostMapping("/crearliga")
-	@Transactional
+    @PostMapping("/crearliga")
+    @Transactional
     public String createLiga(@RequestParam String nombreliga, @RequestParam String password,
-        HttpSession session, Model model) throws IOException {
-        
+            HttpSession session, Model model) throws IOException {
+
         List<Liga> existentes = entityManager.createNamedQuery("Liga.bynombreliga", Liga.class)
-            .setParameter("nombreliga", nombreliga)
+                .setParameter("nombreliga", nombreliga)
                 .getResultList();
 
         if (!existentes.isEmpty()) {
@@ -443,28 +446,32 @@ public class RootController {
             return "crearliga";
         }
 
-        L
+        Liga candidato = new Liga();
+        candidato.setNombreLiga(nombreliga);
+        candidato.setContrasena(password);
+        User u = (User) session.getAttribute("u");
+        candidato.setCreador(u);
+        entityManager.persist(candidato);
+        entityManager.flush();
 
-    candidato.setContrasena(pass
+        return "redirect:clasificacion";
+    }
 
-    entityManager.persist(candidato);entityManager.flush();
-     
+    @GetMapping("/crearequipo")
+    public String getCrearEquipo() {
+        return "crearequipo";
+    }
 
-    
-
-
-    tring etCrearEquipo() { return 
-
-    nuevo equipo
-
+    /**
+     * Crea una nuevo equipo
      */
-	@PostMapping("/crearequipo")
-	@Transactional
+    @PostMapping("/crearequipo")
+    @Transactional
     public String creaEquipo(@RequestParam String nombreequipo,
-        HttpSession session, Model model) throws IOException {
-        
+            HttpSession session, Model model) throws IOException {
+
         List<Equipo> existentes = entityManager.createNamedQuery("Equipo.bynombreequipo", Equipo.class)
-            .setParameter("nombreequipo", nombreequipo)
+                .setParameter("nombreequipo", nombreequipo)
                 .getResultList();
 
         if (!existentes.isEmpty()) {
@@ -473,77 +480,81 @@ public class RootController {
         }
 
         Equipo candidato = new Equipo();
-        User u = (User)session.getAttribute("u");
+        User u = (User) session.getAttribute("u");
         candidato.setOwner(u);
         candidato.setTeamname(nombreequipo);
         candidato.setDinero(500000);
         candidato.setPuntos(0);
         entityManager.persist(candidato);
         entityManager.flush();
-        
+
         return "redirect:equipos";
     }
 
     @GetMapping("/unirseliga")
     public String getUnirseLiga(@RequestParam String nombreEquipo, @RequestParam String nombreLiga, Model model) {
         model.addAttribute("nombreEquipo", nombreEquipo);
-     
-
+        model.addAttribute("nombreLiga", nombreLiga);
+        return "unirseliga";
     }
 
     @PostMapping("/unirseliga")
     @Transactional
-    public String unirLiga(@RequestParam String nombreLiga, @RequestParam String nombreEquipo, @RequestParam String password, HttpSession session, Model model) {
+    public String unirLiga(@RequestParam String nombreLiga, @RequestParam String nombreEquipo,
+            @RequestParam String password, HttpSession session, Model model) {
         Liga liga = entityManager.createNamedQuery("Liga.bynombreliga", Liga.class)
-            .setParameter("nombreli
-
+                .setParameter("nombreliga", nombreLiga)
                 .getSingleResult();
 
-            
-        if (!liga.getContrasena().equals(password)){
-                model.addAttribute("error", "Contraseña errónea");
-        }
-
-            Equipo equipo = entityManager.createNam edQuery("Equipo.bynombreequipo", Equipo.class)
-                .setParameter("nombreequipo", nombreEquipo)
-              equipo.setLiga(liga);
+        if (!liga.getContrasena().equals(password)) {
+            model.addAttribute("error", "Contraseña errónea");
+        } else {
+            Equipo equipo = entityManager.createNamedQuery("Equipo.bynombreequipo", Equipo.class)
+                    .setParameter("nombreequipo", nombreEquipo)
+                    .getSingleResult();
+            equipo.setLiga(liga);
             entityManager.persist(equipo);
-                    tyManager.flush();
+            entityManager.flush();
 
-            List<Liga> misLigas = (List<Liga>)session.getAttribute("misLigas");
+            List<Liga> misLigas = (List<Liga>) session.getAttribute("misLigas");
             misLigas.add(liga);
             session.setAttribute("misLigas", misLigas);
 
-            return "redirect:clasificacion"; 
-            
+            return "redirect:clasificacion";
+        }
 
         return "unirseliga";
     }
 
     @GetMapping("/MiEquipo/{idEquipo}")
     public String getMiEquipo(@PathVariable Long idEquipo, HttpSession session, Model model) {
-     
-
+        Equipo equipo = entityManager.createNamedQuery("Equipo.miEquipoId", Equipo.class)
+                .setParameter("idEquipo", idEquipo)
+                .getSingleResult();
         List<JugadorACB> jugadores = equipo.getJugadores();
 
         List<JugadorACB> bases = new ArrayList<>();
         List<JugadorACB> aleros = new ArrayList<>();
         List<JugadorACB> pivots = new ArrayList<>();
         for (JugadorACB e : jugadores) {
-            if (e.getPosicion().equals("Base")) bases.add(e);
-            else if (e.getPosicion().equals("Alero")) aleros.add(e);
-            else pivots.add(e);
+            if (e.getPosicion().equals("Base"))
+                bases.add(e);
+            else if (e.getPosicion().equals("Alero"))
+                aleros.add(e);
+            else
+                pivots.add(e);
         }
 
         Jornada jornada = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
 
         Map<String, List<Integer>> ultimosPartidos = new HashMap<String, List<Integer>>();
         for (JugadorACB j : jugadores) {
-            List<Integer> listUltPartidos = entityManager.createNamedQuery("PuntosJugador.ultimosPartidos", Integer.class)
-                .setParameter("nombre", j.getNombre())    
-                .setParameter("jornada", jornada.getJornada())
+            List<Integer> listUltPartidos = entityManager
+                    .createNamedQuery("PuntosJugador.ultimosPartidos", Integer.class)
+                    .setParameter("nombre", j.getNombre())
+                    .setParameter("jornada", jornada.getJornada())
                     .setMaxResults(3)
-                        .getResultList();
+                    .getResultList();
 
             ultimosPartidos.put(j.getNombre(), listUltPartidos);
         }
@@ -563,29 +574,29 @@ public class RootController {
         return "MiEquipo";
     }
 
-    tMapping("/MiEquipo/{idEquipo}")
+    @PostMapping("/MiEquipo/{idEquipo}")
     @Transactional
-    public String ficharJugador(@PathVariable Long idEquipo, @RequestParam String nombreJugador, @RequestParam String formType, HttpSession session, Model model) {
-        User u = (User)session.getAttribute("u");
+    public String ficharJugador(@PathVariable Long idEquipo, @RequestParam String nombreJugador,
+            @RequestParam String formType, HttpSession session, Model model) {
+        User u = (User) session.getAttribute("u");
         Equipo equipo = entityManager.createNamedQuery("Equipo.miEquipo", Equipo.class)
-            .setParameter("idEquipo", idEquipo)
-            .setParameter(
+                .setParameter("idEquipo", idEquipo)
+                .setParameter("owner", u)
+                .getSingleResult();
 
         JugadorACB jugador = entityManager.createNamedQuery("JugadorACB.jugador", JugadorACB.class)
-            .setParameter("nombre", nombreJugador)
+                .setParameter("nombre", nombreJugador)
                 .getSingleResult();
 
         if (formType.equals("ficharJugador")) {
             if (equipo.getDinero() < jugador.getValorMercado()) {
                 // Añado a la sesión el error para poder acceder fácilmente
                 session.setAttribute("error", "Dinero insuficiente para el fichaje");
-            }
-            else {
+            } else {
                 equipo.getJugadores().add(jugador);
                 equipo.setDinero(equipo.getDinero() - jugador.getValorMercado());
             }
-        }
-        else {
+        } else {
             equipo.getJugadores().remove(jugador);
             equipo.setDinero(equipo.getDinero() + jugador.getValorMercado());
         }
@@ -596,48 +607,64 @@ public class RootController {
     }
 
     @GetMapping("/fichar")
-    publi
+    public String getFicharJug() {
+        return "fichar";
+    }
 
-    Jornad jornada = entityManae.createNa
+    @PostMapping("/fichar")
+    public String ficharJugadores(@RequestParam(name = "buscar", required = false) String buscar,
+            @RequestParam("formType") String formType, @RequestParam("idequipo") Long idequipo, Model model) {
+        Jornada jornada = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
 
-    adorAC
+        List<JugadorACB> jugadores = new ArrayList<>();
+        List<JugadorACB> jugadoresFichados = entityManager.createNamedQuery("Equipo.miEquipoId", Equipo.class)
+                .setParameter("idEquipo", idequipo)
+                .getSingleResult()
+                .getJugadores();
 
-            .setParameter("idEquip
-        ", idequipo)
-    
-
-    
         if (buscar != null) {
             if (formType.equals("ficharBases")) {
                 jugadores = entityManager.createNamedQuery("JugadorACB.nombreSimilarBases", JugadorACB.class)
-                    .setParameter("nombreSimilar", "%" + buscar + "%")
+                        .setParameter("nombreSimilar", "%" + buscar + "%")
                         .getResultList();
                 jugadores.removeAll(jugadoresFichados);
-            } 
-            else if (formType.equals("ficharAleros")) {
+            } else if (formType.equals("ficharAleros")) {
                 jugadores = entityManager.createNamedQuery("JugadorACB.nombreSimilarAleros", JugadorACB.class)
-                    .setParameter("nombreSimilar", "%" + buscar + "%")
+                        .setParameter("nombreSimilar", "%" + buscar + "%")
                         .getResultList();
                 jugadores.removeAll(jugadoresFichados);
-            }
-            else {
+            } else {
                 jugadores = entityManager.createNamedQuery("JugadorACB.nombreSimilarPivots", JugadorACB.class)
-                    .setParameter("nombreSimilar", "%" + buscar + "%")
+                        .setParameter("nombreSimilar", "%" + buscar + "%")
                         .getResultList();
                 jugadores.removeAll(jugadoresFichados);
             }
+        } else {
+            if (formType.equals("ficharBases")) {
+                jugadores = entityManager.createNamedQuery("JugadorACB.bases", JugadorACB.class)
+                        .getResultList();
+                jugadores.removeAll(jugadoresFichados);
+            } else if (formType.equals("ficharAleros")) {
+                jugadores = entityManager.createNamedQuery("JugadorACB.aleros", JugadorACB.class)
+                        .getResultList();
+                jugadores.removeAll(jugadoresFichados);
+            } else {
+                jugadores = entityManager.createNamedQuery("JugadorACB.pivots", JugadorACB.class)
+                        .getResultList();
+                jugadores.removeAll(jugadoresFichados);
+            }
+        }
 
-     
-            
-            als("ficharBases"jugadores = entityManager.createNamedQu       if (formye.equals("ficharAleros")) {dores = entityMan    .getResultList(); } {dores = entityMan    .getResultList(); 
+        jugadores.sort(Comparator.comparing(JugadorACB::getNombre));
 
-    rt(Comparator.comSf
-
-            .setParameter("nombre", j.getNombre())    
-
-                .setMaxResults(3)    
-               .eResultList
-    );
+        Map<String, List<Integer>> ultimosPartidos = new HashMap<String, List<Integer>>();
+        for (JugadorACB j : jugadores) {
+            List<Integer> listUltPartidos = entityManager
+                    .createNamedQuery("PuntosJugador.ultimosPartidos", Integer.class)
+                    .setParameter("nombre", j.getNombre())
+                    .setParameter("jornada", jornada.getJornada())
+                    .setMaxResults(3)
+                    .getResultList();
 
             ultimosPartidos.put(j.getNombre(), listUltPartidos);
         }
@@ -645,27 +672,31 @@ public class RootController {
         model.addAttribute("idequipo", idequipo);
         model.addAttribute("jugadores", jugadores);
         model.addAttribute("formType", formType);
-        m
+        model.addAttribute("jornada", jornada.getJornada());
+        model.addAttribute("ultimosPartidos", ultimosPartidos);
 
-    
+        return "fichar";
+    }
 
-    ic String getVenderJug() { retrn "vendertMapping("/vender")
+    @GetMapping("/vender")
+    public String getVenderJug() {
+        return "vender";
+    }
 
-    JugadoACB jugador = entityManager.createNamedQuery("JugadorACB.jugador", JugadorACB.class)
-     
+    @PostMapping("/vender")
+    public String venderJugadores(@RequestParam("formType") String formType, @RequestParam("idequipo") Long idequipo,
+            @RequestParam("jugador") String nombreJugador, Model model) {
+        JugadorACB jugador = entityManager.createNamedQuery("JugadorACB.jugador", JugadorACB.class)
+                .setParameter("nombre", nombreJugador)
+                .getSingleResult();
 
-    
+        Jornada jornada = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
 
-    jornada = entityManage
-        .createNamedQuer
-    (
-
-    eger> l
-
-            .setParameter("nombre", jugador.getNombre())    
-            .setParameter("jornada", jornada.getJornada())
+        List<Integer> listUltPartidos = entityManager.createNamedQuery("PuntosJugador.ultimosPartidos", Integer.class)
+                .setParameter("nombre", jugador.getNombre())
+                .setParameter("jornada", jornada.getJornada())
                 .setMaxResults(3)
-                    .getResultList();
+                .getResultList();
 
         model.addAttribute("idequipo", idequipo);
         model.addAttribute("jugador", jugador);
@@ -675,21 +706,21 @@ public class RootController {
     }
 
     @GetMapping("/equipoJornada")
-    public String getEquipoJornada() { return "equipoJornada"; }
+    public String getEquipoJornada() {
+        return "equipoJornada";
+    }
 
     @PostMapping("/equipoJornada")
-    public String postEquipoJornada(@RequestParam("jornadaJugada") int jornada, @RequestParam("idequipo") Long idEquipo, Model model) {
+    public String postEquipoJornada(@RequestParam("jornadaJugada") int jornada, @RequestParam("idequipo") Long idEquipo,
+            Model model) {
         Jornada jornadaActual = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
 
         Equipo equipo = entityManager.createNamedQuery("Equipo.miEquipoId", Equipo.class)
-            .setParameter("idEquipo", idEquipo)
-     
-
-    Parameter("equipo", e
-
-            .setParameter("jornada", j
-        rnada)
-    
+                .setParameter("idEquipo", idEquipo)
+                .getSingleResult();
+        PuntosEquipo pE = entityManager.createNamedQuery("PuntosEquipo.equipo", PuntosEquipo.class)
+                .setParameter("equipo", equipo)
+                .setParameter("jornada", jornada)
                 .getSingleResult();
 
         List<PuntosJugador> jugadores = pE.getJugadores();
@@ -698,9 +729,12 @@ public class RootController {
         List<PuntosJugador> aleros = new ArrayList<>();
         List<PuntosJugador> pivots = new ArrayList<>();
         for (PuntosJugador e : jugadores) {
-            if (e.getPosicion().equals("Base")) bases.add(e);
-            else if (e.getPosicion().equals("Alero")) aleros.add(e);
-            else pivots.add(e);
+            if (e.getPosicion().equals("Base"))
+                bases.add(e);
+            else if (e.getPosicion().equals("Alero"))
+                aleros.add(e);
+            else
+                pivots.add(e);
         }
 
         model.addAttribute("equipo", equipo);
