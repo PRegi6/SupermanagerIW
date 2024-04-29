@@ -42,8 +42,8 @@
                         </div>
                     </div>
                     <div class="promedio_valor">
-                        <p th:text="${jugador.partidosJugados != 0 ? jugador.puntosTotales / jugador.partidosJugados : '0'}">Promedio de puntos</p>
-                        <p th:text="${jugador.valorMercado}">Valor de mercado</p>
+                        <p>Promedio de puntos: <span th:text="${jugador.partidosJugados != 0 ? jugador.puntosTotales / jugador.partidosJugados : '0'}"></span></p>
+                        <p>Valor de mercado: <span th:text="${jugador.valorMercado}"></span></p>
                     </div>
                     <div>
                         <form class="form-signin" method="post" th:action="@{/vender}">
@@ -77,8 +77,8 @@
                         </div>
                     </div>
                     <div class="promedio_valor">
-                        <p th:text="${jugador.partidosJugados != 0 ? jugador.puntosTotales / jugador.partidosJugados : '0'}">Promedio de puntos</p>
-                        <p th:text="${jugador.valorMercado}">Valor de mercado</p>
+                        <p>Promedio de puntos: <span th:text="${jugador.partidosJugados != 0 ? jugador.puntosTotales / jugador.partidosJugados : '0'}"></span></p>
+                        <p>Valor de mercado: <span th:text="${jugador.valorMercado}"></span></p>
                     </div>
                     <div>
                         <form class="form-signin" method="post" th:action="@{/vender}">
@@ -112,8 +112,8 @@
                         </div>
                     </div>
                     <div class="promedio_valor">
-                        <p th:text="${jugador.partidosJugados != 0 ? jugador.puntosTotales / jugador.partidosJugados : '0'}">Promedio de puntos</p>
-                        <p th:text="${jugador.valorMercado}">Valor de mercado</p>
+                        <p>Promedio de puntos: <span th:text="${jugador.partidosJugados != 0 ? jugador.puntosTotales / jugador.partidosJugados : '0'}"></span></p>
+                        <p>Valor de mercado: <span th:text="${jugador.valorMercado}"></span></p>
                     </div>
                     <div>
                         <form class="form-signin" method="post" th:action="@{/vender}">
