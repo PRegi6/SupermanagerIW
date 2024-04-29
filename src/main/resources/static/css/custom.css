@@ -43,6 +43,13 @@ button {
     color: white; /* Cambia el color del texto para que sea legible */
 }
 
+.btn-jornada {
+    background-color: rgb(147, 250, 147);
+    border-color: black;
+    color: black; /* Cambia el color del texto para que sea legible */
+    border-radius: 20px;
+}
+
 .btn-custom:hover {
     background-color: #e62b00; /* Color de fondo cuando se pasa el ratón por encima */
     border-color: #e62b00;
@@ -114,20 +121,28 @@ img.preview {
             border: none;
         }
 
+.jugadores_mercado {
+    height: calc(100vh - 22.5vh);
+    display: inline-block;
+    overflow: auto;
+    padding-right: 10px;
+    padding-left: 10px;
+    scrollbar-width: none;
+}
 
     .div_jugador {
         background-color: white;
-        border: 1px solid black;
+        border: 1px solid rgb(255, 0, 0);
         color: black;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        
         margin-bottom: 10px;
+        border-radius: 10px;
     }
 
         .imagen_jugador {
-            width: 15%;
+            /* width: 15%; */
             border-color: black;
         }
 
@@ -173,14 +188,15 @@ th, td{
 }
 
 
-.ultimosPartidos {
-    display: inline-block; /* Hace que el contenedor esté en la misma línea */
-}
-
 .ultimosPartidos p {
     display: inline-block; /* Hace que los párrafos estén en la misma línea */
     margin-right: 5px; /* Añade un pequeño margen entre los párrafos */
     text-align: center; /* Alinea el texto al centro */
+    padding: 0 5px; /* Espaciado entre el borde y el texto */
+    border-right: 1px solid black; /* Borde derecho para separación */
+    border-left: 1px solid black; /* Borde derecho para separación */
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
 }
 
 .card {
@@ -198,7 +214,7 @@ th, td{
 }
 
 .card-title:hover {
-    color: #ff3700; /* Al pasar el ratón por encima el texto se pone naranja*/
+    color: #ff3700; /* Al pasar el ratón por encima el texto se pone negro*/
 }
 
 .card-text {
@@ -211,6 +227,18 @@ th, td{
     align-items: center; /* Centra verticalmente los elementos */
 }
 
+.card-img {
+    max-width: 100px; /* Ajusta el ancho máximo de la imagen */
+    height: auto;
+    border-radius: 5px;
+    margin-right: 20px; /* Espacio entre la imagen y los otros elementos */
+}
+
+.equipo-imagen {
+    width: 50px; 
+    height: auto;
+    margin-right: 10px; /* Espacio entre la imagen del equipo y la información del jugador */
+}
 
 /*Estilos para la clasificación dentro de una liga*/
 .infoEquipo {
@@ -276,89 +304,30 @@ th, td{
     text-align: center;
 }
 
-.texto-posicion {
-    font-weight: bold; /* negrita */
-    text-transform: uppercase; /* mayúsculas */
-    color: #ff3700;
-    font-size: xx-large;
-}
+/*Estilo de la página de mi Eqiuipo*/
 
-.texto-valor {
-    font-weight: bold;
-    font-style: italic;
-    color: black;
-    font-size: larger;
-}
-
-.spacer {
-    margin: 0 25px; 
-}
-
-.jugador-img {
-    max-width: 250px;
-    height: auto;
-    border-radius: 5px;
-}
-
-.equipo-img {
-    max-width: 50px;
-    height: fit-content;
-    border-radius: 15px;
-}
-.row + .bottom-row {
-    margin-top: 5px;
-}
-
-.promedio {
-    color: green;
-    font-weight: bold;
-    font-size: medium;
-}
-
-.div-login {    
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 500px;
-    padding: 20px;
-    background-color: white;
+.info_jugador{
+    justify-content: center;
     align-items: center;
 }
 
-.form-signin2 {
-    position: relative;
-    background-color: #fff;
-    border: 1px solid #000000;
-    padding: 15px;
-    border-radius: 5px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-}
-
-.form-signin-heading {
-    margin-bottom: 15px;
-    text-align: center;
-}
-
-.spacer-login{
-    height: 10px;
-}
-
-.btn-login {
-    width: 100%; /* Ancho del botón */
-    padding: 10px; /* Espacio interno del botón */
-    border-radius: 5px; /* Radio de borde */
-    background-color: #ff3700;
-    color: #fff;
-    cursor: pointer;
-    font-size: 20px; /* Tamaño del texto del botón */
-    transition: background-color 0.3s, border-color 0.3s, color 0.3s; /* Transición suave */
-}
-
-.btn-login:hover {
-    background-color: #000000;
-    border-color: #000000;
-    color: #fff;
+.ultimosPartidos{
+    justify-content: center;
+    align-items: center;
 }
 
 
+.jugadores_mercado{
+    margin-top: 2px; 
+    display: block;
+    background-color: lightgray;
+    font-weight: bold;
+    border-radius: 10px;
+    border: 1px solid black;
+}
+
+.jornadas {
+    border: 1px solid black;
+    background-color: rgb(122, 224, 255);
+    border-radius: 10px;
+}
