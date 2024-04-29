@@ -363,6 +363,45 @@ th, td{
     font-weight: bold;
 }
 
+
+/*estilo para foro*/
+.infoMensaje {
+    display: flex;
+    justify-content: space-between;
+    background-color: black;
+    justify-content: center;
+    align-items: center;
+    height: 45px;
+    margin: 5px;
+    border-radius: 10px;
+
+}
+.textoFrom {
+    text-align: left;
+    color: lightblue;
+}
+
+.textoMensaje {
+    top: 50%;
+    flex: 1;
+    padding: 5px;
+    text-align: left;
+    color: lightblue;
+}
+
+.Foroboton{
+    display: flex;
+    justify-content: space-between;
+    background-color: lightblue;
+    justify-content: center;
+    align-items: center;
+    height: 35px;
+    margin: 5px;
+    border-radius: 10px;
+    color: blue;
+
+}
+
 /*Estilo de la página de un jugador*/
 .cabeceraJugador {
     display: flex;

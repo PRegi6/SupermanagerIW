@@ -11,19 +11,21 @@
 
     <main class="flex-shrink-0">
         <div class="container">
-            <h1>Foro</h1>
+            <h1 th:href="@{/foro/{id}(id=${liga.id})}">
+                <span th:text="${liga.nombreLiga}"></span>
+            </h1>
         </div>
         <div class="container">
             <th:block th:if="${mensajes.empty}"><p></p></th:block>
             <div class="py-5 row" id="mensajes">
             </div>
-            <form class="form-signin" method="post" th:action="@{/foro/{id}(id=${liga.id})}">
+            <form class="infoEquipo" method="post" th:action="@{/foro/{id}(id=${liga.id})}">
                     <p th:if="${error}" class="error" th:text="${error}">
                         Error en el foro
                     </p>
                     <label for="message" class="visually-hidden">Mensaje</label>
                 <input type="textarea" id="message" name="message" class="form-control" placeholder="Mensaje" required="required" maxlength="257">
-                <button id="sendmsg" class="btn btn-lg btn-custom btn-block" type="submit">Publicar</button>
+                <button id="sendmsg" class="Foroboton" type="submit">Publicar</button>
             </form>
         </div>
     </main>
