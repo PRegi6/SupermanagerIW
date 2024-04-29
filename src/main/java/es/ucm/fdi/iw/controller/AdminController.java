@@ -20,6 +20,7 @@ import es.ucm.fdi.iw.model.Equipo;
 import es.ucm.fdi.iw.model.EquipoACB;
 import es.ucm.fdi.iw.model.Jornada;
 import es.ucm.fdi.iw.model.JugadorACB;
+import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.PartidoACB;
 import es.ucm.fdi.iw.model.PuntosEquipo;
 import es.ucm.fdi.iw.model.PuntosJugador;
@@ -40,6 +41,9 @@ public class AdminController {
 
 	@GetMapping("/")
     public String index(Model model) {
+        List<Message> reportedMessages = entityManager.createNamedQuery("Message.reportados", Message.class)
+            .getResultList();
+        model.addAttribute("reportados", reportedMessages);
         return "admin";
     }
 
@@ -167,17 +171,22 @@ public class AdminController {
 
     @PostMapping("/admin/")
     @Transactional
-    public String cargaBD(@RequestParam("formType") String formType, Model model) {
+    public String cargaBD(@RequestParam("formType") String formType, @RequestParam("idMensaje") Long idMensaje, Model model) {
         Jornada jornada = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
-        // if (formType.equals("subirImg")) {
+        if (formType.equals("eliminar mensaje")) {
+            Message m = entityManager.createNamedQuery("Message.porId", Message.class)
+                .setParameter("idMensaje", idMensaje)
+                    .getSingleResult();
 
-        // }
-        // else {
+            entityManager.remove(m);
+        }
+        else {
             actualizarDatos();
 
             jornada.setJornada(jornada.getJornada() + 1);
-            entityManager.flush();
-        // }
+        }
+
+        entityManager.flush();
 
         model.addAttribute("jornada", jornada.getJornada());
 

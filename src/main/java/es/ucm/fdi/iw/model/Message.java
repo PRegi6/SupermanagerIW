@@ -33,7 +33,10 @@ import lombok.AllArgsConstructor;
 			+ "WHERE m.recipient = :nombreliga ORDER BY m.dateSent DESC"),
 	@NamedQuery(name="Message.porId",
 	query="SELECT m FROM Message m "
-			+ "WHERE m.id = :idMensaje")
+			+ "WHERE m.id = :idMensaje"),
+	@NamedQuery(name="Message.reportados",
+	query="SELECT m FROM Message m "
+			+ "WHERE m.reported = TRUE")
 })
 @Data
 public class Message implements Transferable<Message.Transfer> {

@@ -30,7 +30,9 @@ function renderMsg(msg) {
 let idLiga = window.location.pathname.split("/").pop();
 
 function reportMessage(msgId) {
-    go(`${config.rootUrl}/foro/${idLiga}`, "PUT", {msgId});
+    let data = { idMensaje: msgId };
+    let url = `${config.rootUrl}/foro/${idLiga}`
+    go(url, "PUT", data);
 }
 
 // pinta mensajes viejos al cargarse, via AJAX

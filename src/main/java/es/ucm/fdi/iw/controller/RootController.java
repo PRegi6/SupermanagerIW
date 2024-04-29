@@ -389,7 +389,9 @@ public class RootController {
     }
 
     @PutMapping("/foro/{idLiga}")
-    public String reportMessage(@PathVariable long idLiga, @RequestParam long idMensaje, Model model) {
+    @Transactional
+    public String reportMessage(@PathVariable long idLiga, @RequestBody JsonNode o, Model model) {
+        Long idMensaje = o.get("idMensaje").asLong();
         Message m = entityManager.createNamedQuery("Message.porId", Message.class)
             .setParameter("idMensaje", idMensaje)
                 .getSingleResult();
@@ -550,14 +552,14 @@ public class RootController {
             entityManager.persist(equipo);
             entityManager.flush();
 
-            List<Liga> misLigas = (List<Liga>) session.getAttribute("misLigas");
-            misLigas.add(liga);
+            List<String> misLigas = (List<String>) session.getAttribute("misLigas");
+            misLigas.add(liga.getNombreLiga());
             session.setAttribute("misLigas", misLigas);
 
             return "redirect:clasificacion";
         }
-
-        return "unirseliga";
+        
+        return "redirect:unirseliga" + "?nombreEquipo=" + nombreEquipo + "&nombreLiga=" + nombreLiga;
     }
 
     @GetMapping("/MiEquipo/{idEquipo}")

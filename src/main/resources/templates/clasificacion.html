@@ -30,7 +30,6 @@
                         <tr th:each="equipo : ${equipos}">
                             <td>
                                 <a th:if="${equipo.liga != null}" th:href="@{/liga/{id}(id=${equipo.liga.id})}" th:text="${equipo.liga.getNombreLiga()}"></a>
-                                <span th:unless="${equipo.liga != null}" th:text=""></span>
                             </td>
                             <td th:text="${equipo.teamname}"></td>
                             <td th:text="${posiciones[equipo.teamname]}"></td>

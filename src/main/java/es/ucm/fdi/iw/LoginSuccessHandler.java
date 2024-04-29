@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 import es.ucm.fdi.iw.model.Equipo;
 import es.ucm.fdi.iw.model.Liga;
 import es.ucm.fdi.iw.model.User;
-import es.ucm.fdi.iw.model.User.Role;
 
 /**
  * Called when a user is first authenticated (via login).

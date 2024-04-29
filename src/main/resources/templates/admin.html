@@ -13,9 +13,12 @@
         <div class="container">
             <h1 class="mt-5">Administración</h1>
             <form class="form-signin" method="post" th:action="@{/admin/}">
-                <!-- <label for="zipFile">Selecciona un archivo ZIP para cargar base de datos:</label><br>
-                <input type="file" id="zipFile" name="zipFile" accept=".zip"><br><br>
-                <button class="btn btn-lg btn-custom btn-block" type="submit" name="formType" value="subirImg">Subir archivo zip</button><br><br> -->
+                <div class="formato-mensaje" th:each="mensaje : ${reportados}">
+                    <p th:text="${mensaje.sender}">Emisor</p>
+                    <p th:text="${mensaje.text}">Texto</p>
+                    <input type="hidden" id="idMensaje" name="idMensaje" th:value="${mensaje.id}" />
+                    <button class="btn btn-lg btn-custom btn-block" type="submit" name="formType" value="eliminar mensaje">Eliminar mensaje</button>
+                </div>
                 <button class="btn btn-lg btn-custom btn-block" type="submit" name="formType" value="avanzarJornada">Avanzar jornada</button>
             </form>
         </div>
