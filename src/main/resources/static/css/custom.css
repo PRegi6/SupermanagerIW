@@ -50,6 +50,91 @@ button {
     border-radius: 20px;
 }
 
+.btn-login {
+    width: 100%; /* Ancho del botón */
+    padding: 10px; /* Espacio interno del botón */
+    border-radius: 5px; /* Radio de borde */
+    background-color: #ff3700;
+    color: #fff;
+    cursor: pointer;
+    font-size: 20px; /* Tamaño del texto del botón */
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s; /* Transición suave */
+}
+
+.spacer-login{
+    height: 10px;
+}
+
+.form-signin-heading {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.form-signin2 {
+    position: relative;
+    background-color: #fff;
+    border: 1px solid #000000;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.div-login {    
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    padding: 20px;
+    background-color: white;
+}
+
+
+.promedio {
+    color: green;
+    font-weight: bold;
+    font-size: medium;
+}
+
+.texto-posicion {
+    font-weight: bold; /* negrita */
+    text-transform: uppercase; /* mayúsculas */
+    color: #ff3700;
+    font-size: xx-large;
+}
+
+.texto-valor {
+    font-weight: bold;
+    font-style: italic;
+    color: black;
+    font-size: larger;
+}
+
+.spacer {
+    margin: 0 25px; 
+}
+
+.jugador-img {
+    max-width: 250px;
+    height: auto;
+    border-radius: 5px;
+}
+
+.equipo-img {
+    max-width: 50px;
+    height: fit-content;
+    border-radius: 15px;
+}
+.row + .bottom-row {
+    margin-top: 5px;
+}
+
+.btn-login:hover {
+    background-color: #000000;
+    border-color: #000000;
+    color: #fff;
+}
+
 .btn-custom:hover {
     background-color: #e62b00; /* Color de fondo cuando se pasa el ratón por encima */
     border-color: #e62b00;
