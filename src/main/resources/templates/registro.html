@@ -10,21 +10,31 @@
     <header th:replace="fragments/nav.html :: nav"></header>
 
     <main class="flex-shrink-0">
-        <div class="container">
+        <div class="div-login">
             <form class="form-signin" method="post" th:action="@{/registro}">
                 <h2 class="form-signin-heading">Please register</h2>
                 <p th:if="${error}" class="error" th:text="${error}">
                     Error por defecto
                 </p>
+
+                
                 <p>
                     <label for="username" class="visually-hidden">Username</label>
                     <input type="text" id="username" name="username" class="form-control" placeholder="Username" required="required">
                 </p>
+
+                <div class="spacer-login"></div>
+                
+
                 <p>
                     <label for="password" class="visually-hidden">Password</label>
                     <input type="password" id="password" name="password" class="form-control" placeholder="Password" required="required">
                 </p>
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Registro</button>
+
+                <div class="spacer-login"></div>
+
+                <button class="btn-login" type="submit">Registro</button>
+                <div class="spacer-login"></div>
             </form>
         </div>
     </main>
