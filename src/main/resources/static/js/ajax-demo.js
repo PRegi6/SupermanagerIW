@@ -23,16 +23,18 @@ function renderMsg(msg) {
     return `<div class="formato-mensaje">
                 ${msg.from}:<br>
                 <p>${msg.text}</p>
+                <button onclick="reportMessage(${msg.id})">Reportar</button>
             </div>`;
 }
 
-function deleteMessage(msgId) {
-    console.log("Eliminando mensaje: ", msgId);
+let idLiga = window.location.pathname.split("/").pop();
+
+function reportMessage(msgId) {
+    go(`${config.rootUrl}/foro/${idLiga}`, "PUT", {msgId});
 }
 
 // pinta mensajes viejos al cargarse, via AJAX
 let messageDiv = document.getElementById("mensajes");
-let idLiga = window.location.pathname.split("/").pop();
 let foroUrl = `${config.rootUrl}/mensajes/${idLiga}`;
 go(foroUrl, "GET").then(ms => {
     console.log("Cargando mensajes antiguios", ms);

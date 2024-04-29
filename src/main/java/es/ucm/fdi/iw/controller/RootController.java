@@ -22,6 +22,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -387,6 +388,26 @@ public class RootController {
         return "foro";
     }
 
+    @PutMapping("/foro/{idLiga}")
+    public String reportMessage(@PathVariable long idLiga, @RequestParam long idMensaje, Model model) {
+        Message m = entityManager.createNamedQuery("Message.porId", Message.class)
+            .setParameter("idMensaje", idMensaje)
+                .getSingleResult();
+
+        m.setReported(true);
+        entityManager.flush();
+
+        Liga liga = entityManager.createNamedQuery("Liga.byidliga", Liga.class)
+                .setParameter("idLiga", idLiga)
+                .getSingleResult();
+
+        List<Message> mensajes = liga.getReceived();
+
+        model.addAttribute("mensajes", mensajes);
+        model.addAttribute("liga", liga);
+        return "foro";
+    }
+
     @GetMapping("/mensajes/{idLiga}")
     @ResponseBody
     public List<Message.Transfer> getForoApi(@PathVariable long idLiga) {
@@ -416,6 +437,7 @@ public class RootController {
         m.setRecipient(liga);
         m.setText(text);
         m.setDateSent(LocalDateTime.now());
+        m.setReported(false);
         liga.getReceived().add(m);
         m.toTransfer();
 

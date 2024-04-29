@@ -30,7 +30,10 @@ import lombok.AllArgsConstructor;
 			+ "WHERE m.recipient.id = :userId AND m.dateRead = null"),
 	@NamedQuery(name="Message.porLiga",
 	query="SELECT m FROM Message m "
-			+ "WHERE m.recipient = :nombreliga ORDER BY m.dateSent DESC")
+			+ "WHERE m.recipient = :nombreliga ORDER BY m.dateSent DESC"),
+	@NamedQuery(name="Message.porId",
+	query="SELECT m FROM Message m "
+			+ "WHERE m.id = :idMensaje")
 })
 @Data
 public class Message implements Transferable<Message.Transfer> {
@@ -49,6 +52,8 @@ public class Message implements Transferable<Message.Transfer> {
 	
 	private LocalDateTime dateSent;
 	private LocalDateTime dateRead;
+
+	private Boolean reported;
 	
 	/**
 	 * Objeto para persistir a/de JSON
