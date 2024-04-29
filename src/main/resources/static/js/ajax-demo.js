@@ -1,4 +1,3 @@
-import es.ucm.fdi.iw.model.User;
 /*
  * Ejemplos de uso de JS para interaccionar con servidores
  * y añadir interactividad a la página.
@@ -10,32 +9,20 @@ import es.ucm.fdi.iw.model.User;
 let b = document.getElementById("sendmsg");
 b.onclick = (e) => {
     e.preventDefault();
-    const campo = document.getElementById("message");
     go(b.parentNode.action, 'POST', {
-            message: campo.value
+            message: document.getElementById("message").value
         })
-        .then(d => campo.value = "")
+        .then(d => console.log("La d tiene el valor: ", d))
         .catch(e => console.log("sad", e))
 }
 
 // cómo pintar 1 mensaje (devuelve html que se puede insertar en un div)
-function renderMsg(msg,u) {
+function renderMsg(msg) {
     console.log("rendering: ", msg);
-    let deleteButtonHTML = ""; // Inicializamos el HTML del botón como vacío
-    User u = entityManager.createNamedQuery("User.byUsername", User.class)
-		        .setParameter("username", username)
-		        .getSingleResult();		
-		session.setAttribute("u", u);
-    let isAdmin = (user == "a");
-    if (isAdmin) { // Comprobamos si el usuario es admin
-        // Si es admin, definimos el HTML del botón de eliminar
-        deleteButtonHTML = `<button onclick="deleteMessage('${msg.id}')">Eliminar</button>`;
-    }
     // Incorporamos el botón en el HTML del mensaje si es necesario
     return `<div class="formato-mensaje">
                 ${msg.from}:<br>
                 <p>${msg.text}</p>
-                ${deleteButtonHTML}  <!-- Añadimos el botón aquí -->
             </div>`;
 }
 
@@ -43,11 +30,13 @@ function deleteMessage(msgId) {
     console.log("Eliminando mensaje: ", msgId);
 }
 
-
 // pinta mensajes viejos al cargarse, via AJAX
 let messageDiv = document.getElementById("mensajes");
-go(config.rootUrl + "/foro", "GET").then(ms =>
-    ms.forEach(m => messageDiv.insertAdjacentHTML("beforeend", renderMsg(m))));
+let idLiga = window.location.pathname.split("/").pop();
+let foroUrl = `${config.rootUrl}/mensajes/${idLiga}`;
+go(foroUrl, "GET").then(ms => {
+    console.log("Cargando mensajes antiguios", ms);
+    ms.forEach(m => messageDiv.insertAdjacentHTML("beforeend", renderMsg(m)));})
 
 // y aquí pinta mensajes según van llegando
 if (ws.receive) {

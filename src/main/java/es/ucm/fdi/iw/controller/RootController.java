@@ -375,6 +375,18 @@ public class RootController {
         return "foro"; 
     }
 
+    @GetMapping("/mensajes/{idLiga}")
+    @ResponseBody
+    public List<Message.Transfer> getForoApi(@PathVariable long idLiga) {
+        Liga liga = entityManager.createNamedQuery("Liga.byidliga", Liga.class)
+            .setParameter("idLiga", idLiga)
+                .getSingleResult();
+
+        List<Message> mensajes= liga.getReceived();
+
+        return mensajes.stream().map(Transferable::toTransfer).collect(Collectors.toList());
+    }
+
     @PostMapping("/foro/{idLiga}")
     @ResponseBody
     @Transactional
