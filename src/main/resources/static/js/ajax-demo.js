@@ -25,9 +25,10 @@ function renderMsg(msg) {
 let idLiga = window.location.pathname.split("/").pop();
 
 function reportMessage(msgId) {
-    let data = { idMensaje: msgId };
     let url = `${config.rootUrl}/foro/${idLiga}`
-    go(url, "PUT", data).then(() => {
+    go(url, "PUT", {
+        idMensaje: msgId
+    }).then(() => {
         // Encuentra el toast en el DOM
         const toastEl = document.getElementById("reportToast");
 
@@ -36,7 +37,7 @@ function reportMessage(msgId) {
         toast.show(); // Muestra el toast
 
     }).catch(error => {
-        console.error("Error al cargar mensajes antiguos:", error);
+        console.error("Error al mostrar la notificacion:", error);
     });
 }
 

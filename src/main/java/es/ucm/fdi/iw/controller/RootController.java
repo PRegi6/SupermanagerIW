@@ -385,6 +385,7 @@ public class RootController {
     }
 
     @PutMapping("/foro/{idLiga}")
+    @ResponseBody
     @Transactional
     public String reportMessage(@PathVariable long idLiga, @RequestBody JsonNode o, HttpSession session, Model model) {
         Long idMensaje = o.get("idMensaje").asLong();
@@ -401,7 +402,7 @@ public class RootController {
 
         model.addAttribute("liga", liga);
 
-        return "foro";
+        return "{\"result\": \"message reported.\"}";
     }
 
     @GetMapping("/mensajes/{idLiga}")
