@@ -19,9 +19,15 @@
             <p th:if="${error}" class="error" th:text="${error}">
                 Error en el foro
             </p>
-            <p th:if="${mensajeReportado}" class="error" th:text="${mensajeReportado}">
-                Mensaje reportado
-            </p>
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="reportToast">
+                <div class="toast-header">
+                  <strong class="me-auto">Notificación</strong>
+                  <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Cerrar"></button>
+                </div>
+                <div class="toast-body">
+                  Mensaje correctamente reportado.
+                </div>
+            </div>
             <div class="py-5 row" id="mensajes">
             </div>
             <form class="infoEquipo" method="post" th:action="@{/foro/{id}(id=${liga.id})}">

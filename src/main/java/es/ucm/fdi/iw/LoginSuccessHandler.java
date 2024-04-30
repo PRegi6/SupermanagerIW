@@ -91,7 +91,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 		for (Equipo e : equiposUsr) {
 			Liga liga = e.getLiga();
 			if (liga != null) {
-				ligasUsr.add("/topic/"+liga.getId());
+				ligasUsr.add("/topic/" + liga.getId());
 			}
 		}
 		session.setAttribute("misLigas", ligasUsr);

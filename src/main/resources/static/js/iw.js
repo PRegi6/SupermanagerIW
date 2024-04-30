@@ -44,7 +44,7 @@ const ws = {
                 while (subs.length != 0) {
                     let sub = subs.pop();
                     console.log(` ... to ${sub} ...`)
-                    ws.subscribe(sub);
+                    ws.subscribe(sub.trim());
                 }
             });
             console.log("Connected to WS '" + endpoint + "'")

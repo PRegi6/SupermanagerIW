@@ -27,7 +27,17 @@ let idLiga = window.location.pathname.split("/").pop();
 function reportMessage(msgId) {
     let data = { idMensaje: msgId };
     let url = `${config.rootUrl}/foro/${idLiga}`
-    go(url, "PUT", data);
+    go(url, "PUT", data).then(() => {
+        // Encuentra el toast en el DOM
+        const toastEl = document.getElementById("reportToast");
+
+        // // Usa Bootstrap para mostrar el toast
+        const toast = new bootstrap.Toast(toastEl);
+        toast.show(); // Muestra el toast
+
+    }).catch(error => {
+        console.error("Error al cargar mensajes antiguos:", error);
+    });
 }
 
 // pinta mensajes viejos al cargarse, via AJAX
@@ -40,10 +50,10 @@ go(foroUrl, "GET").then(ms => {
 // y aquí pinta mensajes según van llegando
 if (ws.receive) {
    const oldFn = ws.receive; // guarda referencia a manejador anterior
-   ws.receive = (m) => {
+    ws.receive = (m) => {
        oldFn(m); // llama al manejador anterior
        messageDiv.insertAdjacentHTML("beforeend", renderMsg(m));
-   }
+    }
 }
 
 // // ver https://openlibrary.org/dev/docs/api/books

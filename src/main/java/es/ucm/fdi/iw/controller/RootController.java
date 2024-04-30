@@ -380,10 +380,6 @@ public class RootController {
                 .setParameter("idLiga", idLiga)
                 .getSingleResult();
 
-        // Si se ha reportado un mensaje muestro un mensaje
-        model.addAttribute("mensajeReportado", session.getAttribute("mensajeReportado"));
-        session.removeAttribute("mensajeReportado");
-
         model.addAttribute("liga", liga);
         return "foro";
     }
@@ -405,7 +401,6 @@ public class RootController {
 
         model.addAttribute("liga", liga);
 
-        session.setAttribute("mensajeReportado", "Mensaje reportado correctamente");
         return "foro";
     }
 
@@ -424,7 +419,7 @@ public class RootController {
     @PostMapping("/foro/{idLiga}")
     @ResponseBody
     @Transactional
-    public String postMensaje(@PathVariable long idLiga, @RequestBody JsonNode o, HttpSession session, Model model)
+    public String postMensaje(@PathVariable long idLiga, @RequestBody JsonNode o, HttpSession session)
             throws JsonProcessingException {
 
         String text = o.get("message").asText();
@@ -449,13 +444,8 @@ public class RootController {
 
         String json = mapper.writeValueAsString(m.toTransfer());
 
-        log.info("Sending a message to {} with contents '{}'", liga.getId(), json);
-
+        log.info("Sending a message to {} with contents '{}'", "/topic/" + liga.getId(), json);
         messagingTemplate.convertAndSend("/topic/" + liga.getId(), json);
-        List<Message> mensajes = liga.getReceived();
-        model.addAttribute("mensajes", mensajes);
-        model.addAttribute("liga", liga);
-
         return "{\"result\": \"message sent.\"}";
     }
 
@@ -552,7 +542,7 @@ public class RootController {
             entityManager.flush();
 
             List<String> misLigas = (List<String>) session.getAttribute("misLigas");
-            misLigas.add(liga.getNombreLiga());
+            misLigas.add("/topic/" + liga.getId());
             session.setAttribute("misLigas", misLigas);
 
             return "redirect:clasificacion";
