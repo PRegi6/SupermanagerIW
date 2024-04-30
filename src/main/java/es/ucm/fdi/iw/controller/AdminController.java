@@ -171,7 +171,7 @@ public class AdminController {
 
     @PostMapping("/admin/")
     @Transactional
-    public String cargaBD(@RequestParam("formType") String formType, @RequestParam("idMensaje") Long idMensaje, Model model) {
+    public String cargaBD(@RequestParam("formType") String formType, @RequestParam(name = "idMensaje", required = false) Long idMensaje, Model model) {
         Jornada jornada = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
         if (formType.equals("eliminar mensaje")) {
             Message m = entityManager.createNamedQuery("Message.porId", Message.class)
