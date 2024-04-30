@@ -234,7 +234,6 @@ public class RootController {
                 // Guardar la posición en el mapa
                 posiciones.put(e.getTeamname(), posicion);
             }
-
         }
 
         model.addAttribute("posiciones", posiciones);
@@ -376,21 +375,22 @@ public class RootController {
     }
 
     @GetMapping("/foro/{idLiga}")
-    public String getForo(@PathVariable long idLiga, Model model) {
+    public String getForo(@PathVariable long idLiga, HttpSession session, Model model) {
         Liga liga = entityManager.createNamedQuery("Liga.byidliga", Liga.class)
                 .setParameter("idLiga", idLiga)
                 .getSingleResult();
 
-        List<Message> mensajes = liga.getReceived();
+        // Si se ha reportado un mensaje muestro un mensaje
+        model.addAttribute("mensajeReportado", session.getAttribute("mensajeReportado"));
+        session.removeAttribute("mensajeReportado");
 
-        model.addAttribute("mensajes", mensajes);
         model.addAttribute("liga", liga);
         return "foro";
     }
 
     @PutMapping("/foro/{idLiga}")
     @Transactional
-    public String reportMessage(@PathVariable long idLiga, @RequestBody JsonNode o, Model model) {
+    public String reportMessage(@PathVariable long idLiga, @RequestBody JsonNode o, HttpSession session, Model model) {
         Long idMensaje = o.get("idMensaje").asLong();
         Message m = entityManager.createNamedQuery("Message.porId", Message.class)
             .setParameter("idMensaje", idMensaje)
@@ -400,13 +400,12 @@ public class RootController {
         entityManager.flush();
 
         Liga liga = entityManager.createNamedQuery("Liga.byidliga", Liga.class)
-                .setParameter("idLiga", idLiga)
+            .setParameter("idLiga", idLiga)
                 .getSingleResult();
 
-        List<Message> mensajes = liga.getReceived();
-
-        model.addAttribute("mensajes", mensajes);
         model.addAttribute("liga", liga);
+
+        session.setAttribute("mensajeReportado", "Mensaje reportado correctamente");
         return "foro";
     }
 

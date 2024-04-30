@@ -16,14 +16,16 @@
             </h1>
         </div>
         <div class="container">
-            <th:block th:if="${mensajes.empty}"><p></p></th:block>
+            <p th:if="${error}" class="error" th:text="${error}">
+                Error en el foro
+            </p>
+            <p th:if="${mensajeReportado}" class="error" th:text="${mensajeReportado}">
+                Mensaje reportado
+            </p>
             <div class="py-5 row" id="mensajes">
             </div>
             <form class="infoEquipo" method="post" th:action="@{/foro/{id}(id=${liga.id})}">
-                    <p th:if="${error}" class="error" th:text="${error}">
-                        Error en el foro
-                    </p>
-                    <label for="message" class="visually-hidden">Mensaje</label>
+                <label for="message" class="visually-hidden">Mensaje</label>
                 <input type="textarea" id="message" name="message" class="form-control" placeholder="Mensaje" required="required" maxlength="257">
                 <button id="sendmsg" class="Foroboton" type="submit">Publicar</button>
             </form>
