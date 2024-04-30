@@ -17,7 +17,7 @@ function renderMsg(msg) {
    // Incorporamos el botón en el HTML del mensaje si es necesario
    return `<div class="infoMensaje">
                <p class="textoFrom">${msg.from}:<br></p>
-               <p class="textoMensaje">${msg.text}</p>
+               <p class="textoFecha">${msg.sent}: ${msg.text}</p>
                <button class="Foroboton" onclick="reportMessage(${msg.id})">Reportar</button>
            </div>`;
 }

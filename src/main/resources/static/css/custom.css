@@ -381,6 +381,14 @@ th, td{
     color: lightblue;
 }
 
+.textoFecha {
+    top: 50%;
+    flex: 1;
+    padding: 5px;
+    text-align: left;
+    color: lightblue;
+}
+
 .textoMensaje {
     top: 50%;
     flex: 1;
