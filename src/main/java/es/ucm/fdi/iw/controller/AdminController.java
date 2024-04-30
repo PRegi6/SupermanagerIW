@@ -180,6 +180,13 @@ public class AdminController {
 
             entityManager.remove(m);
         }
+        else if (formType.equals("validar mensaje")) {
+            Message m = entityManager.createNamedQuery("Message.porId", Message.class)
+            .setParameter("idMensaje", idMensaje)
+                .getSingleResult();
+
+            m.setReported(false);
+        }
         else {
             actualizarDatos();
 

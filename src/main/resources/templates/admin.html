@@ -14,9 +14,10 @@
             <h1 class="mt-5">Administración</h1>
             <form class="form-signin" method="post" th:action="@{/admin/}">
                 <div class="infoMensaje" th:each="mensaje : ${reportados}">
-                    <p class="textoFrom" th:text="${mensaje.sender}">Emisor</p>
+                    <p class="textoFrom" th:text="${mensaje.sender.getUsername()}  + ':'">Emisor</p>
                     <p class="textoMensaje" th:text="${mensaje.text}">Texto</p>
                     <input type="hidden" id="idMensaje" name="idMensaje" th:value="${mensaje.id}" />
+                    <button class="Foroboton" type="submit" name="formType" value="validar mensaje">Validar mensaje</button>
                     <button class="Foroboton" type="submit" name="formType" value="eliminar mensaje">Eliminar mensaje</button>
                 </div>
                 <button class="btn btn-lg btn-custom btn-block" type="submit" name="formType" value="avanzarJornada">Avanzar jornada</button>
