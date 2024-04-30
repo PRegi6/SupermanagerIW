@@ -7473,6 +7473,14 @@ textarea.form-control-lg {
   padding-bottom: 3rem !important;
 }
 
+.py-5foro {
+  padding-top: 3rem !important;
+  padding-bottom: 3rem !important;
+  overflow: scroll;
+  height: 40em;
+  width: auto;
+}
+
 .pt-0 {
   padding-top: 0 !important;
 }
