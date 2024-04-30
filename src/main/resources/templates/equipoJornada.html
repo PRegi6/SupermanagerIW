@@ -9,15 +9,17 @@
 <body class="d-flex flex-column h-100">
     <header th:replace="fragments/nav.html :: nav"></header>
 
-    <main class="flex-shrink-0">
-        <h1>
-            <a th:href="@{/MiEquipo/{idEquipo}(idEquipo=${equipo.id})}" th:text="${equipo.teamname}">
-                Nombre equipo
-            </a>
-        </h1>
-        <h1>Puntos conseguidos: <span th:text="${equipoJornada.puntos}">Puntos</span></h1>
+    <main class="flex-shrink-0">        
         <div class="container">
+            <h1>
+                <a th:href="@{/MiEquipo/{idEquipo}(idEquipo=${equipo.id})}" th:text="${equipo.teamname}">
+                    Nombre equipo
+                </a>
+            </h1>
+            
+            
             <div class="jornadas" th:if="${jornada > 1}">
+                <h4>Últimas jornadas </h4>
                 <th:block th:each="jornadaJugada : ${#numbers.sequence(1, jornada - 1)}">
                     <form class="form-jornada" method="post" th:action="@{/equipoJornada}">
                         <input type="hidden" name="jornadaJugada" th:value="${jornadaJugada}">
