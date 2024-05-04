@@ -44,7 +44,7 @@ button {
 }
 
 .btn-jornada {
-    background-color: rgb(147, 250, 147);
+    background-color:#ff3700;
     border-color: black;
     color: black; /* Cambia el color del texto para que sea legible */
     border-radius: 20px;
@@ -101,6 +101,13 @@ button {
     text-transform: uppercase; /* mayúsculas */
     color: #ff3700;
     font-size: xx-large;
+}
+
+.texto-posicion2 {
+    font-weight: bold; /* negrita */
+    text-transform: uppercase; /* mayúsculas */
+    color: #ff3700;
+    font-size: xx-medium;
 }
 
 .texto-valor {
@@ -217,7 +224,7 @@ img.preview {
 
     .div_jugador {
         background-color: white;
-        border: 1px solid rgb(255, 0, 0);
+        border: 2px solid #ff3700;
         color: black;
         display: flex;
         justify-content: space-between;
@@ -236,7 +243,7 @@ img.preview {
         }
 
         .promedio_valor {
-            width: 10%;
+            width: 25%;
         }
 
 th, td{
@@ -298,7 +305,21 @@ th, td{
     margin-bottom: 10px;
 }
 
-.card-title:hover {
+.card-title2 {
+    color: black;
+    font-size: 40px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.card-title3 {
+    color: black;
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.card-title:hover, .card-title2:hover, .card-title3:hover {
     color: #ff3700; /* Al pasar el ratón por encima el texto se pone negro*/
 }
 
@@ -464,6 +485,16 @@ th, td{
 
 .jornadas {
     border: 1px solid black;
-    background-color: rgb(122, 224, 255);
+    background-color: #000000;
     border-radius: 10px;
+    align-items: center;
 }
+
+.text-jornadas{
+    color:white;
+    font-style: italic;
+    font-weight: bold;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html class="h-100" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <th:block th:replace="fragments/head :: header" />
     <title>IW: Login</title>
@@ -10,9 +9,10 @@
     <header th:replace="fragments/nav.html :: nav"></header>
 
     <main class="flex-shrink-0">
+        <h1 style="text-align: center;">Bienvenido a SuperManager ACB</h1>
         <div class="div-login">
             <form class="form-signin2" method="post" th:action="@{/login}">
-                <h2 class="form-signin-heading">Please sign in</h2>
+                <h2 class="form-signin-heading">Iniciar sesión</h2>
                 <p th:if="${#request.getQueryString() == 'error'}" class="error">
                     Error en nombre de usuario o contraseña
                 </p>
@@ -30,7 +30,7 @@
 
                 <div class="spacer-login"></div>
 
-                <button class="btn-login" type="submit">Sign in</button>
+                <button class="btn-login" type="submit">Iniciar sesión</button>
 
                 <div class="spacer-login"></div>
             </form>

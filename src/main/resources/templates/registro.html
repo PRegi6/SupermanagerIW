@@ -10,9 +10,10 @@
     <header th:replace="fragments/nav.html :: nav"></header>
 
     <main class="flex-shrink-0">
+        <h1 style="text-align: center;">Bienvenido a SuperManager ACB</h1>
         <div class="div-login">
             <form class="form-signin2" method="post" th:action="@{/registro}">
-                <h2 class="form-signin-heading">Please register</h2>
+                <h2 class="form-signin-heading">Registro</h2>
                 <p th:if="${error}" class="error" th:text="${error}">
                     Error por defecto
                 </p>
