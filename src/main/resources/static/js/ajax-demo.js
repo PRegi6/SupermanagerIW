@@ -13,13 +13,30 @@ b.onclick = (e) => {
 
 // cómo pintar 1 mensaje (devuelve html que se puede insertar en un div)
 function renderMsg(msg) {
-   console.log("rendering: ", msg);
-   // Incorporamos el botón en el HTML del mensaje si es necesario
-   return `<div class="infoMensaje">
-               <p class="textoFrom">${msg.from}:<br></p>
-               <p class="textoFecha">${msg.sent}: ${msg.text}</p>
-               <button class="Foroboton" onclick="reportMessage(${msg.id})">Reportar</button>
-           </div>`;
+    console.log("rendering: ", msg);
+
+    const fechaHora = new Date(msg.sent);
+ 
+    const dia = fechaHora.getDate();
+    const mes = fechaHora.getMonth() + 1; 
+ 
+    const diaFormateado = dia < 10 ? `0${dia}` : dia;
+    const mesFormateado = mes < 10 ? `0${mes}` : mes;
+ 
+    const hora = fechaHora.getHours();
+    const minutos = fechaHora.getMinutes();
+ 
+    const horaFormateada = hora < 10 ? `0${hora}` : hora;
+    const minutosFormateados = minutos < 10 ? `0${minutos}` : minutos;
+ 
+    const fechaFormateada = `${diaFormateado}/${mesFormateado}<br>${horaFormateada}:${minutosFormateados}`; 
+    // Incorporamos el botón en el HTML del mensaje si es necesario
+    return `<div class="infoMensaje">
+                <p class="textoFrom">${msg.from}<br></p>
+                <p class="textoFecha">${fechaFormateada}:</p>
+                <p class="textoMensaje">${msg.text}</p> <!-- Mensaje separado en una clase diferente -->
+                <button class="Foroboton" onclick="reportMessage(${msg.id})">Reportar</button>
+            </div>`;
 }
 
 let idLiga = window.location.pathname.split("/").pop();
