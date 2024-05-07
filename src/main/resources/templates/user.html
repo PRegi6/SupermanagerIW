@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html class="h-100" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="fragments/head :: header" />
+    <title>IW: Usuario</title>
+</head>
+
+<body class="d-flex flex-column h-100">
+    <header th:replace="fragments/nav.html :: nav"></header>
+
+    <main class="flex-shrink-0">
+        <div class="container">
+            <h1 class="mt-5">Info usuario</h1>
+            <form class="form-signin">
+                <div id="profile" class="border border-2 border-tertiary rounded">
+                    <input type="file" id="f_avatar" accept="image/jpeg,image/png">
+                    <img class="preview" id="avatar" alt="careto a subir" />
+                    <form th:action="@{/user/__${user.id}__/pic}">
+                        <button id="postAvatar">Usar como foto de perfil</button>
+                    </form>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <th:block th:replace="fragments/footer.html :: footer" />
+</body>
+
+</html>
