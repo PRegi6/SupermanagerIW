@@ -510,3 +510,10 @@ th, td{
     margin-left: 20px;
 }
 
+.enlace {
+    color:black;
+    font-weight: bold;
+}
+.enlace:hover{
+    color: #ff3700;
+}
