@@ -169,31 +169,45 @@ public class AdminController {
         }
     }
 
-    @PostMapping("/admin/")
+    @PostMapping("/eliminarMensaje")
     @Transactional
-    public String cargaBD(@RequestParam("formType") String formType, @RequestParam(name = "idMensaje", required = false) Long idMensaje, Model model) {
+    public String eliminarMensaje(@RequestParam("formType") String formType, @RequestParam("idMensaje") Long idMensaje, Model model) {
         Jornada jornada = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
-        if (formType.equals("eliminar mensaje")) {
-            Message m = entityManager.find(Message.class, idMensaje);
+        Message m = entityManager.find(Message.class, idMensaje);
 
-            entityManager.remove(m);
-        }
-        else if (formType.equals("validar mensaje")) {
-            Message m = entityManager.find(Message.class, idMensaje);
-
-            m.setReported(false);
-        }
-        else {
-            actualizarDatos();
-
-            jornada.setJornada(jornada.getJornada() + 1);
-        }
-
-        entityManager.flush();
+        entityManager.remove(m);
 
         model.addAttribute("jornada", jornada.getJornada());
 
-        return "redirect:/admin/";
+        return index(model);
+    }
+
+    @PostMapping("/validarMensaje")
+    @Transactional
+    public String validarMensaje(@RequestParam("formType") String formType, @RequestParam("idMensaje") Long idMensaje, Model model) {
+        Jornada jornada = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
+
+        Message m = entityManager.find(Message.class, idMensaje);
+
+        m.setReported(false);
+
+        model.addAttribute("jornada", jornada.getJornada());
+
+        return index(model);
+    }
+
+    @PostMapping("/avanzarJornada")
+    @Transactional
+    public String avanzarJornada(Model model) {
+        Jornada jornada = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
+        
+        actualizarDatos();
+
+        jornada.setJornada(jornada.getJornada() + 1);
+
+        model.addAttribute("jornada", jornada.getJornada());
+
+        return index(model);
     }
 
 }
