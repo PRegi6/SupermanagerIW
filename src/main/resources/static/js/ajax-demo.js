@@ -1,14 +1,15 @@
 
 // envio de mensajes con AJAX
 let b = document.getElementById("sendmsg");
-const campo = "";
-b.onclick = (e) => {
-    e.preventDefault();
-    go(b.parentNode.action, 'POST', {
-            message: document.getElementById("message").value
-        })
-        .then(d => console.log("La d tiene el valor: ", d))
-        .catch(e => console.log("sad", e))
+if (b) {
+    b.onclick = (e) => {
+        e.preventDefault();
+        go(b.parentNode.action, 'POST', {
+                message: document.getElementById("message").value
+            })
+            .then(d => console.log("La d tiene el valor: ", d))
+            .catch(e => console.log("sad", e))
+    }
 }
 
 // cómo pintar 1 mensaje (devuelve html que se puede insertar en un div)
@@ -60,17 +61,38 @@ function reportMessage(msgId) {
 
 // pinta mensajes viejos al cargarse, via AJAX
 let messageDiv = document.getElementById("mensajes");
-let foroUrl = `${config.rootUrl}/mensajes/${idLiga}`;
-go(foroUrl, "GET").then(ms => {
-   console.log("Cargando mensajes antiguios", ms);
-   ms.forEach(m => messageDiv.insertAdjacentHTML("beforeend", renderMsg(m)));})
+if (messageDiv) {
+    let foroUrl = `${config.rootUrl}/mensajes/${idLiga}`;
+    go(foroUrl, "GET").then(ms => {
+    console.log("Cargando mensajes antiguios", ms);
+    ms.forEach(m => messageDiv.insertAdjacentHTML("beforeend", renderMsg(m)));})
 
-// y aquí pinta mensajes según van llegando
-if (ws.receive) {
-   const oldFn = ws.receive; // guarda referencia a manejador anterior
-    ws.receive = (m) => {
-       oldFn(m); // llama al manejador anterior
-       messageDiv.insertAdjacentHTML("beforeend", renderMsg(m));
+    // y aquí pinta mensajes según van llegando
+    if (ws.receive) {
+        const oldFn = ws.receive; // guarda referencia a manejador anterior
+        ws.receive = (m) => {
+            oldFn(m); // llama al manejador anterior
+            messageDiv.insertAdjacentHTML("beforeend", renderMsg(m));
+        }
+    }
+}
+
+// envio de mensajes con AJAX
+let avanzarJornada = document.getElementById("avanzarJornada");
+console.log("AvanzarJornada es ", avanzarJornada);
+if (avanzarJornada) {
+    avanzarJornada.onclick = (e) => {
+        avanzarJornada.disabled = true
+        e.preventDefault();
+        go(avanzarJornada.parentNode.action, 'POST')
+            .then(d =>{ 
+                console.log("happy", d)
+                avanzarJornada.disabled = false
+            })
+            .catch(e => {
+                console.log("sad", e)
+                avanzarJornada.disabled = false
+            })
     }
 }
 

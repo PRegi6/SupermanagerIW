@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.ucm.fdi.iw.model.Equipo;
 import es.ucm.fdi.iw.model.EquipoACB;
@@ -198,6 +199,7 @@ public class AdminController {
 
     @PostMapping("/avanzarJornada")
     @Transactional
+    @ResponseBody
     public String avanzarJornada(Model model) {
         Jornada jornada = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
         
@@ -207,7 +209,7 @@ public class AdminController {
 
         model.addAttribute("jornada", jornada.getJornada());
 
-        return index(model);
+        return "{\"result\": \"jornada avanzada correctamente.\"}";
     }
 
 }

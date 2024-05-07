@@ -26,13 +26,13 @@
                 </form>
             </div>
             <form class="form-signin" method="post" th:action="@{/admin/avanzarJornada}">
-                <p>ATENCIÓN: Pulsar UNA sola vez y esperar a que se procese bien el click</p>
-                <button class="btn btn-lg btn-custom btn-block" type="submit" name="formType" value="avanzarJornada">Avanzar jornada</button>
+                <button class="btn btn-lg btn-custom btn-block" id="avanzarJornada" type="submit" name="formType" value="avanzarJornada">Avanzar jornada</button>
             </form>
         </div>
     </main>
 
     <th:block th:replace="fragments/footer.html :: footer" />
+    <script th:src="@{/js/ajax-demo.js}"></script>
 </body>
 
 </html>
