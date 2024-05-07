@@ -442,6 +442,9 @@ public class RootController {
         liga.getReceived().add(m);
         m.toTransfer();
 
+        // Guardo el mensaje en la lista de mensajes del usuario
+        sender.getSent().add(m);
+
         entityManager.persist(m);
         entityManager.flush();
 

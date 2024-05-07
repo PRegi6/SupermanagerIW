@@ -25,6 +25,7 @@ import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.PartidoACB;
 import es.ucm.fdi.iw.model.PuntosEquipo;
 import es.ucm.fdi.iw.model.PuntosJugador;
+import es.ucm.fdi.iw.model.User;
 
 /**
  *  Site administration.
@@ -74,6 +75,24 @@ public class AdminController {
 
     @GetMapping("/crearliga")
     public String getCrearLiga() { return "crearliga"; }
+
+    @GetMapping("/usuarios")
+    public String getUsuarios(Model model) {
+        List<User> usuarios = entityManager.createNamedQuery("User.allUsers", User.class)
+            .getResultList();
+
+        model.addAttribute("usuarios", usuarios);
+        return "usuarios"; 
+    }
+
+    @GetMapping("/mensajesReportados")
+    public String mensajesReportados(Model model) {
+        List<Message> reportedMessages = entityManager.createNamedQuery("Message.reportados", Message.class)
+            .getResultList();
+        model.addAttribute("reportados", reportedMessages);
+        
+        return "mensajesReportados";
+    }
 
     @Transactional
     public void actualizarDatos() {
@@ -170,29 +189,41 @@ public class AdminController {
         }
     }
 
+    @PostMapping("/banearUsuario")
+    @Transactional
+    public String banearUsuario(@RequestParam("idUsuario") Long idUsuario, Model model) {
+        User u = entityManager.find(User.class, idUsuario);
+        u.setEnabled(false);
+
+        return index(model);
+    }
+
+    @PostMapping("/desbanearUsuario")
+    @Transactional
+    public String desbanearUsuario(@RequestParam("idUsuario") Long idUsuario, Model model) {
+        User u = entityManager.find(User.class, idUsuario);
+        u.setEnabled(true);
+
+        return index(model);
+    }
+
     @PostMapping("/eliminarMensaje")
     @Transactional
-    public String eliminarMensaje(@RequestParam("formType") String formType, @RequestParam("idMensaje") Long idMensaje, Model model) {
-        Jornada jornada = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
+    public String eliminarMensaje( @RequestParam("idMensaje") Long idMensaje, Model model) {
         Message m = entityManager.find(Message.class, idMensaje);
 
         entityManager.remove(m);
-
-        model.addAttribute("jornada", jornada.getJornada());
 
         return index(model);
     }
 
     @PostMapping("/validarMensaje")
     @Transactional
-    public String validarMensaje(@RequestParam("formType") String formType, @RequestParam("idMensaje") Long idMensaje, Model model) {
-        Jornada jornada = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
+    public String validarMensaje(@RequestParam("idMensaje") Long idMensaje, Model model) {
 
         Message m = entityManager.find(Message.class, idMensaje);
 
         m.setReported(false);
-
-        model.addAttribute("jornada", jornada.getJornada());
 
         return index(model);
     }
