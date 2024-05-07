@@ -222,18 +222,6 @@ public class UserController {
 		return "{\"status\":\"photo uploaded correctly\"}";
     }	
     
-    /**
-     * Returns JSON with count of unread messages 
-     */
-	@GetMapping(path = "unread", produces = "application/json")
-	@ResponseBody
-	public String checkUnread(HttpSession session) {
-		long userId = ((User)session.getAttribute("u")).getId();		
-		long unread = entityManager.createNamedQuery("Message.countUnread", Long.class)
-			.setParameter("userId", userId)
-			.getSingleResult();
-		session.setAttribute("unread", unread);
-		return "{\"unread\": " + unread + "}";
-    }
+    
 	
 }
