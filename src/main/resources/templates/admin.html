@@ -12,14 +12,20 @@
     <main class="flex-shrink-0">
         <div class="container">
             <h1 class="mt-5">Administración</h1>
-            <form class="form-signin" method="post" th:action="@{/admin/}">
-                <div class="infoMensaje" th:each="mensaje : ${reportados}">
-                    <p class="textoFrom" th:text="${mensaje.sender.getUsername()}  + ':'">Emisor</p>
-                    <p class="textoMensaje" th:text="${mensaje.text}">Texto</p>
+            <div class="infoMensaje" th:each="mensaje : ${reportados}">
+                <p class="textoFrom" th:text="${mensaje.sender.getUsername()}  + ':'">Emisor</p>
+                <p class="textoMensaje" th:text="${mensaje.text}">Texto</p>
+                <input type="hidden" id="idMensaje" name="idMensaje" th:value="${mensaje.id}" />
+                <form class="form-signin" method="post" th:action="@{/admin/validarMensaje}">
                     <input type="hidden" id="idMensaje" name="idMensaje" th:value="${mensaje.id}" />
                     <button class="Foroboton" type="submit" name="formType" value="validar mensaje">Validar mensaje</button>
+                </form>
+                <form class="form-signin" method="post" th:action="@{/admin/eliminarMensaje}">
+                    <input type="hidden" id="idMensaje" name="idMensaje" th:value="${mensaje.id}" />
                     <button class="Foroboton" type="submit" name="formType" value="eliminar mensaje">Eliminar mensaje</button>
-                </div>
+                </form>
+            </div>
+            <form class="form-signin" method="post" th:action="@{/admin/avanzarJornada}">
                 <p>ATENCIÓN: Pulsar UNA sola vez y esperar a que se procese bien el click</p>
                 <button class="btn btn-lg btn-custom btn-block" type="submit" name="formType" value="avanzarJornada">Avanzar jornada</button>
             </form>

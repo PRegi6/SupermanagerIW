@@ -29,11 +29,11 @@ function renderMsg(msg) {
     const horaFormateada = hora < 10 ? `0${hora}` : hora;
     const minutosFormateados = minutos < 10 ? `0${minutos}` : minutos;
  
-    const fechaFormateada = `${diaFormateado}/${mesFormateado}<br>${horaFormateada}:${minutosFormateados}`; 
+    const fechaFormateada = `${diaFormateado}/${mesFormateado} ${horaFormateada}:${minutosFormateados}`; 
     // Incorporamos el botón en el HTML del mensaje si es necesario
     return `<div class="infoMensaje">
                 <p class="textoFrom">${msg.from}<br></p>
-                <p class="textoFecha">${fechaFormateada}:</p>
+                <p class="textoFecha">${fechaFormateada}</p>
                 <p class="textoMensaje">${msg.text}</p> <!-- Mensaje separado en una clase diferente -->
                 <button class="Foroboton" onclick="reportMessage(${msg.id})">Reportar</button>
             </div>`;
