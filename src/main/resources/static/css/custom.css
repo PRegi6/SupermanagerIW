@@ -372,6 +372,7 @@ th, td{
     display: inline-block; /* Hace que los párrafos estén en la misma línea */
     justify-content: center;
     align-items: center;
+    margin-top: 15px;
     margin-right: 5px; /* Añade un pequeño margen entre los párrafos */
     padding: 0 5px; /* Espaciado entre el borde y el texto */
     border-right: 1px solid black; /* Borde derecho para separación */
@@ -407,22 +408,25 @@ th, td{
     align-items: center;
     height: 60px;
     margin: 5px;
+    margin-top: 15px;
     border-radius: 10px;
- 
-
 }
+
 .textoFrom {
     text-align: center;
     color: rgb(0, 0, 0);
+    margin-top: 15px;
+    margin-left: 15px;
 }
 
 .textoFecha {
+    display: inline-block;
     top: 50%;
     flex: 0.5;
     padding: 5px;
     text-align: center;
     color: rgb(4, 0, 255);
-    
+    margin-top: 15px;
 }
 
 .textoMensaje {
@@ -431,6 +435,7 @@ th, td{
     padding: 5px;
     text-align: left;
     color: rgb(0, 0, 0);
+    margin-top: 15px;
 }
 
 
@@ -510,3 +515,10 @@ th, td{
     margin-left: 20px;
 }
 
+.enlace {
+    color:black;
+    font-weight: bold;
+}
+.enlace:hover{
+    color: #ff3700;
+}

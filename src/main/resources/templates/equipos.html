@@ -25,12 +25,13 @@
                             <th>Puntos</th>
                             <th>Dinero</th>
                             <th>Liga</th>
+                            <th>Posición</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="equipo : ${misEquipos}">
                             <td>
-                                <a th:href="@{/MiEquipo/{id}(id=${equipo.id})}" th:text="${equipo.teamname}">Los Canijos</a>
+                                <a class = "enlace" th:href="@{/MiEquipo/{id}(id=${equipo.id})}" th:text="${equipo.teamname}">Los Canijos</a>
                             </td>
                             <td th:text="${equipo.puntos}"></td>
                             <td th:text="${equipo.dinero}"></td>
@@ -41,8 +42,12 @@
                                 </form>
                             </td>
                             <td th:unless="${equipo.liga eq null}">
-                                <div th:text="${equipo.liga.getNombreLiga()}"></div>
+                                <a class = "enlace" th:href = "@{/liga/{id}(id=${equipo.liga.id})}" th:text="${equipo.liga.getNombreLiga()}"> </a>
                             </td>
+
+                            <td th:text="${posiciones[equipo.teamname]}"></td>
+
+
                         </tr>                    
                     </tbody>
                 </table>

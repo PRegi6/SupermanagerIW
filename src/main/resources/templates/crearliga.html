@@ -10,11 +10,9 @@
     <header th:replace="fragments/nav.html :: nav"></header>
 
     <main class="flex-shrink-0">
-        <div class="container">
-            <h1>Crea una liga</h1>
-        </div>
-        <div class="container">
-            <form class="form-signin" method="post" th:action="@{/crearliga}">
+        <div class="div-login">
+            <form class="form-signin2" method="post" th:action="@{/crearliga}">
+                <h2 class="form-signin-heading">Crea una liga</h2>
                 <p th:if="${error}" class="error" th:text="${error}">
                     Nombre de liga ya existente
                 </p>
@@ -26,7 +24,7 @@
                     <label for="password" class="visually-hidden">Contraseña</label>
                     <input type="password" id="password" name="password" class="form-control" placeholder="Password" required="required">
                 </p>
-                <button class="btn btn-lg btn-custom btn-block" type="submit">Crear</button>
+                <button class="btn-login" type="submit">Crear</button>
             </form>
         </div>
     </main>
