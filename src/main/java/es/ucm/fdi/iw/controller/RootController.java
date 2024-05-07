@@ -340,11 +340,10 @@ public class RootController {
 
     @GetMapping("/jugador/{idJugador}")
     public String getJugador(@PathVariable long idJugador, Model model) {
-        JugadorACB jugador = entityManager.createNamedQuery("JugadorACB.jugadorId", JugadorACB.class)
-                .setParameter("idJugador", idJugador)
-                .getSingleResult();
+        JugadorACB jugador = entityManager.find(JugadorACB.class, idJugador);
 
         Jornada jornadaActual = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
+
         List<Integer> listUltPartidos = entityManager.createNamedQuery("PuntosJugador.ultimosPartidos", Integer.class)
                 .setParameter("nombre", jugador.getNombre())
                 .setParameter("jornada", jornadaActual.getJornada())
@@ -358,9 +357,7 @@ public class RootController {
 
     @GetMapping("/liga/{idLiga}")
     public String getLiga(@PathVariable long idLiga, Model model) {
-        Liga liga = entityManager.createNamedQuery("Liga.byidliga", Liga.class)
-                .setParameter("idLiga", idLiga)
-                .getSingleResult();
+        Liga liga = entityManager.find(Liga.class, idLiga);
 
         List<Equipo> equipos = entityManager.createNamedQuery("Equipo.byliga", Equipo.class)
                 .setParameter("liga", liga)
@@ -376,9 +373,7 @@ public class RootController {
 
     @GetMapping("/foro/{idLiga}")
     public String getForo(@PathVariable long idLiga, HttpSession session, Model model) {
-        Liga liga = entityManager.createNamedQuery("Liga.byidliga", Liga.class)
-                .setParameter("idLiga", idLiga)
-                .getSingleResult();
+        Liga liga = entityManager.find(Liga.class, idLiga);
 
         model.addAttribute("liga", liga);
         return "foro";
@@ -389,16 +384,12 @@ public class RootController {
     @Transactional
     public String reportMessage(@PathVariable long idLiga, @RequestBody JsonNode o, HttpSession session, Model model) {
         Long idMensaje = o.get("idMensaje").asLong();
-        Message m = entityManager.createNamedQuery("Message.porId", Message.class)
-            .setParameter("idMensaje", idMensaje)
-                .getSingleResult();
+        Message m = entityManager.find(Message.class, idMensaje);
 
         m.setReported(true);
         entityManager.flush();
 
-        Liga liga = entityManager.createNamedQuery("Liga.byidliga", Liga.class)
-            .setParameter("idLiga", idLiga)
-                .getSingleResult();
+        Liga liga = entityManager.find(Liga.class, idLiga);
 
         model.addAttribute("liga", liga);
 
@@ -408,9 +399,7 @@ public class RootController {
     @GetMapping("/mensajes/{idLiga}")
     @ResponseBody
     public List<Message.Transfer> getForoApi(@PathVariable long idLiga) {
-        Liga liga = entityManager.createNamedQuery("Liga.byidliga", Liga.class)
-            .setParameter("idLiga", idLiga)
-                .getSingleResult();
+        Liga liga = entityManager.find(Liga.class, idLiga);
 
         List<Message> mensajes= liga.getReceived();
 
@@ -554,9 +543,8 @@ public class RootController {
 
     @GetMapping("/MiEquipo/{idEquipo}")
     public String getMiEquipo(@PathVariable Long idEquipo, HttpSession session, Model model) {
-        Equipo equipo = entityManager.createNamedQuery("Equipo.miEquipoId", Equipo.class)
-                .setParameter("idEquipo", idEquipo)
-                .getSingleResult();
+        Equipo equipo = entityManager.find(Equipo.class, idEquipo);
+
         List<JugadorACB> jugadores = equipo.getJugadores();
 
         List<JugadorACB> bases = new ArrayList<>();
@@ -643,10 +631,8 @@ public class RootController {
         Jornada jornada = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
 
         List<JugadorACB> jugadores = new ArrayList<>();
-        List<JugadorACB> jugadoresFichados = entityManager.createNamedQuery("Equipo.miEquipoId", Equipo.class)
-                .setParameter("idEquipo", idequipo)
-                .getSingleResult()
-                .getJugadores();
+        List<JugadorACB> jugadoresFichados = entityManager.find(Equipo.class, idequipo)
+            .getJugadores();
 
         if (buscar != null) {
             if (formType.equals("ficharBases")) {
@@ -741,9 +727,7 @@ public class RootController {
             Model model) {
         Jornada jornadaActual = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
 
-        Equipo equipo = entityManager.createNamedQuery("Equipo.miEquipoId", Equipo.class)
-                .setParameter("idEquipo", idEquipo)
-                .getSingleResult();
+        Equipo equipo = entityManager.find(Equipo.class, idEquipo);
         PuntosEquipo pE = entityManager.createNamedQuery("PuntosEquipo.equipo", PuntosEquipo.class)
                 .setParameter("equipo", equipo)
                 .setParameter("jornada", jornada)

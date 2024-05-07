@@ -174,16 +174,12 @@ public class AdminController {
     public String cargaBD(@RequestParam("formType") String formType, @RequestParam(name = "idMensaje", required = false) Long idMensaje, Model model) {
         Jornada jornada = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
         if (formType.equals("eliminar mensaje")) {
-            Message m = entityManager.createNamedQuery("Message.porId", Message.class)
-                .setParameter("idMensaje", idMensaje)
-                    .getSingleResult();
+            Message m = entityManager.find(Message.class, idMensaje);
 
             entityManager.remove(m);
         }
         else if (formType.equals("validar mensaje")) {
-            Message m = entityManager.createNamedQuery("Message.porId", Message.class)
-            .setParameter("idMensaje", idMensaje)
-                .getSingleResult();
+            Message m = entityManager.find(Message.class, idMensaje);
 
             m.setReported(false);
         }
