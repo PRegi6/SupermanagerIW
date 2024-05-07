@@ -221,6 +221,31 @@ public class UserController {
 		}
 		return "{\"status\":\"photo uploaded correctly\"}";
     }	
+
+    @PostMapping("{id}/profile")
+    public String setInf(HttpServletResponse response,
+    @PathVariable long id, 
+    @ModelAttribute User edited, 
+    @RequestParam(required=false) String firstName,
+    @RequestParam(required=false) String LastName,
+    Model model, HttpSession session) throws IOException{
+        User requester = (User)session.getAttribute("u");
+        requester.setFirstName(firstName);
+        requester.setLastName(LastName);
+        
+
+
+        return "user";
+        
+    }
+
+    /**
+     * Uploads a profile pic for a user id
+     * 
+     * @param id
+     * @return
+     * @throws IOException
+     */
     
     
 	
