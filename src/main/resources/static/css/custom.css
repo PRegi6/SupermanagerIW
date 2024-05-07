@@ -361,10 +361,23 @@ th, td{
 .posicionEquipo,
 .nombreEquipo,
 .dueñoEquipo,
-.puntosEquipo {
+.puntosEquipo,
+.ultimasJornadas {
     flex: 1;
     padding: 5px;
     text-align: center;
+}
+
+.ultimasJornadas p {
+    display: inline-block; /* Hace que los párrafos estén en la misma línea */
+    justify-content: center;
+    align-items: center;
+    margin-right: 5px; /* Añade un pequeño margen entre los párrafos */
+    padding: 0 5px; /* Espaciado entre el borde y el texto */
+    border-right: 1px solid black; /* Borde derecho para separación */
+    border-left: 1px solid black; /* Borde derecho para separación */
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
 }
 
 .posicionEquipo {
@@ -472,7 +485,6 @@ th, td{
     justify-content: center;
     align-items: center;
 }
-
 
 .jugadores_mercado{
     margin-top: 2px; 

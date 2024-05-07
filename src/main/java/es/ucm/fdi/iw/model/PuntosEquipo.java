@@ -16,7 +16,12 @@ import javax.persistence.*;
 @NamedQueries({
     @NamedQuery(name="PuntosEquipo.equipo",
     query="SELECT e FROM PuntosEquipo e "
-            + "WHERE e.equipo = :equipo AND e.jornada = :jornada")
+            + "WHERE e.equipo = :equipo AND e.jornada = :jornada"),
+    @NamedQuery(
+    name = "PuntosEquipo.ultimasJornadas",
+    query = "SELECT e.puntos FROM PuntosEquipo e " +
+            "WHERE e.jornada < :jornada AND e.equipo = :equipo " +
+            "ORDER BY ABS(e.jornada - :jornada)")
 })
 @NoArgsConstructor
 @Table(name="PuntosEquipo")

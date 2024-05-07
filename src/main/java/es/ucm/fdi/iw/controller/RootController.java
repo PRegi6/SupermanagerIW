@@ -363,10 +363,25 @@ public class RootController {
                 .setParameter("liga", liga)
                 .getResultList();
 
+        Jornada jornadaActual = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
+
+        Map<String, List<Integer>> ultimasJornadas = new HashMap<String, List<Integer>>();
+        for (Equipo e : equipos) {
+            List<Integer> listUltJornadas = entityManager
+                    .createNamedQuery("PuntosEquipo.ultimasJornadas", Integer.class)
+                    .setParameter("equipo", e)
+                    .setParameter("jornada", jornadaActual.getJornada())
+                    .setMaxResults(3)
+                    .getResultList();
+
+            ultimasJornadas.put(e.getTeamname(), listUltJornadas);
+        }
+
         equipos.sort(Comparator.comparingInt(Equipo::getPuntos).reversed());
 
         model.addAttribute("equipos", equipos);
         model.addAttribute("nombreLiga", liga.getNombreLiga());
+        model.addAttribute("ultimasJornadas", ultimasJornadas);
 
         return "liga";
     }

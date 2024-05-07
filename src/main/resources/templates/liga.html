@@ -17,6 +17,9 @@
                     <div class="posicionEquipo"><span th:text="${equipoIndex.index + 1}">Posicion en liga</span></div>
                     <div class="nombreEquipo"><span th:text="${equipo.teamname}">Nombre equipo</span></div>
                     <div class="dueñoEquipo" th:text="${equipo.owner.getUsername()}">Nombre usuario</div>
+                    <div class = "ultimasJornadas">
+                        <p th:each="puntuacion : ${ultimasJornadas[equipo.teamname]}" th:text="${puntuacion}">Puntuacion equipo</p>
+                    </div>
                     <div class="puntosEquipo" th:text="${equipo.puntos}">Puntos equipo</div>
                 </div>
             </th:block>
