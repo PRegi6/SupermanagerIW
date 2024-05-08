@@ -73,9 +73,6 @@ if (b){
            messageDiv.insertAdjacentHTML("beforeend", renderMsg(m));
         }
     }
-
-
-   
 }
 
 // avanzarJornada con AJAX
@@ -112,32 +109,32 @@ document.querySelectorAll(".perfilable").forEach(o => {
 }});
 
 // refresca previsualizacion cuando cambias imagen
-document.querySelector("#f_avatar").onchange = e => {
-    let img = document.querySelector("#avatar");
-    let fileInput = document.querySelector("#f_avatar");
-    console.log(img, fileInput);
-    readImageFileData(fileInput.files[0], img);
-};
-console.log("El botón objetivo es ", document.querySelector("#postAvatar"));
+let avatar = document.querySelector("#f_avatar")
+if (avatar) {
+    avatar.onchange = e => {
+        let img = document.querySelector("#avatar");
+        let fileInput = document.querySelector("#f_avatar");
+        console.log(img, fileInput);
+        readImageFileData(fileInput.files[0], img);
+    };
+    console.log("El botón objetivo es ", document.querySelector("#postAvatar"));
+}
 
 // click en boton de enviar avatar
-document.querySelector("#postAvatar").onclick = e => {
-    e.preventDefault();
-
-    let url = document.querySelector("#postAvatar").parentNode.action;
-    let img = document.querySelector("#avatar");
-    let file = document.querySelector("#f_avatar");
-    postImage(img, url, "photo").then(() => {
-        let cacheBuster = "?" + new Date().getTime();
-        document.querySelector("a.nav-link>img.iwthumb").src = url + cacheBuster;
-    });
-};
-
-
- 
- 
- 
-
+let postAvatar = document.querySelector("#postAvatar")
+if (postAvatar) {
+    postAvatar.onclick = e => {
+        e.preventDefault();
+    
+        let url = document.querySelector("#postAvatar").parentNode.action;
+        let img = document.querySelector("#avatar");
+        let file = document.querySelector("#f_avatar");
+        postImage(img, url, "photo").then(() => {
+            let cacheBuster = "?" + new Date().getTime();
+            document.querySelector("a.nav-link>img.iwthumb").src = url + cacheBuster;
+        });
+    };
+}
 
 // // ver https://openlibrary.org/dev/docs/api/books
 // // no requieren "api key", pero necesitas 1 consulta adicional por autor
