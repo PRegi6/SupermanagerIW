@@ -94,6 +94,18 @@ public class AdminController {
         return "mensajesReportados";
     }
 
+    @GetMapping("/mensajesUsuario")
+    public String mensajesReportados(@RequestParam("idUsuario") Long idUsuario, Model model) {
+        User u = entityManager.find(User.class, idUsuario);
+
+        List<Message> mensajesUsuario = u.getSent();
+
+        model.addAttribute("usuario", u);
+        model.addAttribute("mensajes", mensajesUsuario);
+        
+        return "mensajesUsuario";
+    }
+
     @Transactional
     public void actualizarDatos() {
         Jornada jornada = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
@@ -241,6 +253,19 @@ public class AdminController {
         model.addAttribute("jornada", jornada.getJornada());
 
         return "{\"result\": \"jornada avanzada correctamente.\"}";
+    }
+
+    @PostMapping("/eliminarMensajes")
+    @Transactional
+    public String eliminarMensajes(@RequestParam("idUsuario") Long idUsuario, Model model) {
+        User u = entityManager.find(User.class, idUsuario);
+
+        u.getSent().clear();
+
+        model.addAttribute("usuario", u);
+        model.addAttribute("mensajes", u.getSent());
+
+        return "mensajesUsuario";
     }
 
 }

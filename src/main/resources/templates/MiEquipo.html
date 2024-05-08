@@ -46,7 +46,7 @@
                         <p>Promedio de puntos: <span th:text="${jugador.partidosJugados != 0 ? jugador.puntosTotales / jugador.partidosJugados : '0'}"></span></p>
                         <p>Valor de mercado: <span th:text="${jugador.valorMercado}"></span></p>
                     </div>
-                    <div>
+                    <div th:if="${equipo.owner.getId()} == ${u.id}">
                         <form class="form-signin" method="post" th:action="@{/vender}">
                             <input type="hidden" name="formType" value="venderBases">
                             <input type="hidden" name="idequipo" th:value="${idequipo}">
@@ -55,7 +55,7 @@
                         </form>
                     </div>
                 </div>
-                <th:block th:if="${bases.size &lt; 2}">
+                <th:block th:if="${bases.size &lt; 2} and ${equipo.owner.getId()} == ${u.id}">
                     <form class="form-signin" method="post" th:action="@{/fichar}">
                         <input type="hidden" name="formType" value="ficharBases">
                         <input type="hidden" name="idequipo" th:value="${idequipo}">
@@ -81,16 +81,16 @@
                         <p>Promedio de puntos: <span th:text="${jugador.partidosJugados != 0 ? jugador.puntosTotales / jugador.partidosJugados : '0'}"></span></p>
                         <p>Valor de mercado: <span th:text="${jugador.valorMercado}"></span></p>
                     </div>
-                    <div>
+                    <div th:if="${equipo.owner.getId()} == ${u.id}">
                         <form class="form-signin" method="post" th:action="@{/vender}">
-                            <input type="hidden" name="formType" value="venderAleros">
+                            <input type="hidden" name="formType" value="venderBases">
                             <input type="hidden" name="idequipo" th:value="${idequipo}">
                             <input type="hidden" name="jugador" th:value="${jugador.nombre}">
                             <button class="btn btn-lg btn-custom btn-block" type="submit">Vender</button>
                         </form>
                     </div>
                 </div>
-                <th:block th:if="${aleros.size &lt; 4}">
+                <th:block th:if="${aleros.size &lt; 4} and ${equipo.owner.getId()} == ${u.id}">
                     <form class="form-signin" method="post" th:action="@{/fichar}">
                         <input type="hidden" name="formType" value="ficharAleros">
                         <input type="hidden" name="idequipo" th:value="${idequipo}">
@@ -116,16 +116,16 @@
                         <p>Promedio de puntos: <span th:text="${jugador.partidosJugados != 0 ? jugador.puntosTotales / jugador.partidosJugados : '0'}"></span></p>
                         <p>Valor de mercado: <span th:text="${jugador.valorMercado}"></span></p>
                     </div>
-                    <div>
+                    <div th:if="${equipo.owner.getId()} == ${u.id}">
                         <form class="form-signin" method="post" th:action="@{/vender}">
-                            <input type="hidden" name="formType" value="venderPivots">
+                            <input type="hidden" name="formType" value="venderBases">
                             <input type="hidden" name="idequipo" th:value="${idequipo}">
                             <input type="hidden" name="jugador" th:value="${jugador.nombre}">
                             <button class="btn btn-lg btn-custom btn-block" type="submit">Vender</button>
                         </form>
                     </div>
                 </div>
-                <th:block th:if="${pivots.size &lt; 4}">
+                <th:block th:if="${pivots.size &lt; 4} and ${equipo.owner.getId()} == ${u.id}">
                     <form class="form-signin" method="post" th:action="@{/fichar}">
                         <input type="hidden" name="formType" value="ficharPivots">
                         <input type="hidden" name="idequipo" th:value="${idequipo}">

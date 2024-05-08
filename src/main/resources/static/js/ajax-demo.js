@@ -75,42 +75,43 @@ if (b){
     }
 }
 
-  // click en botones de "usar como foto de perfil"
-document.querySelectorAll(".perfilable").forEach(o => {
-    o.onclick = e => {
-        e.preventDefault();
-        let url = o.parentNode.action;
-        let img = o.parentNode.parentNode.querySelector("img");
-        postImage(img, url, "photo").then(() => {
-            let cacheBuster = "?" + new Date().getTime();
-            document.querySelector("a.nav-link>img.iwthumb").src = url + cacheBuster;
-        });
-}});
+// // click en botones de "usar como foto de perfil"
+// document.querySelectorAll(".perfilable").forEach(o => {
+//     o.onclick = e => {
+//         e.preventDefault();
+//         let url = o.parentNode.action;
+//         let img = o.parentNode.parentNode.querySelector("img");
+//         postImage(img, url, "photo").then(() => {
+//             let cacheBuster = "?" + new Date().getTime();
+//             document.querySelector("a.nav-link>img.iwthumb").src = url + cacheBuster;
+//         });
+// }});
 
-// refresca previsualizacion cuando cambias imagen
-document.querySelector("#f_avatar").onchange = e => {
-    let img = document.querySelector("#avatar");
-    let fileInput = document.querySelector("#f_avatar");
-    console.log(img, fileInput);
-    readImageFileData(fileInput.files[0], img);
-};
-console.log("El botón objetivo es ", document.querySelector("#postAvatar"));
+// // refresca previsualizacion cuando cambias imagen
+// document.querySelector("#f_avatar").onchange = e => {
+//     let img = document.querySelector("#avatar");
+//     let fileInput = document.querySelector("#f_avatar");
+//     console.log(img, fileInput);
+//     readImageFileData(fileInput.files[0], img);
+// };
+// console.log("El botón objetivo es ", document.querySelector("#postAvatar"));
 
-// click en boton de enviar avatar
-document.querySelector("#postAvatar").onclick = e => {
-    e.preventDefault();
+// // click en boton de enviar avatar
+// document.querySelector("#postAvatar").onclick = e => {
+//     e.preventDefault();
 
-    let url = document.querySelector("#postAvatar").parentNode.action;
-    let img = document.querySelector("#avatar");
-    let file = document.querySelector("#f_avatar");
-    postImage(img, url, "photo").then(() => {
-        let cacheBuster = "?" + new Date().getTime();
-        document.querySelector("a.nav-link>img.iwthumb").src = url + cacheBuster;
-    });
-};
+//     let url = document.querySelector("#postAvatar").parentNode.action;
+//     let img = document.querySelector("#avatar");
+//     let file = document.querySelector("#f_avatar");
+//     postImage(img, url, "photo").then(() => {
+//         let cacheBuster = "?" + new Date().getTime();
+//         document.querySelector("a.nav-link>img.iwthumb").src = url + cacheBuster;
+//     });
+// };
 
 // avanzarJornada con AJAX
 let avanzarJornada = document.getElementById("avanzarJornada");
+let adminUrl = `${config.rootUrl}/admin/`;
 console.log("AvanzarJornada es ", avanzarJornada);
 if (avanzarJornada) {
     avanzarJornada.onclick = (e) => {
@@ -120,6 +121,7 @@ if (avanzarJornada) {
             .then(d =>{ 
                 console.log("happy", d)
                 avanzarJornada.disabled = false
+                window.location.href = adminUrl;
             })
             .catch(e => {
                 console.log("sad", e)

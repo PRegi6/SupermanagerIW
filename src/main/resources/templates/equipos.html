@@ -44,10 +44,7 @@
                             <td th:unless="${equipo.liga eq null}">
                                 <a class = "enlace" th:href = "@{/liga/{id}(id=${equipo.liga.id})}" th:text="${equipo.liga.getNombreLiga()}"> </a>
                             </td>
-
                             <td th:text="${posiciones[equipo.teamname]}"></td>
-
-
                         </tr>                    
                     </tbody>
                 </table>

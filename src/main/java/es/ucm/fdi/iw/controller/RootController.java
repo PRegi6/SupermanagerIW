@@ -561,6 +561,7 @@ public class RootController {
 
     @GetMapping("/MiEquipo/{idEquipo}")
     public String getMiEquipo(@PathVariable Long idEquipo, HttpSession session, Model model) {
+        User u = (User) session.getAttribute("u");
         Equipo equipo = entityManager.find(Equipo.class, idEquipo);
 
         List<JugadorACB> jugadores = equipo.getJugadores();
@@ -598,6 +599,7 @@ public class RootController {
         model.addAttribute("pivots", pivots);
         model.addAttribute("jornada", jornada.getJornada());
         model.addAttribute("ultimosPartidos", ultimosPartidos);
+        model.addAttribute("u", u);
 
         // Si hay error al fichar muestro el error y lo quito de la sesión
         model.addAttribute("error", session.getAttribute("error"));
@@ -774,6 +776,58 @@ public class RootController {
         model.addAttribute("jornada", jornadaActual.getJornada());
 
         return "equipoJornada";
+    }
+
+    @GetMapping("/perfilPublico/{idUsuario}")
+    public String perfilUsuario(@PathVariable Long idUsuario, HttpSession session, Model model) {
+        Jornada jornadaActual = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
+        User u = (User) session.getAttribute("u");
+        // Si un usuario pulsa en su enlace se le redirige a su propio perfil
+        if (idUsuario == u.getId()) {
+            return "user";
+        }
+
+        u = entityManager.find(User.class, idUsuario);
+        List<Equipo> equipos = entityManager.createNamedQuery("Equipo.misEquipos", Equipo.class)
+                .setParameter("owner", u)
+                .getResultList();
+
+        Map<String, Integer> posiciones = new HashMap<>();
+
+        for (Equipo e : equipos) {
+            Liga liga = e.getLiga();
+            if (liga != null) {
+                List<Equipo> equiposLiga = entityManager.createNamedQuery("Equipo.byliga", Equipo.class)
+                        .setParameter("liga", liga)
+                        .getResultList();
+
+                equiposLiga.sort(Comparator.comparingInt(Equipo::getPuntos).reversed());
+
+                int posicion = equiposLiga.indexOf(e) + 1; // Sumamos 1 para que la posición comience desde 1
+
+                // Guardar la posición en el mapa
+                posiciones.put(e.getTeamname(), posicion);
+            }
+        }
+
+        Map<String, List<Integer>> ultimasJornadas = new HashMap<String, List<Integer>>();
+        for (Equipo e : equipos) {
+            List<Integer> listUltJornadas = entityManager
+                    .createNamedQuery("PuntosEquipo.ultimasJornadas", Integer.class)
+                    .setParameter("equipo", e)
+                    .setParameter("jornada", jornadaActual.getJornada())
+                    .setMaxResults(3)
+                    .getResultList();
+
+            ultimasJornadas.put(e.getTeamname(), listUltJornadas);
+        }
+        
+        model.addAttribute("usuario", u);
+        model.addAttribute("equipos", equipos);
+        model.addAttribute("posiciones", posiciones);
+        model.addAttribute("ultimasJornadas", ultimasJornadas);
+
+        return "perfilPublico";
     }
 
 }

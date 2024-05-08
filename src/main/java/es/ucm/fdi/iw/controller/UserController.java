@@ -232,21 +232,17 @@ public class UserController {
         User requester = (User)session.getAttribute("u");
         requester.setFirstName(firstName);
         requester.setLastName(LastName);
-        
-
 
         return "user";
-        
     }
 
-    /**
-     * Uploads a profile pic for a user id
-     * 
-     * @param id
-     * @return
-     * @throws IOException
-     */
-    
-    
+    @GetMapping("{id}/profile")
+    public String profile(@PathVariable long id, Model model, HttpSession session) {
+        User target = entityManager.find(User.class, id);
+        
+        model.addAttribute("user", target);
+
+        return "profile";
+    }
 	
 }
