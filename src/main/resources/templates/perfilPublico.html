@@ -12,6 +12,8 @@
     <main class="flex-shrink-0">
         <div class="container">
             <h1>Perfil de <span th:text="${usuario.username}">Usuario</span></h1>
+            <p>Nombre: <span th:text="${usuario.firstName}">No ha actualizado este campo</span></p>
+            <p>Apellidos: <span th:text="${usuario.lastName}">No ha actualizado este campo</span></p>
             <th:block th:if="${equipos.empty}">
                 <p>El usuario no tiene equipos actualmente</p>
             </th:block>
