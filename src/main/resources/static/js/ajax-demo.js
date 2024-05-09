@@ -75,59 +75,65 @@ if (b){
     }
 }
 
-// // click en botones de "usar como foto de perfil"
-// document.querySelectorAll(".perfilable").forEach(o => {
-//     o.onclick = e => {
-//         e.preventDefault();
-//         let url = o.parentNode.action;
-//         let img = o.parentNode.parentNode.querySelector("img");
-//         postImage(img, url, "photo").then(() => {
-//             let cacheBuster = "?" + new Date().getTime();
-//             document.querySelector("a.nav-link>img.iwthumb").src = url + cacheBuster;
-//         });
-// }});
-
-// // refresca previsualizacion cuando cambias imagen
-// document.querySelector("#f_avatar").onchange = e => {
-//     let img = document.querySelector("#avatar");
-//     let fileInput = document.querySelector("#f_avatar");
-//     console.log(img, fileInput);
-//     readImageFileData(fileInput.files[0], img);
-// };
-// console.log("El botón objetivo es ", document.querySelector("#postAvatar"));
-
-// // click en boton de enviar avatar
-// document.querySelector("#postAvatar").onclick = e => {
-//     e.preventDefault();
-
-//     let url = document.querySelector("#postAvatar").parentNode.action;
-//     let img = document.querySelector("#avatar");
-//     let file = document.querySelector("#f_avatar");
-//     postImage(img, url, "photo").then(() => {
-//         let cacheBuster = "?" + new Date().getTime();
-//         document.querySelector("a.nav-link>img.iwthumb").src = url + cacheBuster;
-//     });
-// };
-
 // avanzarJornada con AJAX
 let avanzarJornada = document.getElementById("avanzarJornada");
 let adminUrl = `${config.rootUrl}/admin/`;
 console.log("AvanzarJornada es ", avanzarJornada);
 if (avanzarJornada) {
-    avanzarJornada.onclick = (e) => {
-        avanzarJornada.disabled = true
+ avanzarJornada.onclick = (e) => {
+     avanzarJornada.disabled = true
+     e.preventDefault();
+     go(avanzarJornada.parentNode.action, 'POST')
+         .then(d =>{ 
+             console.log("happy", d)
+             avanzarJornada.disabled = false
+             window.location.href = adminUrl;
+         })
+         .catch(e => {
+             console.log("sad", e)
+             avanzarJornada.disabled = false
+         })
+ }
+}
+
+// click en botones de "usar como foto de perfil"
+document.querySelectorAll(".perfilable").forEach(o => {
+    o.onclick = e => {
         e.preventDefault();
-        go(avanzarJornada.parentNode.action, 'POST')
-            .then(d =>{ 
-                console.log("happy", d)
-                avanzarJornada.disabled = false
-                window.location.href = adminUrl;
-            })
-            .catch(e => {
-                console.log("sad", e)
-                avanzarJornada.disabled = false
-            })
-    }
+        let url = o.parentNode.action;
+        let img = o.parentNode.parentNode.querySelector("img");
+        postImage(img, url, "photo").then(() => {
+            let cacheBuster = "?" + new Date().getTime();
+            document.querySelector("a.nav-link>img.iwthumb").src = url + cacheBuster;
+        });
+}});
+
+// refresca previsualizacion cuando cambias imagen
+let avatar = document.querySelector("#f_avatar")
+if (avatar) {
+    avatar.onchange = e => {
+        let img = document.querySelector("#avatar");
+        let fileInput = document.querySelector("#f_avatar");
+        console.log(img, fileInput);
+        readImageFileData(fileInput.files[0], img);
+    };
+    console.log("El botón objetivo es ", document.querySelector("#postAvatar"));
+}
+
+// click en boton de enviar avatar
+let postAvatar = document.querySelector("#postAvatar")
+if (postAvatar) {
+    postAvatar.onclick = e => {
+        e.preventDefault();
+    
+        let url = document.querySelector("#postAvatar").parentNode.action;
+        let img = document.querySelector("#avatar");
+        let file = document.querySelector("#f_avatar");
+        postImage(img, url, "photo").then(() => {
+            let cacheBuster = "?" + new Date().getTime();
+            document.querySelector("a.nav-link>img.iwthumb").src = url + cacheBuster;
+        });
+    };
 }
 
 // // ver https://openlibrary.org/dev/docs/api/books

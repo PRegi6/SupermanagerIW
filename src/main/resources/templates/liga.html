@@ -16,7 +16,7 @@
                 <div class="infoEquipo" th:each="equipo, equipoIndex : ${equipos}">
                     <div class="posicionEquipo"><span th:text="${equipoIndex.index + 1}">Posicion en liga</span></div>
                     <div class="nombreEquipo"><span th:text="${equipo.teamname}">Nombre equipo</span></div>
-                    <div class="dueñoEquipo" th:text="${equipo.owner.getUsername()}">Nombre usuario</div>
+                    <div class="dueñoEquipo"><a class = "enlace" th:href="@{/perfilPublico/{id}(id=${equipo.owner.getId()})}" th:text="${equipo.owner.getUsername()}">PerfilUsuario</a></div>
                     <div class = "ultimasJornadas">
                         <p th:each="puntuacion : ${ultimasJornadas[equipo.teamname]}" th:text="${puntuacion}">Puntuacion equipo</p>
                     </div>

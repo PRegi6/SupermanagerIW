@@ -223,15 +223,17 @@ public class UserController {
     }	
 
     @PostMapping("{id}/profile")
+    @Transactional
     public String setInf(HttpServletResponse response,
     @PathVariable long id, 
     @ModelAttribute User edited, 
-    @RequestParam(required=false) String firstName,
-    @RequestParam(required=false) String LastName,
+    @RequestParam String firstName,
+    @RequestParam String lastName,
     Model model, HttpSession session) throws IOException{
-        User requester = (User)session.getAttribute("u");
-        requester.setFirstName(firstName);
-        requester.setLastName(LastName);
+        User u = entityManager.find(User.class, id);
+
+        u.setFirstName(firstName);
+        u.setLastName(lastName);
 
         return "user";
     }

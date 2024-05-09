@@ -784,6 +784,7 @@ public class RootController {
         User u = (User) session.getAttribute("u");
         // Si un usuario pulsa en su enlace se le redirige a su propio perfil
         if (idUsuario == u.getId()) {
+            model.addAttribute("user", u);
             return "user";
         }
 
