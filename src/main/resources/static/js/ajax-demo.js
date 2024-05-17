@@ -30,9 +30,17 @@ if (b){
         const minutosFormateados = minutos < 10 ? `0${minutos}` : minutos;
      
         const fechaFormateada = `${diaFormateado}/${mesFormateado}<br>${horaFormateada}:${minutosFormateados}`; 
-        // Incorporamos el botón en el HTML del mensaje si es necesario
-        return `<div class="infoMensaje">
-                    <p class="textoFrom">${msg.from}<br></p>
+        
+        const userId = msg.fromId; // Ajusta esto según la estructura real de msg.from
+        const username = msg.from; // Ajusta esto según la estructura real de msg.from
+
+        // Incorporamos el botón en el HTML del mensaje si es necesario       
+
+        return `
+            <div class="infoMensaje">
+                <p class="textoFrom">
+                    <a class="enlace" href="/perfilPublico/${userId}" >${username}</a><br>
+                </p>
                     <p class="textoFecha">${fechaFormateada}:</p>
                     <p class="textoMensaje">${msg.text}</p> <!-- Mensaje separado en una clase diferente -->
                     <button class="Foroboton" onclick="reportMessage(${msg.id})">Reportar</button>

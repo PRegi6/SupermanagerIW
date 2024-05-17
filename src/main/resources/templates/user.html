@@ -11,13 +11,11 @@
 
     <main class="flex-shrink-0">
         <div class="container">
-            <h1 class="mt-5">Info usuario</h1>
-            <h1 class="mt-5">Perfil de <span th:text="${user.username}">Paco</span></h1>
+            <h1>Mi perfil</h1>
 
             <div id="profile" class="border border-2 border-tertiary rounded">
-                <h1>Informacion Usuario</h1>
-                <p>Nombre: <span th:text="${user.firstName}">No se ha puesto nombre</span></p>
-                <p>Apellido: <span th:text="${user.lastName}">No se ha puesto nombre</span></p>
+                <p> <strong>Nombre: </strong> <span th:text="${user.firstName}">No se ha puesto nombre</span></p>
+                <p> <strong>Apellido: </strong> <span th:text="${user.lastName}">No se ha puesto nombre</span></p>
                 <a class = "enlace" th:href="@{/user/__${user.id}__/profile}">Hacer click para cambiar informacion</a>
             </div>
 

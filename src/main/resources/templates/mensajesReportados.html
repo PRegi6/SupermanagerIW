@@ -11,7 +11,10 @@
 
     <main class="flex-shrink-0">
         <div class="container">
-            <h1 class="mt-5">Mensajes reportados</h1>
+            <h1>Mensajes reportados</h1>
+            <th:block th:if="${reportados.empty}">
+                <p>No hay mensajes reportados</p>
+            </th:block>
             <div class="infoMensaje" th:each="mensaje : ${reportados}">
                 <p class="textoFrom" th:text="${mensaje.sender.getUsername()}  + ':'">Emisor</p>
                 <p class="textoMensaje" th:text="${mensaje.text}">Texto</p>
