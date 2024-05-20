@@ -49,32 +49,32 @@ public class AdminController {
         return "admin";
     }
 
-    @GetMapping("/clasificacion")
-    public String getClasificacion() { return "clasificacion"; }
+    // @GetMapping("/clasificacion")
+    // public String getClasificacion() { return "clasificacion"; }
 
-    @GetMapping("/equipos")
-    public String getEquipos() { return "equipos"; }
+    // @GetMapping("/equipos")
+    // public String getEquipos() { return "equipos"; }
 
-    @GetMapping("/mercado")
-    public String getMercado() { return "mercado"; }
+    // @GetMapping("/mercado")
+    // public String getMercado() { return "mercado"; }
 
-    @GetMapping("/actualidad")
-    public String getActualidad() { return "actualidad"; }
+    // @GetMapping("/actualidad")
+    // public String getActualidad() { return "actualidad"; }
 
-    @GetMapping("/miequipo")
-    public String getMiequipo() { return "miequipo"; }
+    // @GetMapping("/miequipo")
+    // public String getMiequipo() { return "miequipo"; }
 
-    @GetMapping("/jugador")
-    public String getJugador() { return "jugador"; }
+    // @GetMapping("/jugador")
+    // public String getJugador() { return "jugador"; }
 
-    @GetMapping("/liga")
-    public String getLiga() { return "liga"; }
+    // @GetMapping("/liga")
+    // public String getLiga() { return "liga"; }
 
-    @GetMapping("/foro")
-    public String getForo() { return "foro"; }
+    // @GetMapping("/foro")
+    // public String getForo() { return "foro"; }
 
-    @GetMapping("/crearliga")
-    public String getCrearLiga() { return "crearliga"; }
+    // @GetMapping("/crearliga")
+    // public String getCrearLiga() { return "crearliga"; }
 
     @GetMapping("/usuarios")
     public String getUsuarios(Model model) {
