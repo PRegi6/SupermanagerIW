@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 import es.ucm.fdi.iw.model.Equipo;
 import es.ucm.fdi.iw.model.Liga;
 import es.ucm.fdi.iw.model.User;
-import es.ucm.fdi.iw.model.User.Role;
 
 /**
  * Called when a user is first authenticated (via login).
@@ -92,7 +91,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 		for (Equipo e : equiposUsr) {
 			Liga liga = e.getLiga();
 			if (liga != null) {
-				ligasUsr.add("/topic/"+liga.getId());
+				ligasUsr.add("/topic/" + liga.getId());
 			}
 		}
 		session.setAttribute("misLigas", ligasUsr);

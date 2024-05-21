@@ -13,24 +13,15 @@
         <div class="container">
             <h1>Clasificación de <span th:text="${nombreLiga}">liga</span></h1>
             <th:block th:if="${not equipos.empty}">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Equipo</th>
-                            <th>Posición</th>
-                            <th>Puntos</th>
-                            <th>Dinero</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="equipo, equipoIndex : ${equipos}">
-                            <td th:text="${equipo.teamname}"></td>
-                            <td th:text="${equipoIndex.index + 1}"></td>
-                            <td th:text="${equipo.puntos}"></td>
-                            <td th:text="${equipo.dinero}"></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="infoEquipo" th:each="equipo, equipoIndex : ${equipos}">
+                    <div class="posicionEquipo"><span th:text="${equipoIndex.index + 1}">Posicion en liga</span></div>
+                    <div class="nombreEquipo"><span th:text="${equipo.teamname}">Nombre equipo</span></div>
+                    <div class="dueñoEquipo"><a class = "enlace" th:href="@{/perfilPublico/{id}(id=${equipo.owner.getId()})}" th:text="${equipo.owner.getUsername()}">PerfilUsuario</a></div>
+                    <div class = "ultimasJornadas">
+                        <p th:each="puntuacion : ${ultimasJornadas[equipo.teamname]}" th:text="${puntuacion}">Puntuacion equipo</p>
+                    </div>
+                    <div class="puntosEquipo" th:text="${equipo.puntos}">Puntos equipo</div>
+                </div>
             </th:block>
         </div>
     </main>

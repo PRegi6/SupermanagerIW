@@ -1,10 +1,7 @@
 package es.ucm.fdi.iw.controller;
 
 import es.ucm.fdi.iw.LocalData;
-import es.ucm.fdi.iw.model.Message;
-import es.ucm.fdi.iw.model.Transferable;
 import es.ucm.fdi.iw.model.User;
-import es.ucm.fdi.iw.model.Liga;
 import es.ucm.fdi.iw.model.User.Role;
 
 import org.apache.logging.log4j.LogManager;
@@ -21,7 +18,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -33,18 +29,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import java.io.*;
 import java.security.SecureRandom;
-import java.time.LocalDateTime;
 import java.util.Base64;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  *  User management.
@@ -233,19 +221,30 @@ public class UserController {
 		}
 		return "{\"status\":\"photo uploaded correctly\"}";
     }	
-    
-    /**
-     * Returns JSON with count of unread messages 
-     */
-	@GetMapping(path = "unread", produces = "application/json")
-	@ResponseBody
-	public String checkUnread(HttpSession session) {
-		long userId = ((User)session.getAttribute("u")).getId();		
-		long unread = entityManager.createNamedQuery("Message.countUnread", Long.class)
-			.setParameter("userId", userId)
-			.getSingleResult();
-		session.setAttribute("unread", unread);
-		return "{\"unread\": " + unread + "}";
+
+    @PostMapping("{id}/profile")
+    @Transactional
+    public String setInf(HttpServletResponse response,
+    @PathVariable long id, 
+    @ModelAttribute User edited, 
+    @RequestParam String firstName,
+    @RequestParam String lastName,
+    Model model, HttpSession session) throws IOException{
+        User u = entityManager.find(User.class, id);
+
+        u.setFirstName(firstName);
+        u.setLastName(lastName);
+
+        return "user";
+    }
+
+    @GetMapping("{id}/profile")
+    public String profile(@PathVariable long id, Model model, HttpSession session) {
+        User target = entityManager.find(User.class, id);
+        
+        model.addAttribute("user", target);
+
+        return "profile";
     }
 	
 }

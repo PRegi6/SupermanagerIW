@@ -14,46 +14,31 @@
         <div class="container">
             <h1>Información de <span th:text="${jugador.nombre}">Jugador</span></h1>
             <th:block>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Foto del jugador</th>
-                            <th>Nombre</th>
-                            <th>Nacionalidad</th>
-                            <th>Equipo</th>
-                            <th>Posicion</th>
-                            <th>Partidos Jugados</th>
-                            <th>Puntos Totales</th>
-                            <th>Valoracion Total</th>
-                            <th>Valoracion media</th>
-                            <th>Valor de mercado</th>
-                            <th>Últimos partidos</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <div class="imagen_jugador">
-                                    <img th:src="@{'/img/jugadores/' + ${jugador.nombre} + '.jpg'}"/>
-                                </div>
-                            </td>
-                            <td th:text="${jugador.nombre}"></td>
-                            <td th:text="${jugador.pais}"></td>
-                            <td th:text="${jugador.equipo}"></td>
-                            <td th:text="${jugador.posicion}"></td>
-                            <td th:text="${jugador.partidosJugados}"></td>
-                            <td th:text="${jugador.puntosTotales}"></td>
-                            <td th:text="${jugador.valoracionTotal}"></td>
-                            <td th:text="${jugador.valoracionMedia}"></td>
-                            <td th:text="${jugador.valorMercado}"></td>
-                            <td>
-                                <div class = "ultimosPartidos">
-                                    <p th:each="valoracion : ${ultimosPartidos}" th:text="${valoracion}">Valoracion</p>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div>
+                    <div class="cabeceraJugador">
+                        <div class="imagen_jugador">
+                            <img th:src="@{'/img/jugadores/' + ${jugador.nombre} + '.jpg'}"/>
+                        </div>
+                        <div class="infoPersonal">
+                            <div class="nombreJugador"><span th:text="${jugador.nombre}">Nombre jugador</span></div>
+                            <div><span th:text="${jugador.pais}">Pais jugador</span></div>
+                            <div><span th:text="${jugador.posicion}">Posicion jugador</span></div>
+                            <div><span th:text="${jugador.equipo}">Equipo jugador</span></div>
+                        </div>
+                    </div>
+                    <div class="promediosTemporada">
+                        <div class="tituloPromedios"><h4>Promedios en temporada regular</h4></div>
+                        <div class="categoriaPromedio">Partidos jugados: <span th:text="${jugador.partidosJugados}">Partidos jugador</span></div>
+                        <div class="categoriaPromedio">Puntos totales: <span th:text="${jugador.puntosTotales}">Puntos jugador</span></div>
+                        <div class="categoriaPromedio">Valoración total: <span th:text="${jugador.valoracionTotal}">Valoración jugador</span></div>
+                        <div class="categoriaPromedio">Valoración por partido: <span th:text="${jugador.valoracionMedia}">Valoracion por partido</span></div>
+                        <div class="categoriaPromedio">Valor de mercado: <span th:text="${jugador.valorMercado} + '&euro;'">Valor jugador</span></div>
+                        <div class="ultimosPartidos">
+                            Últimos partidos:
+                            <p th:each="valoracion : ${ultimosPartidos}" th:text="${valoracion}">Valoracion</p>
+                        </div>
+                    </div>
+                </div>
             </th:block>
         </div>
     </main>

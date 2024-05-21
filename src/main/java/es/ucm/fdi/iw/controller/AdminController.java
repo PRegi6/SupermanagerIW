@@ -15,14 +15,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import es.ucm.fdi.iw.model.Equipo;
 import es.ucm.fdi.iw.model.EquipoACB;
 import es.ucm.fdi.iw.model.Jornada;
 import es.ucm.fdi.iw.model.JugadorACB;
+import es.ucm.fdi.iw.model.Message;
 import es.ucm.fdi.iw.model.PartidoACB;
 import es.ucm.fdi.iw.model.PuntosEquipo;
 import es.ucm.fdi.iw.model.PuntosJugador;
+import es.ucm.fdi.iw.model.User;
 
 /**
  *  Site administration.
@@ -40,35 +43,68 @@ public class AdminController {
 
 	@GetMapping("/")
     public String index(Model model) {
+        List<Message> reportedMessages = entityManager.createNamedQuery("Message.reportados", Message.class)
+            .getResultList();
+        model.addAttribute("reportados", reportedMessages);
         return "admin";
     }
 
-    @GetMapping("/clasificacion")
-    public String getClasificacion() { return "clasificacion"; }
+    // @GetMapping("/clasificacion")
+    // public String getClasificacion() { return "clasificacion"; }
 
-    @GetMapping("/equipos")
-    public String getEquipos() { return "equipos"; }
+    // @GetMapping("/equipos")
+    // public String getEquipos() { return "equipos"; }
 
-    @GetMapping("/mercado")
-    public String getMercado() { return "mercado"; }
+    // @GetMapping("/mercado")
+    // public String getMercado() { return "mercado"; }
 
-    @GetMapping("/actualidad")
-    public String getActualidad() { return "actualidad"; }
+    // @GetMapping("/actualidad")
+    // public String getActualidad() { return "actualidad"; }
 
-    @GetMapping("/miequipo")
-    public String getMiequipo() { return "miequipo"; }
+    // @GetMapping("/miequipo")
+    // public String getMiequipo() { return "miequipo"; }
 
-    @GetMapping("/jugador")
-    public String getJugador() { return "jugador"; }
+    // @GetMapping("/jugador")
+    // public String getJugador() { return "jugador"; }
 
-    @GetMapping("/liga")
-    public String getLiga() { return "liga"; }
+    // @GetMapping("/liga")
+    // public String getLiga() { return "liga"; }
 
-    @GetMapping("/foro")
-    public String getForo() { return "foro"; }
+    // @GetMapping("/foro")
+    // public String getForo() { return "foro"; }
 
-    @GetMapping("/crearliga")
-    public String getCrearLiga() { return "crearliga"; }
+    // @GetMapping("/crearliga")
+    // public String getCrearLiga() { return "crearliga"; }
+
+    @GetMapping("/usuarios")
+    public String getUsuarios(Model model) {
+        List<User> usuarios = entityManager.createNamedQuery("User.allUsers", User.class)
+            .getResultList();
+
+        model.addAttribute("usuarios", usuarios);
+        return "usuarios"; 
+    }
+
+    @GetMapping("/mensajesReportados")
+    public String mensajesReportados(Model model) {
+        List<Message> reportedMessages = entityManager.createNamedQuery("Message.reportados", Message.class)
+            .getResultList();
+        model.addAttribute("reportados", reportedMessages);
+        
+        return "mensajesReportados";
+    }
+
+    @GetMapping("/mensajesUsuario")
+    public String mensajesReportados(@RequestParam("idUsuario") Long idUsuario, Model model) {
+        User u = entityManager.find(User.class, idUsuario);
+
+        List<Message> mensajesUsuario = u.getSent();
+
+        model.addAttribute("usuario", u);
+        model.addAttribute("mensajes", mensajesUsuario);
+        
+        return "mensajesUsuario";
+    }
 
     @Transactional
     public void actualizarDatos() {
@@ -165,23 +201,71 @@ public class AdminController {
         }
     }
 
-    @PostMapping("/admin/")
+    @PostMapping("/banearUsuario")
     @Transactional
-    public String cargaBD(@RequestParam("formType") String formType, Model model) {
+    public String banearUsuario(@RequestParam("idUsuario") Long idUsuario, Model model) {
+        User u = entityManager.find(User.class, idUsuario);
+        u.setEnabled(false);
+
+        return index(model);
+    }
+
+    @PostMapping("/desbanearUsuario")
+    @Transactional
+    public String desbanearUsuario(@RequestParam("idUsuario") Long idUsuario, Model model) {
+        User u = entityManager.find(User.class, idUsuario);
+        u.setEnabled(true);
+
+        return index(model);
+    }
+
+    @PostMapping("/eliminarMensaje")
+    @Transactional
+    public String eliminarMensaje( @RequestParam("idMensaje") Long idMensaje, Model model) {
+        Message m = entityManager.find(Message.class, idMensaje);
+
+        entityManager.remove(m);
+
+        return index(model);
+    }
+
+    @PostMapping("/validarMensaje")
+    @Transactional
+    public String validarMensaje(@RequestParam("idMensaje") Long idMensaje, Model model) {
+
+        Message m = entityManager.find(Message.class, idMensaje);
+
+        m.setReported(false);
+
+        return index(model);
+    }
+
+    @PostMapping("/avanzarJornada")
+    @Transactional
+    @ResponseBody
+    public String avanzarJornada(Model model) {
         Jornada jornada = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
-        // if (formType.equals("subirImg")) {
+        
+        actualizarDatos();
 
-        // }
-        // else {
-            actualizarDatos();
-
-            jornada.setJornada(jornada.getJornada() + 1);
-            entityManager.flush();
-        // }
+        jornada.setJornada(jornada.getJornada() + 1);
 
         model.addAttribute("jornada", jornada.getJornada());
 
-        return "redirect:/";
+        return "{\"result\": \"jornada avanzada correctamente.\"}";
+    }
+
+    @PostMapping("/eliminarMensajes")
+    @Transactional
+    public String eliminarMensajes(@RequestParam("idUsuario") Long idUsuario, Model model) {
+        User u = entityManager.find(User.class, idUsuario);
+
+        u.getSent().clear();
+
+        model.addAttribute("usuario", u);
+        model.addAttribute("mensajes", u.getSent());
+
+        return "mensajesUsuario";
     }
 
 }
