@@ -26,8 +26,8 @@ def main():
     """
     Función principal que redimensiona todas las imágenes en las carpetas 'equipos' y 'jugadores'.
     """
-    carpeta_equipos = r'C:\Users\elray\Desktop\IW\ProyectoIW_main\ProyectoIW\src\main\resources\static\img\equipos'
-    carpeta_jugadores = r'C:\Users\elray\Desktop\IW\ProyectoIW_main\ProyectoIW\src\main\resources\static\img\jugadores'
+    carpeta_equipos = r'C:\Users\elray\Desktop\IW\ProyectoIW_main\SupermanagerIW\src\main\resources\static\img\equipos'
+    carpeta_jugadores = r'C:\Users\elray\Desktop\IW\ProyectoIW_main\SupermanagerIW\src\main\resources\static\img\jugadores'
     
     redimensionar_imagenes_en_carpeta(carpeta_equipos, 75, 75)
     redimensionar_imagenes_en_carpeta(carpeta_jugadores, 125, 125)

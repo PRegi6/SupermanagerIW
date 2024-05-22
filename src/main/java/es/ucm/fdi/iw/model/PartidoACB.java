@@ -9,7 +9,10 @@ import lombok.Data;
     query="SELECT p FROM PartidoACB p "
             + "WHERE p.jornada = :jornada"),
     @NamedQuery(name="PartidoACB.equipos",
-    query="SELECT DISTINCT p.local FROM PartidoACB p")
+    query="SELECT DISTINCT p.local FROM PartidoACB p"),
+    @NamedQuery(name="PartidoACB.partido",
+    query="SELECT p FROM PartidoACB p "
+            + "WHERE p.local = :local AND p.visitante = :visitante")
 })
 @Entity
 @Data

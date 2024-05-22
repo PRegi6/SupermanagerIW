@@ -16,10 +16,18 @@ La aplicación dispondrá de un foro común en la que se lanzarán noticias, com
 El proyecto cuenta con los datos de equipos y jugadores de la Liga Endesa hasta la jornada 27. Dichos datos están ya incluidos en el archivo import.sql.
 
 Si se quieren añadir más jornadas hay que ejecutar, por separado y NO desde el directorio del proyecto, el archivo BDdesde0.py.
-Este archivo obtendrá los datos de todas las jornadas disponibles en la página web, incluida las fotos de equipos y jugadores, y los guardará en los siguientes archivos json:
+Este archivo obtendrá los datos de todas las jornadas disponibles en la página web, incluida las fotos de equipos y jugadores, y los guardará en el archivo Liga.db.
+
+Para poder insertar fácilmente los datos en la aplicaicón hay que ejecutar, por separado y NO desde el directorio del proyecto, el archivo parseJson.py.
+Este archivo parseará los datos contenidos en Liga.db y los guardará en los siguientes archivos json:
     - jornada_acb.json (Información de los partidos)
     - jugador_acb.json (Información general de los jugadores)
     - puntos_jugador.json (Información del desempeño de los jugadores en las jornadas)
 Nota: La ejecución del archivo puede fallar
 
 Después de obtener los archivos json, los administradores podrán subir dichos archivos a la aplicación para añadir las jornadas que no estén ya insertadas en la aplicación.
+Como los archivos contienen la información de todas las jornadas, la ejecución de la funcionalidad "Añadir jornadas" tarda unos minutos.
+
+Para la comprobación de dicha funcionalidad se proporcionan ya los archivos json con la información de todas las jornadas.
+
+Además el proyecto cuenta con el archivo resizeImg.py, para cambiar si fuera necesario el tamaño de las imágenes.

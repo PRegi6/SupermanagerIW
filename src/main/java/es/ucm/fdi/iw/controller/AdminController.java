@@ -259,18 +259,69 @@ public class AdminController {
                 int puntosLocal = partido.getInt("puntos_local");
                 String visitante = partido.getString("visitante");
                 int puntosVisitante = partido.getInt("puntos_visitante");
+                
+                PartidoACB nuevoPartido;
+                try {
+                    nuevoPartido = entityManager.createNamedQuery("PartidoACB.partido", PartidoACB.class)
+                    .setParameter("local", local)
+                    .setParameter("visitante", visitante)
+                        .getSingleResult();
 
-                PartidoACB nuevoPartido = new PartidoACB();
+                } catch (NoResultException e) {
+                    nuevoPartido = new PartidoACB();    
+                    nuevoPartido.setJornada(jornadaPartido);
+                    nuevoPartido.setLocal(local);
+                    nuevoPartido.setPuntosLocal(puntosLocal);
+                    nuevoPartido.setPuntosVisitante(puntosVisitante);
+                    nuevoPartido.setVisitante(visitante);
+
+                    entityManager.persist(nuevoPartido);
+                }
+
+                nuevoPartido.setJornada(jornadaPartido);
                 nuevoPartido.setLocal(local);
                 nuevoPartido.setPuntosLocal(puntosLocal);
-                nuevoPartido.setVisitante(visitante);
                 nuevoPartido.setPuntosVisitante(puntosVisitante);
-                nuevoPartido.setJornada(jornadaPartido);
+                nuevoPartido.setVisitante(visitante);
 
-                entityManager.persist(nuevoPartido);
+                entityManager.flush();
             }
         }
 
+    }
+
+    @Transactional
+    public void procesarJugadorACB(MultipartFile file) throws IOException{
+        String contenido = new String(file.getBytes());
+        JSONArray jsonArray = new JSONArray(contenido);
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject j = jsonArray.getJSONObject(i);
+            String nombre = j.getString("nombre");
+
+            try {
+                JugadorACB jugador = entityManager.createNamedQuery("JugadorACB.jugador", JugadorACB.class)
+                .setParameter("nombre", nombre)
+                    .getSingleResult();
+            } catch (NoResultException e) {
+                String pais = j.getString("pais");
+                String posicion = j.getString("posicion");
+                String equipo = j.getString("equipo");
+                
+                JugadorACB jugador = new JugadorACB();
+                jugador.setNombre(nombre);
+                jugador.setPais(pais);
+                jugador.setPosicion(posicion);
+                jugador.setEquipo(equipo);
+                jugador.setPartidosJugados(0);
+                jugador.setPuntosTotales(0);
+                jugador.setValorMercado(50000);
+                jugador.setValoracionMedia(0);
+                jugador.setValoracionTotal(0);
+
+                entityManager.persist(jugador);
+            }
+        }
     }
 
     @Transactional
@@ -286,14 +337,32 @@ public class AdminController {
             if (jornadaPartido >= jornada.getJornada()) {
                 String nombre = pJ.getString("nombre");
                 int puntos = pJ.getInt("puntos");
-                int valoracion = pJ.getInt("visitante");
-                Double valor_mercado = pJ.getDouble("puntos_visitante");
+                int valoracion = pJ.getInt("valoracion");
+                Double valor_mercado = pJ.getDouble("valor_mercado");
 
                 JugadorACB jugador = entityManager.createNamedQuery("JugadorACB.jugador", JugadorACB.class)
                     .setParameter("nombre", nombre)
                         .getSingleResult();
+                
+                PuntosJugador nuevoPj;
+                try {
+                    nuevoPj = entityManager.createNamedQuery("PuntosJugador.jugador", PuntosJugador.class)
+                    .setParameter("nombre", nombre)
+                    .setParameter("jornada", jornadaPartido)
+                        .getSingleResult();
 
-                PuntosJugador nuevoPj = new PuntosJugador();    
+                } catch (NoResultException e) {
+                    nuevoPj = new PuntosJugador();    
+                    nuevoPj.setJornada(jornadaPartido);
+                    nuevoPj.setNombre(nombre);
+                    nuevoPj.setPosicion(jugador.getPosicion());
+                    nuevoPj.setPuntos(puntos);
+                    nuevoPj.setValor_mercado(valor_mercado);
+                    nuevoPj.setValoracion(valoracion);
+
+                    entityManager.persist(nuevoPj);
+                }
+
                 nuevoPj.setJornada(jornadaPartido);
                 nuevoPj.setNombre(nombre);
                 nuevoPj.setPosicion(jugador.getPosicion());
@@ -301,7 +370,7 @@ public class AdminController {
                 nuevoPj.setValor_mercado(valor_mercado);
                 nuevoPj.setValoracion(valoracion);
 
-                entityManager.persist(nuevoPj);
+                entityManager.flush();
             }
         }
     }
@@ -376,15 +445,28 @@ public class AdminController {
     @PostMapping("/añadirJornadas")
     @Transactional
     public String añadirJornadas(@RequestParam("bdfiles") MultipartFile[] files, Model model) {
-
         // Damos por hecho que se han insertado los archivos que queremos y que tiene datos
+        
+        // Forzamos a ejecutar procesarJugadorACB por si hay algún nuevo jugador y evitar posibles errores
+        for (MultipartFile file : files) {
+            String nombreArchivo = file.getOriginalFilename();
+            try {
+                if (nombreArchivo.equals("jugador_acb.json")) {
+                    procesarJugadorACB(file);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    
+        // Luego procesamos los demás archivos
         for (MultipartFile file : files) {
             String nombreArchivo = file.getOriginalFilename();
             try {
                 if (nombreArchivo.equals("jornada_acb.json")) {
                     procesarJornadaACB(file);
-                } 
-                else {
+                }
+                else if (nombreArchivo.equals("puntos_jugador.json")) {
                     procesarPuntosJugador(file);
                 }
             } catch (IOException e) {

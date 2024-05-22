@@ -302,11 +302,12 @@ def main():
             visitante = info_partido[-2].find_element(By.TAG_NAME, 'span').text
 
             if link_partido.text != 'Game preview':
-
+                
+                jornada = num_partidos // 9 + 1
                 puntos_equipos = link_partido.text.split('-')
                 puntos_equipos = [int(p) for p in puntos_equipos]
 
-                insertar_jornada('Liga.db', local, puntos_equipos[0], visitante, puntos_equipos[1], num_partidos // 9 + 1)
+                insertar_jornada('Liga.db', local, puntos_equipos[0], visitante, puntos_equipos[1], jornada)
 
                 ultima_fecha = fecha_partido
 
@@ -331,42 +332,45 @@ def main():
                         jornada = equipos_liga[nombre_equipo]
                         puntos = info_jugador[1].text
                         valoracion = info_jugador[-1].text
-                        # Si el jugador es "nuevo" lo añado al conjunto de jugadores de la liga
-                        if nombre_jugador not in jugadores_liga or nombre_jugador != "":
-                            jugadores_liga.add(nombre_jugador)
-                            ventana_anterior = driver.current_window_handle
-                            nacionalidad, posicion = posicion_y_nacionalidad(driver, nombre_jugador, enlace_jugador, ventana_anterior)
-                            insertar_jugador('Liga.db', nombre_jugador, nacionalidad, nombre_equipo, posicion, 0, 0, 0, 50000)
-                            # Despues de visitar la página del jugador actualizo las estructuras principales para evitarme errores
-                            equipos = driver.find_element(By.CSS_SELECTOR, '.home-game__content__entry.home-game__content__team-stats').find_element(By.CLASS_NAME, 'container-fluid').find_elements(By.CLASS_NAME, 'row')
-                            info_jugadores = equipos[j].find_element(By.CLASS_NAME,'table').find_element(By.TAG_NAME, 'tbody').find_elements(By.TAG_NAME, 'tr')
 
-                        equipo_actual, partidos_jugador, puntos_jugador, valoracion_jugador, valor_mercado_total = get_info_jugador('Liga.db', nombre_jugador)
-                        
-                        if nombre_equipo != equipo_actual:
-                            equipo_actual = nombre_equipo
-                        
-                        partidos_jugador += 1
-                        puntos_jugador = puntos_jugador + int(puntos)
-                        valoracion_jugador = valoracion_jugador + int(valoracion)
-                        
-                        promedio_valoracion = valoracion_jugador / partidos_jugador
-                        valoracion_media = round((promedio_valoracion), 2)
-                        promedio_puntos = round(puntos_jugador / partidos_jugador, 2)
-                        valor_mercado = max(round((promedio_puntos * 50000), 2), 50000)
+                        # Comprobamos que el nombre del jugador es válido
+                        if nombre_jugador != "":
+                            # Si el jugador es "nuevo" lo añado al conjunto de jugadores de la liga
+                            if nombre_jugador not in jugadores_liga:
+                                jugadores_liga.add(nombre_jugador)
+                                ventana_anterior = driver.current_window_handle
+                                nacionalidad, posicion = posicion_y_nacionalidad(driver, nombre_jugador, enlace_jugador, ventana_anterior)
+                                insertar_jugador('Liga.db', nombre_jugador, nacionalidad, nombre_equipo, posicion, 0, 0, 0, 50000)
+                                # Despues de visitar la página del jugador actualizo las estructuras principales para evitarme errores
+                                equipos = driver.find_element(By.CSS_SELECTOR, '.home-game__content__entry.home-game__content__team-stats').find_element(By.CLASS_NAME, 'container-fluid').find_elements(By.CLASS_NAME, 'row')
+                                info_jugadores = equipos[j].find_element(By.CLASS_NAME,'table').find_element(By.TAG_NAME, 'tbody').find_elements(By.TAG_NAME, 'tr')
 
-                        if partidos_jugador > 4:
-                            valor_mercado_superior = 1.15 * valor_mercado_total
-                            valor_mercado_inferior = 0.85 * valor_mercado_total
-                            if valor_mercado > valor_mercado_superior:
-                                valor_mercado = round(valor_mercado_superior, 2)
-                            elif valor_mercado < valor_mercado_inferior:
-                                valor_mercado = round(valor_mercado_inferior, 2)
-                        elif partidos_jugador < 4:
-                            valor_mercado = 50000
-                        
-                        guardar_puntos_jugador('Liga.db', nombre_jugador, int(puntos), int(valoracion), valor_mercado, jornada, promedio_puntos, valoracion_media)
-                        actualizar_info_jugador('Liga.db', nombre_jugador, equipo_actual, partidos_jugador, puntos_jugador, valoracion_jugador, valor_mercado)
+                            equipo_actual, partidos_jugador, puntos_jugador, valoracion_jugador, valor_mercado_total = get_info_jugador('Liga.db', nombre_jugador)
+                            
+                            if nombre_equipo != equipo_actual:
+                                equipo_actual = nombre_equipo
+                            
+                            partidos_jugador += 1
+                            puntos_jugador = puntos_jugador + int(puntos)
+                            valoracion_jugador = valoracion_jugador + int(valoracion)
+                            
+                            promedio_valoracion = valoracion_jugador / partidos_jugador
+                            valoracion_media = round((promedio_valoracion), 2)
+                            promedio_puntos = round(puntos_jugador / partidos_jugador, 2)
+                            valor_mercado = max(round((promedio_puntos * 50000), 2), 50000)
+
+                            if partidos_jugador > 4:
+                                valor_mercado_superior = 1.15 * valor_mercado_total
+                                valor_mercado_inferior = 0.85 * valor_mercado_total
+                                if valor_mercado > valor_mercado_superior:
+                                    valor_mercado = round(valor_mercado_superior, 2)
+                                elif valor_mercado < valor_mercado_inferior:
+                                    valor_mercado = round(valor_mercado_inferior, 2)
+                            elif partidos_jugador < 4:
+                                valor_mercado = 50000
+                            
+                            guardar_puntos_jugador('Liga.db', nombre_jugador, int(puntos), int(valoracion), valor_mercado, jornada, promedio_puntos, valoracion_media)
+                            actualizar_info_jugador('Liga.db', nombre_jugador, equipo_actual, partidos_jugador, puntos_jugador, valoracion_jugador, valor_mercado)
 
                 # Vuelvo a la página principal y actualizo las estructuras de datos
                 driver.close()
@@ -375,7 +379,7 @@ def main():
                 rango_partidos = partidos[i:i+10]
 
             else:
-                insertar_jornada('Liga.db', local, 0, visitante, 0, num_partidos // 9 + 1)
+                insertar_jornada('Liga.db', local, 0, visitante, 0, jornada)
 
             num_partidos = num_partidos + 1
 
