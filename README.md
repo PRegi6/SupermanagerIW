@@ -28,6 +28,6 @@ Nota: La ejecución del archivo puede fallar
 Después de obtener los archivos json, los administradores podrán subir dichos archivos a la aplicación para añadir las jornadas que no estén ya insertadas en la aplicación.
 Como los archivos contienen la información de todas las jornadas, la ejecución de la funcionalidad "Añadir jornadas" tarda unos minutos.
 
-Para la comprobación de dicha funcionalidad se proporcionan ya los archivos json con la información de todas las jornadas.
+Para la comprobación de dicha funcionalidad se proporcionan ya los ejecutables (.py) y json con la información de todas las jornadas en el directorio /test/java.
 
 Además el proyecto cuenta con el archivo resizeImg.py, para cambiar si fuera necesario el tamaño de las imágenes.
