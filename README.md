@@ -8,5 +8,18 @@ Para formar cada equipo dispones de un presupuesto fijo, con el que puedes ficha
 Puedes formar hasta un máximo de cinco equipos y participar en tantas ligas como quieras, tanto públicas como privadas, y competir contra tus amigos. Solo podrás tener un equipo por cada liga en la que participes. 
 La aplicación dispondrá de un foro común en la que se lanzarán noticias, como cuáles son los jugadores con mejor relación valoración/precio, lesiones, etc. 
 
-**Diagrama base de datos:**
-![supermanager (1)](https://github.com/PRegi6/ProyectoIW/assets/117353780/92fd93a7-7871-487c-8dc1-0a3d09ffdd43)
+**Usuarios y contraseñas:**
+    - username: a // password: a
+    - username: b // password: aa
+
+**Explicaciones adicionales proyecto:**
+El proyecto cuenta con los datos de equipos y jugadores de la Liga Endesa hasta la jornada 27. Dichos datos están ya incluidos en el archivo import.sql.
+
+Si se quieren añadir más jornadas hay que ejecutar, por separado y NO desde el directorio del proyecto, el archivo BDdesde0.py.
+Este archivo obtendrá los datos de todas las jornadas disponibles en la página web, incluida las fotos de equipos y jugadores, y los guardará en los siguientes archivos json:
+    - jornada_acb.json (Información de los partidos)
+    - jugador_acb.json (Información general de los jugadores)
+    - puntos_jugador.json (Información del desempeño de los jugadores en las jornadas)
+Nota: La ejecución del archivo puede fallar
+
+Después de obtener los archivos json, los administradores podrán subir dichos archivos a la aplicación para añadir las jornadas que no estén ya insertadas en la aplicación.

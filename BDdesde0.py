@@ -29,6 +29,7 @@ meses = {
 posiciones = {
     'BA': 'Base',
     'BA / ES': 'Base',
+    'ES / BA': 'Base',
     'ES': 'Alero',
     'ES / AL': 'Alero',
     'AL': 'Alero',
@@ -176,8 +177,8 @@ def aceptar_cookies(driver):
     Intenta aceptar las cookies si existen
     """
     # Espero hasta que el iframe esté presente
-    WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.ID, "sp_message_iframe_1105263")))
-    iframe_cookies = driver.find_element(By.ID, "sp_message_iframe_1105263")
+    WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, "//iframe[@title='SP Consent Message']")))
+    iframe_cookies = driver.find_element(By.XPATH, "//iframe[@title='SP Consent Message']")
     
     driver.switch_to.frame(iframe_cookies)
     
@@ -331,7 +332,7 @@ def main():
                         puntos = info_jugador[1].text
                         valoracion = info_jugador[-1].text
                         # Si el jugador es "nuevo" lo añado al conjunto de jugadores de la liga
-                        if nombre_jugador not in jugadores_liga:
+                        if nombre_jugador not in jugadores_liga or nombre_jugador != "":
                             jugadores_liga.add(nombre_jugador)
                             ventana_anterior = driver.current_window_handle
                             nacionalidad, posicion = posicion_y_nacionalidad(driver, nombre_jugador, enlace_jugador, ventana_anterior)

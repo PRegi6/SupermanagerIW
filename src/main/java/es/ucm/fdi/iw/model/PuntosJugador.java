@@ -15,7 +15,7 @@ import lombok.Data;
     query = "SELECT j.valoracion FROM PuntosJugador j " +
             "WHERE j.jornada < :jornada AND j.nombre = :nombre " +
             "ORDER BY ABS(j.jornada - :jornada)"
-)
+    )
 })
 @Table(name="PuntosJugador")
 public class PuntosJugador {

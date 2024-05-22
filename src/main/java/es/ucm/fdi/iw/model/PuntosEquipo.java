@@ -21,7 +21,9 @@ import javax.persistence.*;
     name = "PuntosEquipo.ultimasJornadas",
     query = "SELECT e.puntos FROM PuntosEquipo e " +
             "WHERE e.jornada < :jornada AND e.equipo = :equipo " +
-            "ORDER BY ABS(e.jornada - :jornada)")
+            "ORDER BY ABS(e.jornada - :jornada)"),
+    @NamedQuery(name="PuntosEquipo.deletePuntosEquipo",
+    query="DELETE FROM PuntosEquipo")
 })
 @NoArgsConstructor
 @Table(name="PuntosEquipo")

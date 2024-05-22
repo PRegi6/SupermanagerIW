@@ -32,7 +32,9 @@ import lombok.AllArgsConstructor;
 		@NamedQuery(name = "Message.porId", query = "SELECT m FROM Message m "
 				+ "WHERE m.id = :idMensaje"),
 		@NamedQuery(name = "Message.reportados", query = "SELECT m FROM Message m "
-				+ "WHERE m.reported = TRUE")
+				+ "WHERE m.reported = TRUE"),
+		@NamedQuery(name="Message.deleteMessages",
+		query="DELETE FROM Message")
 })
 @Data
 public class Message implements Transferable<Message.Transfer> {
