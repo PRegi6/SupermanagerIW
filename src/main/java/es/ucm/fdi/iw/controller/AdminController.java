@@ -88,9 +88,9 @@ public class AdminController {
         return "reiniciarApp";
     }
 
-    @GetMapping("/añadirJornadas")
+    @GetMapping("/anadirJornadas")
     public String añadirJornadas() {
-        return "añadirJornadas";
+        return "anadirJornadas";
     }
 
     @Transactional
@@ -442,7 +442,7 @@ public class AdminController {
         return "mensajesUsuario";
     }
     
-    @PostMapping("/añadirJornadas")
+    @PostMapping("/anadirJornadas")
     @Transactional
     public String añadirJornadas(@RequestParam("bdfiles") MultipartFile[] files, Model model) {
         // Damos por hecho que se han insertado los archivos que queremos y que tiene datos
