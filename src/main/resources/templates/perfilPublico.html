@@ -45,6 +45,16 @@
                     </tr>                    
                 </tbody>
             </table>
+            <th:block th:if="${session.u.hasRole('ADMIN')}">
+                <form th:if="${!usuario.enabled}" class="form-signin" th:method="post" th:action="@{/admin/desbanearUsuario}">
+                    <input type="hidden" id="idUsuario" name="idUsuario" th:value="${usuario.id}"/>
+                    <button class="Foroboton" type="submit">Desbanear usuario</button>
+                </form>
+                <form th:if="${usuario.enabled}" class="form-signin" method="post" th:action="@{/admin/banearUsuario}">
+                    <input type="hidden" id="idUsuario" name="idUsuario" th:value="${usuario.id}" />
+                    <button class="Foroboton" type="submit" name="formType" value="banear usuario">Banear usuario</button>
+                </form>
+            </th:block>
         </div>
     </main>
 

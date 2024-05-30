@@ -106,11 +106,13 @@ public class RootController {
     public String index(HttpSession session, Model model) {
         User u = (User) session.getAttribute("u");
         Jornada jornada = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
-        if (u != null) {
-            model.addAttribute("nombreUsuario", u.getUsername());
-        } else {
-            model.addAttribute("nombreUsuario", null);
-        }
+        // if (u != null) {
+        //     model.addAttribute("nombreUsuario", u.getUsername());
+        // } else {
+        //     model.addAttribute("nombreUsuario", null);
+        // }
+
+        model.addAttribute("nombreUsuario", u.getUsername());
 
         List<EquipoACB> equipos = entityManager.createNamedQuery("EquipoACB.equipos", EquipoACB.class)
                 .getResultList();

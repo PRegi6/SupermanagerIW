@@ -24,14 +24,12 @@
                 </form>
                 <div id="filtros_posicion">
                     <form method="post" th:action="@{/mercado}">
-                        <button type="submit" name="posicion" value="Base" class="boton_posicion">Base</button>
-                        <button type="submit" name="posicion" value="Alero" class="boton_posicion">Alero</button>
-                        <button type="submit" name="posicion" value="Pivot" class="boton_posicion">Pivot</button>
+                        <button type="submit" name="posicion" id="boton-bases" value="Base" class="boton_posicion">Base</button>
+                        <button type="submit" name="posicion" id="boton-aleros" value="Alero" class="boton_posicion">Alero</button>
+                        <button type="submit" name="posicion" id="boton-pivots" value="Pivot" class="boton_posicion">Pivot</button>
                     </form>
                 </div>
             </div>
-
-            
             <div class="row">
                 <div th:each="jugador : ${jugadores}" class="col-md-6">
                     <div class="card">                                               

@@ -144,7 +144,18 @@ public class AdminController {
 
                     pE.setPuntos(puntosGanados);
                     pE.getJugadores().add(pJ);
-                } catch (NoResultException excep) { /*Si la consulta no devuelve un resultado sigo mirando*/ }
+                } catch (NoResultException excep) { /*Si la consulta no devuelve un resultado sigo mirando*/ 
+                    PuntosJugador newPj = new PuntosJugador();
+                    newPj.setJornada(jornada.getJornada());
+                    newPj.setNombre(j.getNombre());
+                    newPj.setPuntos(0);
+                    newPj.setPosicion(j.getPosicion());
+                    newPj.setValor_mercado(j.getValorMercado());
+                    newPj.setValoracion(0);
+
+                    entityManager.persist(newPj);
+                    pE.getJugadores().add(newPj);
+                }
             }
 
             e.setPuntos(e.getPuntos() + puntosGanados);

@@ -16,7 +16,9 @@
                 <p>No hay mensajes reportados</p>
             </th:block>
             <div class="infoMensaje" th:each="mensaje : ${reportados}">
-                <p class="textoFrom" th:text="${mensaje.sender.getUsername()}  + ':'">Emisor</p>
+                <p class="textoFrom">
+                    <a class="enlace" th:href="@{/perfilPublico/{id}(id=${mensaje.sender.getId()})}" th:text="${mensaje.sender.getUsername()}">Nombre usuario</a>
+                </p>
                 <p class="textoMensaje" th:text="${mensaje.text}">Texto</p>
                 <input type="hidden" id="idMensaje" name="idMensaje" th:value="${mensaje.id}" />
                 <form class="form-signin" method="post" th:action="@{/admin/validarMensaje}">

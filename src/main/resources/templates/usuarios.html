@@ -20,11 +20,14 @@
                     <div class="estadoUsuario">
                         <span th:text="${usuario.enabled ? 'Usuario válido' : 'Baneado'}">Estado usuario</span>
                     </div>
+                    <div class="nombreusuario">
+                        <p>Inicios de sesión: <span th:text="${usuario.getNumlogins()}">Número logins</span></p>
+                    </div>
                     <form th:if="${!usuario.enabled}" class="form-signin" th:method="post" th:action="@{/admin/desbanearUsuario}">
                         <input type="hidden" id="idUsuario" name="idUsuario" th:value="${usuario.id}"/>
                         <button class="Foroboton" type="submit">Desbanear usuario</button>
                     </form>
-                    <form class="form-signin" method="post" th:action="@{/admin/banearUsuario}">
+                    <form th:if="${usuario.enabled}" class="form-signin" method="post" th:action="@{/admin/banearUsuario}">
                         <input type="hidden" id="idUsuario" name="idUsuario" th:value="${usuario.id}" />
                         <button class="Foroboton" type="submit" name="formType" value="banear usuario">Banear usuario</button>
                     </form>

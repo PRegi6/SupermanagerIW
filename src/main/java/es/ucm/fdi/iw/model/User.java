@@ -18,28 +18,25 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @NamedQueries({
-    @NamedQuery(name="User.byUsername",
-            query="SELECT u FROM User u "
-                    + "WHERE u.username = :username AND u.enabled = TRUE"),
-    @NamedQuery(name="User.hasUsername",
-            query="SELECT COUNT(u) "
-                    + "FROM User u "
-                    + "WHERE u.username = :username"),
-    @NamedQuery(name="User.allUsers",
-            query="SELECT u FROM User u")
+        @NamedQuery(name = "User.byUsername", query = "SELECT u FROM User u "
+                + "WHERE u.username = :username AND u.enabled = TRUE"),
+        @NamedQuery(name = "User.hasUsername", query = "SELECT COUNT(u) "
+                + "FROM User u "
+                + "WHERE u.username = :username"),
+        @NamedQuery(name = "User.allUsers", query = "SELECT u FROM User u")
 })
-@Table(name="IWUser")
+@Table(name = "IWUser")
 public class User implements Transferable<User.Transfer> {
 
     public enum Role {
-        USER,			// normal users 
-        ADMIN,          // admin users
+        USER, // normal users
+        ADMIN, // admin users
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gen")
     @SequenceGenerator(name = "gen", sequenceName = "gen")
-	private long id;
+    private long id;
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -52,16 +49,19 @@ public class User implements Transferable<User.Transfer> {
     private boolean enabled;
     private String roles; // split by ',' to separate roles
 
-	@OneToMany
-	@JoinColumn(name = "sender_id")
-	private List<Message> sent = new ArrayList<>();	
-    
+    private int numlogins;
+
+    @OneToMany
+    @JoinColumn(name = "sender_id")
+    private List<Message> sent = new ArrayList<>();
+
     @OneToMany
     @JoinColumn(name = "owner_id")
     private List<Equipo> equipos = new ArrayList<>();
 
     /**
      * Checks whether this user has a given role.
+     * 
      * @param role to check
      * @return true iff this user has that role.
      */
@@ -73,19 +73,18 @@ public class User implements Transferable<User.Transfer> {
     @Getter
     @AllArgsConstructor
     public static class Transfer {
-		private long id;
+        private long id;
         private String username;
-		private int totalSent;
+        private int totalSent;
     }
 
-	@Override
+    @Override
     public Transfer toTransfer() {
-		return new Transfer(id,	username, sent.size());
-	}
-	
-	@Override
-	public String toString() {
-		return toTransfer().toString();
-	}
-}
+        return new Transfer(id, username, sent.size());
+    }
 
+    @Override
+    public String toString() {
+        return toTransfer().toString();
+    }
+}

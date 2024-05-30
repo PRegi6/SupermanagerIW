@@ -6,6 +6,6 @@ class InternalRunner {
     
     @Karate.Test
     Karate testUsers() {
-        return Karate.run("users").relativeTo(getClass());
+        return Karate.run("/users/users").relativeTo(getClass());
     }      
 }

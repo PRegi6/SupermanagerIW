@@ -2,8 +2,8 @@ INSERT INTO "PUBLIC"."JORNADA" VALUES
 (1, 1);
  
 INSERT INTO "PUBLIC"."IWUSER" VALUES
-(2, TRUE, NULL, NULL, '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 'ADMIN,USER', 'a'),
-(3, TRUE, NULL, NULL, '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 'USER', 'b');    
+(2, TRUE, NULL, NULL, 0, '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 'ADMIN,USER', 'a'),
+(3, TRUE, NULL, NULL, 0, '{bcrypt}$2a$10$2BpNTbrsarbHjNsUWgzfNubJqBRf.0Vz9924nRSHBqlbPKerkgX.W', 'USER', 'b');    
 
 INSERT INTO "PUBLIC"."LIGA" VALUES
 (4, '123', 'PaquitoLeague', 3),
