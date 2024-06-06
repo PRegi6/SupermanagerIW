@@ -6,7 +6,7 @@ class ExternalRunner {
 
     // @Karate.Test
     // Karate testLogin() {
-    //     return Karate.run("login").relativeTo(getClass());
+    // return Karate.run("login").relativeTo(getClass());
     // }
 
     // // @Karate.Test
@@ -16,21 +16,26 @@ class ExternalRunner {
 
     // @Karate.Test
     // Karate testCrearLiga() {
-    //     return Karate.run("crearLiga").relativeTo(getClass());
+    // return Karate.run("crearLiga").relativeTo(getClass());
     // }
 
     // @Karate.Test
     // Karate testCrearEquipo() {
-    //     return Karate.run("crearEquipo").relativeTo(getClass());
+    // return Karate.run("crearEquipo").relativeTo(getClass());
     // }
 
     // @Karate.Test
     // Karate testFichar() {
-    //     return Karate.run("fichar").relativeTo(getClass());
+    // return Karate.run("fichar").relativeTo(getClass());
+    // }
+
+    // @Karate.Test
+    // Karate testMensajes() {
+    // return Karate.run("mensajes").relativeTo(getClass());
     // }
 
     @Karate.Test
-    Karate testMensajes() {
-        return Karate.run("mensajes").relativeTo(getClass());
+    Karate testBanear() {
+        return Karate.run("banear").relativeTo(getClass());
     }
 }
