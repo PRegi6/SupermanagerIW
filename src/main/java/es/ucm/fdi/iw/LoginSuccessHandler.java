@@ -66,7 +66,12 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 	    log.info("Storing user info for {} in session {}", username, session.getId());
 		User u = entityManager.createNamedQuery("User.byUsername", User.class)
 		        .setParameter("username", username)
-		        .getSingleResult();		
+		        .getSingleResult();
+		// Aumento el número de login hechos
+		int numLogins = u.getNumlogins();
+		u.setNumlogins(numLogins + 1);
+		entityManager.flush();
+
 		session.setAttribute("u", u);
 
 		// add 'url' and 'ws' session variables
