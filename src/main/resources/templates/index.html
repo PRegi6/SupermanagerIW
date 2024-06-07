@@ -37,7 +37,9 @@
                         <tr th:each="equipo, index : ${equipos}">
                             <td>
                                 <img th:src="@{'img/equipos/' + ${equipo.nombreEquipo} + '.jpg'}"/>
-                                <span th:text="${equipo.nombreEquipo}"></span>
+                                <a class = "enlace" th:href="@{/equipo/{id}(id=${equipo.id})}">
+                                    <span th:text="${equipo.nombreEquipo}"></span>
+                                </a>
                             </td>
                             <td th:text="${index.index + 1}"></td>
                             <td th:text="${equipo.victorias + equipo.derrotas}"></td>

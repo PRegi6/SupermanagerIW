@@ -144,6 +144,25 @@ if (postAvatar) {
     };
 }
 
+// document.addEventListener('DOMContentLoaded', function() {
+//     const filterButtons = document.querySelectorAll('.boton_posicion');
+
+//     filterButtons.forEach(button => {
+//         button.addEventListener('click', function(event) {
+//             event.preventDefault();
+//             const currentButton = document.querySelector('.boton_posicion.active');
+//             if (currentButton) {
+//                 currentButton.classList.remove('active');
+//                 currentButton.style.fontSize = '1em'; // Tamaño normal
+//             }
+//             this.classList.add('active');
+//             this.style.fontSize = '1.5em'; // Tamaño más grande
+//         });
+//     });
+// });
+
+
+
 // // ver https://openlibrary.org/dev/docs/api/books
 // // no requieren "api key", pero necesitas 1 consulta adicional por autor
 // function fetchBookData(isbn, targetImg) {

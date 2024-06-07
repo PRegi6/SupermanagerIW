@@ -21,7 +21,7 @@
                         <span th:text="${usuario.enabled ? 'Usuario válido' : 'Baneado'}">Estado usuario</span>
                     </div>
                     <div class="nombreusuario">
-                        <p>Inicios de sesión: <span th:text="${usuario.getNumlogins()}">Número logins</span></p>
+                        <p>Inicios de sesión: <span th:text="${usuario.numlogins}">Número logins</span></p>
                     </div>
                     <form th:if="${!usuario.enabled}" class="form-signin" th:method="post" th:action="@{/admin/desbanearUsuario}">
                         <input type="hidden" id="idUsuario" name="idUsuario" th:value="${usuario.id}"/>
