@@ -72,14 +72,6 @@ public class RootController {
         return "login";
     }
 
-    @PostMapping("/login")
-    public String login(HttpSession session) {
-        User u = (User) session.getAttribute("u");
-        u.setNumlogins(u.getNumlogins() + 1);
-        entityManager.flush();
-        return "login";
-    }
-
     @GetMapping("/registro")
     public String registro(Model model) {
         return "registro";
