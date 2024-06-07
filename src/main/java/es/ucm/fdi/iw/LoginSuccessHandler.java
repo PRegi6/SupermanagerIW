@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,6 +48,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
      * Called whenever a user authenticates correctly.
      */
     @Override
+	@Transactional
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
 	   
@@ -66,7 +68,12 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 	    log.info("Storing user info for {} in session {}", username, session.getId());
 		User u = entityManager.createNamedQuery("User.byUsername", User.class)
 		        .setParameter("username", username)
-		        .getSingleResult();		
+		        .getSingleResult();
+		// Aumento el número de login hechos
+		int numLogins = u.getNumlogins();
+		u.setNumlogins(numLogins + 1);
+		entityManager.flush();
+
 		session.setAttribute("u", u);
 
 		// add 'url' and 'ws' session variables
