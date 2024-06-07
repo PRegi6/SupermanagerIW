@@ -522,3 +522,9 @@ th, td{
 .enlace:hover{
     color: #ff3700;
 }
+
+.boton_posicion.active {
+    background-color: green;
+    
+}
+

@@ -10,12 +10,15 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -69,6 +72,14 @@ public class RootController {
         return "login";
     }
 
+    @PostMapping("/login")
+    public String login(HttpSession session) {
+        User u = (User) session.getAttribute("u");
+        u.setNumlogins(u.getNumlogins() + 1);
+        entityManager.flush();
+        return "login";
+    }
+
     @GetMapping("/registro")
     public String registro(Model model) {
         return "registro";
@@ -107,9 +118,9 @@ public class RootController {
         User u = (User) session.getAttribute("u");
         Jornada jornada = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
         // if (u != null) {
-        //     model.addAttribute("nombreUsuario", u.getUsername());
+        // model.addAttribute("nombreUsuario", u.getUsername());
         // } else {
-        //     model.addAttribute("nombreUsuario", null);
+        // model.addAttribute("nombreUsuario", null);
         // }
 
         model.addAttribute("nombreUsuario", u.getUsername());
@@ -418,7 +429,7 @@ public class RootController {
     public List<Message.Transfer> getForoApi(@PathVariable long idLiga) {
         Liga liga = entityManager.find(Liga.class, idLiga);
 
-        List<Message> mensajes= liga.getReceived();
+        List<Message> mensajes = liga.getReceived();
 
         return mensajes.stream().map(Transferable::toTransfer).collect(Collectors.toList());
     }
@@ -557,7 +568,7 @@ public class RootController {
 
             return "redirect:clasificacion";
         }
-        
+
         return "redirect:unirseliga" + "?nombreEquipo=" + nombreEquipo + "&nombreLiga=" + nombreLiga;
     }
 
@@ -654,7 +665,7 @@ public class RootController {
 
         List<JugadorACB> jugadores = new ArrayList<>();
         List<JugadorACB> jugadoresFichados = entityManager.find(Equipo.class, idequipo)
-            .getJugadores();
+                .getJugadores();
 
         if (buscar != null) {
             if (formType.equals("ficharBases")) {
@@ -824,13 +835,35 @@ public class RootController {
 
             ultimasJornadas.put(e.getTeamname(), listUltJornadas);
         }
-        
+
         model.addAttribute("usuario", u);
         model.addAttribute("equipos", equipos);
         model.addAttribute("posiciones", posiciones);
         model.addAttribute("ultimasJornadas", ultimasJornadas);
 
         return "perfilPublico";
+    }
+
+    @GetMapping("/equipo/{id}")
+    public String verPartidosEquipo(@PathVariable long id, Model model) {
+
+        // obtengo objeto equipo con sus atributos
+        EquipoACB equipo = entityManager.find(EquipoACB.class, id);
+
+        String nombreEquipo = equipo.getNombreEquipo();
+
+        // busco en la tabla de PartidoACB todas las filas que incluyen a equipo como
+        // local o vistante (que participe) y las guardo en una lista
+        List<PartidoACB> partidos = entityManager
+                .createQuery("SELECT p FROM PartidoACB p WHERE p.local = :equipo OR p.visitante = :equipo",
+                        PartidoACB.class)
+                .setParameter("equipo", nombreEquipo)
+                .getResultList();
+
+        model.addAttribute("equipo", equipo);
+        model.addAttribute("partidos", partidos);
+
+        return "partidosEquipo";
     }
 
 }

@@ -32,23 +32,23 @@ import es.ucm.fdi.iw.model.PuntosJugador;
 import es.ucm.fdi.iw.model.User;
 
 /**
- *  Site administration.
+ * Site administration.
  *
- *  Access to this end-point is authenticated - see SecurityConfig
+ * Access to this end-point is authenticated - see SecurityConfig
  */
 @Controller
 @RequestMapping("admin")
 public class AdminController {
 
-	private static final Logger log = LogManager.getLogger(AdminController.class);
+    private static final Logger log = LogManager.getLogger(AdminController.class);
 
     @Autowired
-	private EntityManager entityManager;
+    private EntityManager entityManager;
 
-	@GetMapping("/")
+    @GetMapping("/")
     public String index(Model model) {
         List<Message> reportedMessages = entityManager.createNamedQuery("Message.reportados", Message.class)
-            .getResultList();
+                .getResultList();
         model.addAttribute("reportados", reportedMessages);
         return "admin";
     }
@@ -56,18 +56,18 @@ public class AdminController {
     @GetMapping("/usuarios")
     public String getUsuarios(Model model) {
         List<User> usuarios = entityManager.createNamedQuery("User.allUsers", User.class)
-            .getResultList();
+                .getResultList();
 
         model.addAttribute("usuarios", usuarios);
-        return "usuarios"; 
+        return "usuarios";
     }
 
     @GetMapping("/mensajesReportados")
     public String mensajesReportados(Model model) {
         List<Message> reportedMessages = entityManager.createNamedQuery("Message.reportados", Message.class)
-            .getResultList();
+                .getResultList();
         model.addAttribute("reportados", reportedMessages);
-        
+
         return "mensajesReportados";
     }
 
@@ -79,7 +79,7 @@ public class AdminController {
 
         model.addAttribute("usuario", u);
         model.addAttribute("mensajes", mensajesUsuario);
-        
+
         return "mensajesUsuario";
     }
 
@@ -99,14 +99,14 @@ public class AdminController {
 
         // Actualizamos las estadísticas de los jugadores
         List<JugadorACB> jugadores = entityManager.createNamedQuery("JugadorACB.jugadores", JugadorACB.class)
-            .getResultList();
+                .getResultList();
 
-        for (JugadorACB j: jugadores) {
+        for (JugadorACB j : jugadores) {
             try {
                 PuntosJugador pJ = entityManager.createNamedQuery("PuntosJugador.jugador", PuntosJugador.class)
-                    .setParameter("nombre", j.getNombre())
-                    .setParameter("jornada", jornada.getJornada())
-                    .getSingleResult();
+                        .setParameter("nombre", j.getNombre())
+                        .setParameter("jornada", jornada.getJornada())
+                        .getSingleResult();
 
                 int partidosJugados = j.getPartidosJugados();
                 int puntosJugador = j.getPuntosTotales();
@@ -120,31 +120,32 @@ public class AdminController {
                 j.setValoracionMedia(valoracionMedia);
 
                 entityManager.flush();
-            } catch (NoResultException e) { /*Si la consulta no devuelve un resultado sigo mirando*/ }
+            } catch (NoResultException e) {
+                /* Si la consulta no devuelve un resultado sigo mirando */ }
         }
 
         // Actualizamos los puntos de todos los equipos de los usuarios
         List<Equipo> equipos = entityManager.createNamedQuery("Equipo.todosEquipos", Equipo.class)
-            .getResultList();
-        
-        for (Equipo e: equipos) {
+                .getResultList();
+
+        for (Equipo e : equipos) {
             PuntosEquipo pE = new PuntosEquipo();
             pE.setEquipo(e);
             pE.setJornada(jornada.getJornada());
             List<JugadorACB> jugadoresEquipo = e.getJugadores();
             int puntosGanados = 0;
-            for (JugadorACB j: jugadoresEquipo) {
+            for (JugadorACB j : jugadoresEquipo) {
                 try {
                     PuntosJugador pJ = entityManager.createNamedQuery("PuntosJugador.jugador", PuntosJugador.class)
-                        .setParameter("nombre", j.getNombre())
-                        .setParameter("jornada", jornada.getJornada())
+                            .setParameter("nombre", j.getNombre())
+                            .setParameter("jornada", jornada.getJornada())
                             .getSingleResult();
 
                     puntosGanados = puntosGanados + pJ.getValoracion();
 
                     pE.setPuntos(puntosGanados);
                     pE.getJugadores().add(pJ);
-                } catch (NoResultException excep) { /*Si la consulta no devuelve un resultado sigo mirando*/ 
+                } catch (NoResultException excep) { /* Si la consulta no devuelve un resultado sigo mirando */
                     PuntosJugador newPj = new PuntosJugador();
                     newPj.setJornada(jornada.getJornada());
                     newPj.setNombre(j.getNombre());
@@ -164,16 +165,16 @@ public class AdminController {
         }
 
         List<PartidoACB> partidos = entityManager.createNamedQuery("PartidoACB.partidosJornada", PartidoACB.class)
-            .setParameter("jornada", jornada.getJornada())
+                .setParameter("jornada", jornada.getJornada())
                 .getResultList();
-        
-        for (PartidoACB p: partidos) {
+
+        for (PartidoACB p : partidos) {
             EquipoACB local = entityManager.createNamedQuery("EquipoACB.equipo", EquipoACB.class)
-                .setParameter("equipo", p.getLocal())
+                    .setParameter("equipo", p.getLocal())
                     .getSingleResult();
 
             EquipoACB visitante = entityManager.createNamedQuery("EquipoACB.equipo", EquipoACB.class)
-                .setParameter("equipo", p.getVisitante())
+                    .setParameter("equipo", p.getVisitante())
                     .getSingleResult();
 
             int puntosLocal = p.getPuntosLocal();
@@ -186,8 +187,7 @@ public class AdminController {
             if (puntosLocal > puntosVisitante) {
                 local.setVictorias(local.getVictorias() + 1);
                 visitante.setDerrotas(visitante.getDerrotas() + 1);
-            }
-            else {
+            } else {
                 visitante.setVictorias(visitante.getVictorias() + 1);
                 local.setDerrotas(local.getDerrotas() + 1);
             }
@@ -203,9 +203,9 @@ public class AdminController {
     public void reiniciarBD() {
         // Vaciamos los mensajes enviados por los usuarios
         List<User> usuarios = entityManager.createNamedQuery("User.allUsers", User.class)
-            .getResultList();
+                .getResultList();
 
-        for (User u: usuarios) {
+        for (User u : usuarios) {
             u.getSent().clear();
         }
 
@@ -216,10 +216,10 @@ public class AdminController {
         jornada.setJornada(0);
 
         List<Equipo> equiposUsr = entityManager.createNamedQuery("Equipo.todosEquipos", Equipo.class)
-            .getResultList();
+                .getResultList();
 
         // Reiniciamos la información de todos los equipos de los usuarios
-        for (Equipo e: equiposUsr) {
+        for (Equipo e : equiposUsr) {
             e.setDinero(500000);
             e.setPuntos(0);
             e.getJugadores().clear();
@@ -227,9 +227,9 @@ public class AdminController {
 
         // Reiniciamos las estadísticas de los jugadores
         List<JugadorACB> jugadores = entityManager.createNamedQuery("JugadorACB.jugadores", JugadorACB.class)
-            .getResultList();
+                .getResultList();
 
-        for (JugadorACB j: jugadores) {
+        for (JugadorACB j : jugadores) {
             j.setPartidosJugados(0);
             j.setPuntosTotales(0);
             j.setValorMercado(50000);
@@ -241,7 +241,7 @@ public class AdminController {
         List<EquipoACB> equipos = entityManager.createNamedQuery("EquipoACB.equipos", EquipoACB.class)
                 .getResultList();
 
-        for (EquipoACB e: equipos) {
+        for (EquipoACB e : equipos) {
             e.setVictorias(0);
             e.setDerrotas(0);
             e.setDiferencia(0);
@@ -270,16 +270,16 @@ public class AdminController {
                 int puntosLocal = partido.getInt("puntos_local");
                 String visitante = partido.getString("visitante");
                 int puntosVisitante = partido.getInt("puntos_visitante");
-                
+
                 PartidoACB nuevoPartido;
                 try {
                     nuevoPartido = entityManager.createNamedQuery("PartidoACB.partido", PartidoACB.class)
-                    .setParameter("local", local)
-                    .setParameter("visitante", visitante)
-                        .getSingleResult();
+                            .setParameter("local", local)
+                            .setParameter("visitante", visitante)
+                            .getSingleResult();
 
                 } catch (NoResultException e) {
-                    nuevoPartido = new PartidoACB();    
+                    nuevoPartido = new PartidoACB();
                     nuevoPartido.setJornada(jornadaPartido);
                     nuevoPartido.setLocal(local);
                     nuevoPartido.setPuntosLocal(puntosLocal);
@@ -302,7 +302,7 @@ public class AdminController {
     }
 
     @Transactional
-    public void procesarJugadorACB(MultipartFile file) throws IOException{
+    public void procesarJugadorACB(MultipartFile file) throws IOException {
         String contenido = new String(file.getBytes());
         JSONArray jsonArray = new JSONArray(contenido);
 
@@ -312,13 +312,13 @@ public class AdminController {
 
             try {
                 JugadorACB jugador = entityManager.createNamedQuery("JugadorACB.jugador", JugadorACB.class)
-                .setParameter("nombre", nombre)
-                    .getSingleResult();
+                        .setParameter("nombre", nombre)
+                        .getSingleResult();
             } catch (NoResultException e) {
                 String pais = j.getString("pais");
                 String posicion = j.getString("posicion");
                 String equipo = j.getString("equipo");
-                
+
                 JugadorACB jugador = new JugadorACB();
                 jugador.setNombre(nombre);
                 jugador.setPais(pais);
@@ -338,7 +338,7 @@ public class AdminController {
     @Transactional
     public void procesarPuntosJugador(MultipartFile file) throws IOException {
         Jornada jornada = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
-        
+
         String contenido = new String(file.getBytes());
         JSONArray jsonArray = new JSONArray(contenido);
 
@@ -352,18 +352,18 @@ public class AdminController {
                 Double valor_mercado = pJ.getDouble("valor_mercado");
 
                 JugadorACB jugador = entityManager.createNamedQuery("JugadorACB.jugador", JugadorACB.class)
-                    .setParameter("nombre", nombre)
+                        .setParameter("nombre", nombre)
                         .getSingleResult();
-                
+
                 PuntosJugador nuevoPj;
                 try {
                     nuevoPj = entityManager.createNamedQuery("PuntosJugador.jugador", PuntosJugador.class)
-                    .setParameter("nombre", nombre)
-                    .setParameter("jornada", jornadaPartido)
-                        .getSingleResult();
+                            .setParameter("nombre", nombre)
+                            .setParameter("jornada", jornadaPartido)
+                            .getSingleResult();
 
                 } catch (NoResultException e) {
-                    nuevoPj = new PuntosJugador();    
+                    nuevoPj = new PuntosJugador();
                     nuevoPj.setJornada(jornadaPartido);
                     nuevoPj.setNombre(nombre);
                     nuevoPj.setPosicion(jugador.getPosicion());
@@ -406,7 +406,7 @@ public class AdminController {
 
     @PostMapping("/eliminarMensaje")
     @Transactional
-    public String eliminarMensaje( @RequestParam("idMensaje") Long idMensaje, Model model) {
+    public String eliminarMensaje(@RequestParam("idMensaje") Long idMensaje, Model model) {
         Message m = entityManager.find(Message.class, idMensaje);
 
         entityManager.remove(m);
@@ -430,7 +430,7 @@ public class AdminController {
     @ResponseBody
     public String avanzarJornada(Model model) {
         Jornada jornada = entityManager.createNamedQuery("Jornada.getJornada", Jornada.class).getSingleResult();
-        
+
         actualizarDatos();
 
         jornada.setJornada(jornada.getJornada() + 1);
@@ -452,13 +452,15 @@ public class AdminController {
 
         return "mensajesUsuario";
     }
-    
+
     @PostMapping("/anadirJornadas")
     @Transactional
     public String añadirJornadas(@RequestParam("bdfiles") MultipartFile[] files, Model model) {
-        // Damos por hecho que se han insertado los archivos que queremos y que tiene datos
-        
-        // Forzamos a ejecutar procesarJugadorACB por si hay algún nuevo jugador y evitar posibles errores
+        // Damos por hecho que se han insertado los archivos que queremos y que tiene
+        // datos
+
+        // Forzamos a ejecutar procesarJugadorACB por si hay algún nuevo jugador y
+        // evitar posibles errores
         for (MultipartFile file : files) {
             String nombreArchivo = file.getOriginalFilename();
             try {
@@ -469,15 +471,14 @@ public class AdminController {
                 e.printStackTrace();
             }
         }
-    
+
         // Luego procesamos los demás archivos
         for (MultipartFile file : files) {
             String nombreArchivo = file.getOriginalFilename();
             try {
                 if (nombreArchivo.equals("jornada_acb.json")) {
                     procesarJornadaACB(file);
-                }
-                else if (nombreArchivo.equals("puntos_jugador.json")) {
+                } else if (nombreArchivo.equals("puntos_jugador.json")) {
                     procesarPuntosJugador(file);
                 }
             } catch (IOException e) {

@@ -70,6 +70,10 @@ public class User implements Transferable<User.Transfer> {
         return Arrays.asList(roles.split(",")).contains(roleName);
     }
 
+    public void incrementLoginCount() {
+        this.numlogins++;
+    }
+
     @Getter
     @AllArgsConstructor
     public static class Transfer {
